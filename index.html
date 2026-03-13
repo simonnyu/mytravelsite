@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JEJU SOLO BEYOND | 濟州精品獨旅指南</title>
+    <title>JEJU SOLO BEYOND | 濟州公車獨旅全功能指南</title>
     <style>
         :root {
             --primary: #FF7B54;
@@ -35,44 +35,33 @@
             background: var(--bg);
             min-height: 100vh;
             position: relative;
-            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
         }
 
-        /* Hero Magazine Style */
+        /* Hero Magazine Header */
         .hero {
-            height: 45vh;
-            background: linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.9)), 
+            height: 42vh;
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.85)), 
                         linear-gradient(135deg, #FF7B54 0%, #FFB26B 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             padding: 30px 25px;
             color: white;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            position: relative;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
         }
-        .hero::before {
-            content: 'JEJU';
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 80px;
-            font-weight: 900;
-            opacity: 0.1;
-            letter-spacing: -5px;
-        }
-        .hero h1 { font-size: 42px; font-weight: 900; line-height: 1; letter-spacing: -1.5px; }
-        .hero p { font-size: 14px; opacity: 0.8; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; font-weight: 600; }
+        .hero h1 { font-size: 44px; font-weight: 900; line-height: 0.9; letter-spacing: -2px; }
+        .hero p { font-size: 13px; opacity: 0.8; letter-spacing: 3px; text-transform: uppercase; margin-top: 10px; font-weight: 700; }
 
-        /* Sticky Navigation */
+        /* Sticky Tabs */
         .nav-tabs {
             position: sticky;
             top: 0;
             background: rgba(248, 250, 252, 0.98);
             backdrop-filter: blur(15px);
             display: flex;
-            padding: 15px 20px;
+            padding: 12px 20px;
             z-index: 1000;
             border-bottom: 1px solid #E2E8F0;
             justify-content: center;
@@ -86,7 +75,7 @@
             font-weight: 800;
             color: var(--text-muted);
             font-size: 13px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.3s;
         }
         .tab-btn.active {
             background: var(--dark);
@@ -94,41 +83,42 @@
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
         }
 
-        /* Strategy Banner */
+        /* Essential Banner */
         .strategy-banner {
             margin: 20px;
             padding: 15px 20px;
             background: white;
             border-radius: 18px;
             border-left: 5px solid var(--primary);
-            font-size: 13px;
+            font-size: 12.5px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            line-height: 1.7;
         }
         .strategy-banner b { color: var(--primary); }
 
-        /* Views */
+        /* Day Views */
         .day-view { display: none; padding: 0 20px 100px; }
-        .day-view.active { display: block; animation: fadeInUp 0.5s ease-out; }
+        .day-view.active { display: block; animation: fadeInUp 0.5s ease; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Timeline & Sections */
+        /* Timeline Items */
         .time-block { margin-top: 40px; }
         .time-header {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .time-tag {
-            background: var(--primary);
+            background: var(--dark);
             color: white;
             padding: 4px 12px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 900;
             margin-right: 12px;
         }
-        .time-title { font-size: 18px; font-weight: 900; color: var(--dark); letter-spacing: -0.5px; }
-        .scroll-hint { font-size: 11px; color: var(--text-muted); margin-left: auto; font-weight: 500; }
+        .time-title { font-size: 18px; font-weight: 900; color: var(--dark); flex-grow: 1; }
+        .bus-badge { font-size: 10px; background: var(--accent); color: white; padding: 2px 8px; border-radius: 5px; font-weight: 800; }
 
         /* Horizontal Card Scroller */
         .card-scroller {
@@ -145,14 +135,13 @@
             min-width: 310px;
             max-width: 310px;
             background: var(--card);
-            border-radius: 24px;
+            border-radius: 26px;
             padding: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
             border: 1px solid #F1F5F9;
             scroll-snap-align: start;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s;
         }
         .card-label {
             font-size: 10px;
@@ -160,43 +149,30 @@
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
+            margin-bottom: 8px;
         }
-        .card-name { font-size: 20px; font-weight: 900; margin-bottom: 8px; color: var(--dark); }
-        .card-info { font-size: 14px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6; flex-grow: 1; }
+        .card-name { font-size: 19px; font-weight: 900; margin-bottom: 8px; color: var(--dark); }
+        .card-info { font-size: 13.5px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6; }
         
-        /* Specialized Photography UI */
+        /* Photography Guide Section */
         .photo-guide {
             background: var(--primary-soft);
             border-radius: 16px;
             padding: 15px;
             margin-top: auto;
-            position: relative;
-            border: 1px solid rgba(255, 123, 84, 0.1);
+            border-left: 4px solid var(--primary);
         }
         .photo-guide b {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 900;
             text-transform: uppercase;
         }
-        .photo-guide p { font-size: 12.5px; color: #7C2D12; font-weight: 500; }
-        .lens-badge {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 2px 8px;
-            background: white;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 800;
-            color: var(--primary);
-        }
+        .photo-guide p { font-size: 12px; color: #7C2D12; font-weight: 500; }
 
-        /* Naver Button */
+        /* Naver Map Button */
         .naver-link {
             display: flex;
             align-items: center;
@@ -210,15 +186,10 @@
             font-weight: 800;
             margin-top: 15px;
             gap: 10px;
-            box-shadow: 0 4px 10px rgba(3, 199, 90, 0.2);
         }
-        .naver-link::before { 
-            content: 'N'; font-family: sans-serif; font-weight: 900; 
-            background: white; color: var(--accent); width: 20px; height: 20px; 
-            border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px;
-        }
+        .naver-link::before { content: 'N'; font-family: sans-serif; font-weight: 900; background: white; color: var(--accent); width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
 
-        /* Grand Hyatt Finale Card */
+        /* Grand Finale Finale */
         .finale-card {
             background: var(--dark);
             color: white;
@@ -227,33 +198,22 @@
             margin: 40px 0;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-        .finale-card::after {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
-            opacity: 0.1;
         }
         .finale-label { color: var(--gold); font-weight: 900; font-size: 11px; letter-spacing: 3px; }
         .finale-name { font-size: 24px; font-weight: 900; margin: 10px 0; }
-        .finale-info { font-size: 14px; opacity: 0.8; margin-bottom: 20px; }
-        .flight-alert {
-            background: rgba(255,255,255,0.1);
+        .bus-route-box {
+            background: rgba(255,255,255,0.08);
             padding: 15px;
-            border-radius: 15px;
+            border-radius: 16px;
             font-size: 13px;
+            margin-bottom: 20px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-        .flight-alert b { color: var(--primary); font-weight: 900; }
+        .bus-route-box b { color: var(--primary); }
 
         footer {
             text-align: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             font-size: 11px;
             color: var(--text-muted);
             letter-spacing: 2px;
@@ -266,299 +226,277 @@
 <div class="app-container">
     <header class="hero">
         <div class="hero-content">
-            <p>Solo Travel | Magazine Guide</p>
+            <p>Full Bus & Solo Itinerary</p>
             <h1>JEJU<br>BEYOND</h1>
         </div>
     </header>
 
     <div class="strategy-banner">
-        📍 <b>獨旅嚴選：</b> 08:00 起床健身 ✕ 16:00 嚴格禁咖啡因。所有景點均附平行備選與 <b>📸 電腦桌布級構圖建議</b>。
+        📍 <b>獨旅公車策略：</b> 08:00 起床健身 ✕ 16:00 嚴格禁咖啡因。<br>
+        全程利用 <b>101/102 急行巴士</b> 跨區，附 <b>平行備選</b> 與 <b>桌布攝影建議</b>。
     </div>
 
     <nav class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab(this, 'day2')">DAY 02 東海岸</button>
-        <button class="tab-btn" onclick="switchTab(this, 'day3')">DAY 03 西海岸</button>
+        <button class="tab-btn active" onclick="switchTab(this, 'day2')">DAY 02 東線大景</button>
+        <button class="tab-btn" onclick="switchTab(this, 'day3')">DAY 03 西線美學</button>
     </nav>
 
-    <!-- DAY 02 - EASTERN JEJU -->
+    <!-- DAY 02 - EASTERN ROUTE -->
     <div id="day2" class="day-view active">
-        <!-- 08:00 Gym -->
+        <!-- Gym Block -->
         <div class="time-block">
             <div class="time-header">
                 <span class="time-tag">08:00</span>
-                <span class="time-title">晨間健身 ✕ 盥洗</span>
+                <span class="time-title">飯店健身 ✕ 甦醒</span>
             </div>
-            <p style="font-size: 13px; color: var(--text-muted); padding: 0 5px;">飯店 1F 健身房 1HR。洗澡後帶上相機，準備迎接東海岸的薄荷藍海。</p>
+            <p style="font-size: 13px; color: var(--text-muted); padding: 0 5px;">新羅舒泰健身房 1HR。洗澡後帶上相機，步行至飯店對面公車站。</p>
         </div>
 
-        <!-- 10:00 London Bagel -->
+        <!-- 10:30 Brunch -->
         <div class="time-block">
             <div class="time-header">
-                <span class="time-tag">10:00</span>
-                <span class="time-title">現象級早午餐與攝影</span>
+                <span class="time-tag">10:30</span>
+                <span class="time-title">人氣早午餐規劃</span>
+                <span class="bus-badge">Bus 201/101</span>
             </div>
             <div class="card">
-                <div class="card-label"><span>Trend</span><span>外帶限定</span></div>
+                <div class="card-label">Trend | 外帶最快</div>
                 <div class="card-name">倫敦貝果博物館 (濟州)</div>
-                <div class="card-info">雖然人潮洶湧，但<b>外帶 (Take-out)</b> 速度快非常多。拿著熱貝果直接走到旁邊的海邊木棧道吃，才是獨旅者的餘裕。</div>
+                <div class="card-info">週末排隊極長。<b>強烈建議選「外帶 (Take-out)」</b>，拿到海邊木棧道吃。步行至「東福里」站搭 201 續行。</div>
                 <div class="photo-guide">
-                    <b>📸 桌布攝影機位</b>
-                    <p>利用店外那面紅磚英倫牆，將藍色海洋作為背景。建議用 iPhone 2x 焦段，對準招牌與雲朵，拍出具有雜誌質感的鎖屏圖。</p>
-                    <span class="lens-badge">Recommend: 35mm / 50mm</span>
+                    <b>📸 桌布攝影視角</b>
+                    <p>利用店外復古紅磚牆，將藍色大海作為背景。使用 2x 焦段拍攝招牌細節，適合做手機鎖屏。</p>
                 </div>
                 <a href="https://map.naver.com/v5/search/런던베이글뮤지엄+제주" target="_blank" class="naver-link">Naver Map 導航</a>
             </div>
         </div>
 
-        <!-- 11:20 Coffee Parallel -->
+        <!-- 11:30 Coffee Parallel -->
         <div class="time-block">
             <div class="time-header">
-                <span class="time-tag">11:20</span>
-                <span class="time-title">早晨咖啡 (平行選擇)</span>
-                <span class="scroll-hint">左滑切換 👉</span>
+                <span class="time-tag">11:30</span>
+                <span class="time-title">早晨咖啡 (平行宇宙)</span>
+                <span style="font-size: 11px; color: var(--text-muted); margin-left: auto;">左滑選擇 👉</span>
             </div>
             <div class="card-scroller">
+                <!-- Choice 1 -->
                 <div class="card">
-                    <div class="card-label">主推：極簡大窗</div>
-                    <div class="card-name">Cafe Mou Moon</div>
-                    <div class="card-info">位於月汀里。擁有一整面巨大的玻璃窗。視覺極致純淨。</div>
+                    <div class="card-label">主推：極簡落地窗</div>
+                    <div class="card-name">Cafe Mou Moon (月汀里)</div>
+                    <div class="card-info">二樓擁有整面無死角海景大窗。從貝果搭 201 路約 15 分鐘達月汀里。</div>
                     <div class="photo-guide">
-                        <b>📸 構圖教學</b>
-                        <p>站在二樓正中心，將窗框作為畫框，把海平線置於畫面中央，適合做成簡約電腦桌面。</p>
+                        <b>📸 桌布構圖</b>
+                        <p>站在二樓正中心，將窗框當作畫框，拍攝極簡的海平線。適合做 16:9 電腦桌面。</p>
                     </div>
-                    <a href="https://map.naver.com/v5/search/카페무문" target="_blank" class="naver-link">Naver Map</a>
+                    <a href="https://map.naver.com/v5/search/카페+무문" target="_blank" class="naver-link">Naver Map</a>
                 </div>
+                <!-- Choice 2 -->
                 <div class="card">
-                    <div class="card-label">備選：復古鄉村</div>
+                    <div class="card-label">備選：英式鄉村風</div>
                     <div class="card-name">Cafe Layered</div>
-                    <div class="card-info">就在貝果隔壁。若不想移動，這裡的甜點與裝潢極具細節。</div>
+                    <div class="card-info">就在貝果隔壁，不想再搭公車移動的最佳備案。司康水準極高。</div>
                     <a href="https://map.naver.com/v5/search/카페레이어드+제주" target="_blank" class="naver-link">Naver Map</a>
-                </div>
-                <div class="card">
-                    <div class="card-label">備選：無壓大空間</div>
-                    <div class="card-name">Gommak Coffee</div>
-                    <div class="card-info">空間感極佳，遠離擁擠，適合想安靜修圖的人。</div>
-                    <a href="https://map.naver.com/v5/search/곰막" target="_blank" class="naver-link">Naver Map</a>
                 </div>
             </div>
         </div>
 
-        <!-- 12:45 Lunch Parallel -->
+        <!-- 13:00 Lunch Parallel -->
         <div class="time-block">
             <div class="time-header">
-                <span class="time-tag">12:45</span>
+                <span class="time-tag">13:00</span>
                 <span class="time-title">獨食午餐 (平行選擇)</span>
             </div>
             <div class="card-scroller">
                 <div class="card">
-                    <div class="card-label">主推：鮑魚石鍋</div>
+                    <div class="card-label">主推：鮑魚名店</div>
                     <div class="card-name">明珍鮑魚 (명진전복)</div>
-                    <div class="card-info">一人可點鮑魚石鍋飯，飯後倒入熱水變鍋巴湯，補足體力。</div>
+                    <div class="card-info">搭 201 至坪代里。招牌鮑魚石鍋飯，飯後倒入熱水變溫潤鍋巴湯。</div>
                     <a href="https://map.naver.com/v5/search/명진전복" target="_blank" class="naver-link">Naver Map</a>
                 </div>
                 <div class="card">
                     <div class="card-label">備選：視覺系章魚</div>
                     <div class="card-name">벵디 (Bengdi)</div>
-                    <div class="card-info">整隻章魚蓋飯。設有面海單人吧台，是獨旅者的最佳食堂。</div>
+                    <div class="card-info">整隻巨大章魚蓋飯。設有面海單人吧台，一個人吃超愜意。</div>
                     <a href="https://map.naver.com/v5/search/벵디" target="_blank" class="naver-link">Naver Map</a>
                 </div>
                 <div class="card">
-                    <div class="card-label">備選：清爽麵食</div>
-                    <div class="card-name">Gommak 生魚片麵</div>
-                    <div class="card-info">海膽麵或生魚片拌麵。大份量、高CP值，免排隊。</div>
+                    <div class="card-label">備選：海鮮湯麵</div>
+                    <div class="card-name">Gommak (海鮮麵)</div>
+                    <div class="card-info">空間感十足，免排隊。海膽湯麵或生魚片麵份量極大。</div>
                     <a href="https://map.naver.com/v5/search/곰막식당" target="_blank" class="naver-link">Naver Map</a>
                 </div>
             </div>
         </div>
 
-        <!-- 15:30 World Heritage Photography -->
+        <!-- 15:30 Seongsan Block -->
         <div class="time-block">
             <div class="time-header">
                 <span class="time-tag">15:30</span>
-                <span class="time-title">世界遺產大景攝影</span>
-            </div>
-            <div class="card" style="min-width: 100%;">
-                <div class="card-label">Highlight</div>
-                <div class="card-name">城山日出峰 (海岸線步道)</div>
-                <div class="card-info"><b>不需買票登頂。</b>直接走左側海女之家方向的步道，這裡是拍攝黑色火山岩斷崖的最佳視角。</div>
-                <div class="photo-guide">
-                    <b>📸 攝影師秘密機位</b>
-                    <p>走到海岸最下方，讓鏡頭低角度平視黑色礁石與白色浪花擊打。下午光線剛好照在岩壁上，層次感極佳。</p>
-                    <span class="lens-badge">Recommend: 0.5x Ultra Wide</span>
-                </div>
-                <a href="https://map.naver.com/v5/search/성산일출봉" target="_blank" class="naver-link">Naver Map</a>
-            </div>
-        </div>
-
-        <!-- 17:30 Sunset Photography -->
-        <div class="time-block">
-            <div class="time-header">
-                <span class="time-tag">17:30</span>
-                <span class="time-title">魔幻時刻：咸德夕照</span>
-            </div>
-            <div class="card" style="min-width: 100%;">
-                <div class="card-label">Panorama View</div>
-                <div class="card-name">犀牛峰 (Seoubong)</div>
-                <div class="card-info">就在咸德海灘旁。沿著步道爬升 10 分鐘，即可俯瞰整個馬蹄形的咸德海灘。</div>
-                <div class="photo-guide">
-                    <b>📸 巔峰大片建議</b>
-                    <p>這是濟州最強的海景俯瞰點。利用日落前的金色光芒，拍攝海水從淺綠到深藍的漸層，是完美的 16:9 電腦壁紙。</p>
-                </div>
-                <a href="https://map.naver.com/v5/search/서우봉" target="_blank" class="naver-link">Naver Map</a>
-            </div>
-        </div>
-
-        <!-- Dinner Parallel -->
-        <div class="time-block" style="margin-bottom: 50px;">
-            <div class="time-header">
-                <span class="time-tag">18:30</span>
-                <span class="time-title">咸德獨食晚餐</span>
+                <span class="time-title">世界大景 ✕ 咖啡</span>
+                <span class="bus-badge">Bus 201</span>
             </div>
             <div class="card-scroller">
                 <div class="card">
+                    <div class="card-label">景點：火山地貌</div>
+                    <div class="card-name">城山日出峰 (左側步道)</div>
+                    <div class="card-info">不需登頂。走海女之家步道，拍出黑色火山岩與浪花擊打的大片。</div>
+                    <div class="photo-guide">
+                        <b>📸 構圖筆記</b>
+                        <p>低角度拍攝玄武岩與斷崖，下午光影層次感最強。</p>
+                    </div>
+                    <a href="https://map.naver.com/v5/search/성산일출봉" target="_blank" class="naver-link">Naver Map</a>
+                </div>
+                <div class="card">
+                    <div class="card-label">咖啡：特色堅果</div>
+                    <div class="card-name">Dorrell Coffee</div>
+                    <div class="card-info">必點 Nutty Cloud 堅果雲朵拿鐵 (限16:00前)。工業風設計。</div>
+                    <a href="https://map.naver.com/v5/search/도렐+제주" target="_blank" class="naver-link">Naver Map</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 18:30 Dinner -->
+        <div class="time-block" style="margin-bottom: 50px;">
+            <div class="time-header">
+                <span class="time-tag">18:30</span>
+                <span class="time-title">咸德夕陽與晚餐</span>
+                <span class="bus-badge">Bus 201/101</span>
+            </div>
+            <div class="card-scroller">
+                <div class="card">
+                    <div class="card-label">主推：單人白帶魚</div>
                     <div class="card-name">咸德馬當 (함덕마당)</div>
-                    <div class="card-info">提供罕見的「單人辣燉白帶魚套餐」。</div>
+                    <div class="card-info">罕見提供 1 人份辣燉白帶魚套餐。餐前先爬犀牛峰步道拍海景。</div>
                     <a href="https://map.naver.com/v5/search/함덕마당" target="_blank" class="naver-link">Naver Map</a>
                 </div>
                 <div class="card">
-                    <div class="card-name">Yesodam (豬肉湯麵)</div>
-                    <div class="card-info">在地人老店。濃郁大骨湯與厚切黑豬肉。</div>
+                    <div class="card-label">備選：黑豬肉湯麵</div>
+                    <div class="card-name">Yesodam (在地老店)</div>
+                    <div class="card-info">濃郁大骨湯底。一人吃暖胃且高 CP 值。</div>
                     <a href="https://map.naver.com/v5/search/예소담" target="_blank" class="naver-link">Naver Map</a>
-                </div>
-                <div class="card">
-                    <div class="card-name">熟成到 (咸德店)</div>
-                    <div class="card-info">最強黑豬肉。接受單人，但須點兩份肉(400g)。</div>
-                    <a href="https://map.naver.com/v5/search/숙성도+함덕" target="_blank" class="naver-link">Naver Map</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- DAY 03 - WESTERN JEJU -->
+    <!-- DAY 03 - WESTERN ROUTE -->
     <div id="day3" class="day-view">
         <div class="time-block">
             <div class="time-header">
                 <span class="time-tag">08:00</span>
-                <span class="time-title">最後健身 ✕ 退房</span>
+                <span class="time-title">晨間健身 ✕ Check-out</span>
             </div>
-            <p style="font-size: 13px; color: var(--text-muted); padding: 0 5px;">帶著行李前往「漢拏醫院」站，搭乘 102 急行巴士前往翰林。</p>
+            <p style="font-size: 13px; color: var(--text-muted); padding: 0 5px;">健身房最後衝刺。退房後步行至「漢拏醫院」站，搭乘 102 急行巴士。</p>
         </div>
 
-        <!-- 10:00 West Coffee -->
+        <!-- 10:30 West Coffee -->
         <div class="time-block">
             <div class="time-header">
-                <span class="time-tag">10:00</span>
+                <span class="time-tag">10:30</span>
                 <span class="time-title">廢墟美學咖啡</span>
+                <span class="bus-badge">Bus 102 (急行)</span>
             </div>
             <div class="card-scroller">
                 <div class="card">
-                    <div class="card-label">Industrial Beauty</div>
-                    <div class="card-name">Anthracite Coffee</div>
-                    <div class="card-info">舊澱粉廠改建。蕨類、鏽蝕機具、火山石。獨食靜謐首選。</div>
-                    <div class="photo-guide">
-                        <b>📸 桌面大片建議</b>
-                        <p>拍攝陽光從舊廠房頂部漏下來，照在機具與蕨類上的光影對比，極致冷淡美學。</p>
-                    </div>
+                    <div class="card-label">主推：工業廢墟</div>
+                    <div class="card-name">Anthracite 翰林</div>
+                    <div class="card-info">舊澱粉廠改建。蕨類與鏽蝕機具共生。公車站步行 5 分即達。</div>
+                    <div class="photo-guide"><b>📸 構圖：</b>拍攝屋頂透下的光束灑在生鏽輸送帶上的畫面。</div>
                     <a href="https://map.naver.com/v5/search/앤트러사이트+제주" target="_blank" class="naver-link">Naver Map</a>
                 </div>
                 <div class="card">
-                    <div class="card-label">Beach Resort</div>
+                    <div class="card-label">備選：峇里島風</div>
                     <div class="card-name">Hotel Sand</div>
-                    <div class="card-info">位於狹才。峇里島度假感，沙灘就在門外。</div>
+                    <div class="card-info">位於狹才海灘。沙灘連著咖啡廳，視野極致奢華。</div>
                     <a href="https://map.naver.com/v5/search/호텔샌드" target="_blank" class="naver-link">Naver Map</a>
-                </div>
-                <div class="card">
-                    <div class="card-label">Vintage School</div>
-                    <div class="card-name">明月國民學校</div>
-                    <div class="card-info">廢棄小學改建。走廊與舊木地板極度好拍。</div>
-                    <a href="https://map.naver.com/v5/search/명월국민학교" target="_blank" class="naver-link">Naver Map</a>
                 </div>
             </div>
         </div>
 
-        <!-- 11:30 Best Desktop Spot -->
+        <!-- Desktop Wallpaper -->
         <div class="time-block">
             <div class="time-header">
                 <span class="time-tag">11:30</span>
                 <span class="time-title">西線終極桌布大景</span>
             </div>
             <div class="card" style="min-width: 100%;">
-                <div class="card-label">Top Choice</div>
+                <div class="card-label">Highlight</div>
                 <div class="card-name">金陵/狹才 ✕ 飛揚島</div>
-                <div class="card-info">這是濟州島最純淨的果凍色海水。正對面就是漂浮在海上的孤島「飛揚島」。</div>
+                <div class="card-info">這是濟州最純淨的薄荷色海域。正對面即是海中孤島「飛揚島」。</div>
                 <div class="photo-guide">
-                    <b>📸 構圖大師筆記</b>
-                    <p>將飛揚島放在畫面正中央，保留大量的白色沙灘與綠色海水。這是最經典的濟州島電腦壁紙機位。</p>
-                    <span class="lens-badge">Recommend: 2x Zoom (iPhone)</span>
+                    <b>📸 桌布機位建議</b>
+                    <p>使用 2x 焦段將飛揚島置於中心，保留下方 1/3 的果凍色海水。極致純淨，完美桌布。</p>
                 </div>
                 <a href="https://map.naver.com/v5/search/협재해수욕장" target="_blank" class="naver-link">Naver Map</a>
             </div>
         </div>
 
-        <!-- 12:30 West Lunch -->
+        <!-- 12:30 Lunch Parallel -->
         <div class="time-block">
             <div class="time-header">
                 <span class="time-tag">12:30</span>
-                <span class="time-title">涯月獨食午餐</span>
+                <span class="time-title">獨食午餐方案</span>
+                <span class="bus-badge">Bus 202</span>
             </div>
             <div class="card-scroller">
                 <div class="card">
-                    <div class="card-label">Sea Front</div>
+                    <div class="card-label">主推：海景拉麵</div>
                     <div class="card-name">Nolaba 海鮮拉麵</div>
-                    <div class="card-info">設有面海單人吧台。一個人嗑滿滿螃蟹的海鮮拉麵，絕美風景。</div>
+                    <div class="card-info">設有面海單人吧台。嗑滿滿螃蟹的海鮮拉麵，一人吃最豪邁。</div>
                     <a href="https://map.naver.com/v5/search/노라바" target="_blank" class="naver-link">Naver Map</a>
                 </div>
                 <div class="card">
-                    <div class="card-label">Local Meat</div>
+                    <div class="card-label">備選：炸豬排</div>
                     <div class="card-name">西村祭 (炸豬排)</div>
-                    <div class="card-info">黑豬肉厚切炸豬排。份量驚人，單人友善。</div>
+                    <div class="card-info">巨無霸黑豬肉炸豬排，完全歡迎單人，飽足感爆表。</div>
                     <a href="https://map.naver.com/v5/search/서촌제" target="_blank" class="naver-link">Naver Map</a>
                 </div>
             </div>
         </div>
 
-        <!-- 14:30 Afternoon Gallery Coffee -->
+        <!-- 14:30 Final Coffee -->
         <div class="time-block">
             <div class="time-header">
                 <span class="time-tag">14:30</span>
                 <span class="time-title">海邊藝廊咖啡攝影</span>
+                <span class="bus-badge">🚶 漢潭步道步行</span>
             </div>
             <div class="card-scroller">
                 <div class="card">
-                    <div class="card-label">Art Frame</div>
+                    <div class="card-label">主推：畫框大窗</div>
                     <div class="card-name">Slowboat (涯月)</div>
-                    <div class="card-info">靜謐如畫廊。二樓那扇著名的巨型方窗，將海景裁切成一幅畫。</div>
-                    <div class="photo-guide">
-                        <b>📸 必拍視角</b>
-                        <p>坐在沙發上，拍攝正對面大窗。海平線剛好橫貫窗戶，極簡、純粹、永恆。</p>
-                    </div>
+                    <div class="card-info">藝廊般的靜謐。二樓大窗將海景裁切成一幅永恆的畫。</div>
+                    <div class="photo-guide"><b>📸 必拍視角：</b>二樓面窗沙發位，拍攝畫框海景。</div>
                     <a href="https://map.naver.com/v5/search/슬로우보트" target="_blank" class="naver-link">Naver Map</a>
                 </div>
                 <div class="card">
-                    <div class="card-label">Movie Scene</div>
+                    <div class="card-label">備選：電影感窗景</div>
                     <div class="card-name">Lazy Pump</div>
-                    <div class="card-info">舊幫浦廠改建。巨大的觀景窗像電影院螢幕一樣壯觀。</div>
+                    <div class="card-info">舊幫浦廠改建。方形巨窗，極適合拍攝文藝人像。</div>
                     <a href="https://map.naver.com/v5/search/레이지펌프" target="_blank" class="naver-link">Naver Map</a>
                 </div>
             </div>
         </div>
 
-        <!-- 17:00 Finale -->
+        <!-- Finale: Grand Hyatt to Airport (Full Bus) -->
         <div class="finale-card">
-            <span class="finale-label">THE PERFECT ENDING</span>
+            <span class="finale-label">THE ULTIMATE ENDING</span>
             <h3 class="finale-name">濟州君悅酒店 汗蒸幕</h3>
             <p class="finale-info">
-                位於夢想之塔 6 樓。在登機前享受最高規格的熱海水浴與韓式排毒。徹底洗去旅途疲憊，並在館內享用最後的韓式料理。
+                位於老衡洞 Dream Tower 6 樓。登機前享受最高規海水浴與韓式排毒。徹底洗去疲憊。
             </p>
-            <div class="flight-alert">
-                ⏰ <b>20:15</b> 櫃檯叫車 ➡ <b>20:30</b> 到達機場 ➡ <b>22:00</b> 飛機起飛
+            <div class="bus-route-box">
+                🚌 <b>機場交通 (NO TAXI)：</b><br>
+                從君悅酒店步行 3 分鐘至「老衡五岔路口 (노형오거리)」站。<br>
+                搭乘 <b>315、316、465、466 號公車</b> 或 <b>600 號機場巴士</b>。<br>
+                ⏰ <b>20:15</b> 出發 ➡ <b>20:30</b> 抵達機場 ➡ <b>22:00</b> 起飛
             </div>
             <a href="https://map.naver.com/v5/search/그랜드하얏트제주+찜질방" target="_blank" class="naver-link" style="background: var(--gold); color: black;">Naver Map 導航</a>
         </div>
     </div>
 
     <footer>
-        <p>© 2026 JEJU SOLO ADVENTURE | MAGAZINE EDITION</p>
+        <p>© 2026 JEJU SOLO ADVENTURE | ALL-BUS EDITION</p>
     </footer>
 </div>
 
