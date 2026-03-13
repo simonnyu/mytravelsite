@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>JEJU SOLO BEYOND | 濟州公車獨旅終極指南 13.0</title>
+    <title>JEJU SOLO BEYOND | 濟州公車獨旅終極指南 16.0</title>
     <style>
         :root {
             --primary: #FF7B54;
             --primary-soft: #FFF5F2;
             --dark: #0F172A;
-            --accent: #03C75A;
+            --accent: #03C75A; /* Naver 綠 */
+            --google: #4285F4; /* Google 藍 */
             --bg: #F8FAFC;
             --card: #FFFFFF;
             --text: #1A202C;
@@ -37,7 +38,7 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.1);
         }
 
-        /* Hero Header */
+        /* Hero Magazine Header */
         .hero {
             height: 38vh;
             background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.85)), 
@@ -73,12 +74,12 @@
             border-radius: 20px;
             font-weight: 800;
             color: var(--text-muted);
-            font-size: 11px;
+            font-size: 12px;
         }
         .tab-btn.active { background: var(--dark); color: white; }
 
         /* Banners */
-        .bus-warning {
+        .banner {
             margin: 20px;
             padding: 15px 20px;
             background: #FFFBEB;
@@ -97,51 +98,56 @@
 
         /* Timeline Items */
         .time-block { margin-top: 35px; }
-        .time-header { display: flex; align-items: center; margin-bottom: 12px; }
+        .time-header { display: flex; align-items: center; margin-bottom: 15px; }
         .time-tag { background: var(--dark); color: white; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 900; margin-right: 12px; }
-        .time-title { font-size: 16px; font-weight: 900; color: var(--dark); flex-grow: 1; }
-        .bus-meta { font-size: 9px; background: var(--accent); color: white; padding: 2px 6px; border-radius: 4px; font-weight: 800; }
+        .time-title { font-size: 17px; font-weight: 900; color: var(--dark); flex-grow: 1; }
+        .bus-meta { font-size: 10px; background: var(--accent); color: white; padding: 2px 8px; border-radius: 5px; font-weight: 800; }
 
-        /* Card Scroller */
-        .card-scroller { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+        /* Card System */
+        .card-scroller { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; scroll-snap-type: x mandatory; }
         .card-scroller::-webkit-scrollbar { display: none; }
 
         .card {
-            min-width: 290px;
-            max-width: 290px;
+            min-width: 310px;
+            max-width: 310px;
             background: var(--card);
-            border-radius: 22px;
-            padding: 20px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+            border-radius: 26px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
             border: 1px solid #F1F5F9;
             scroll-snap-align: start;
             display: flex;
             flex-direction: column;
         }
-        .card-label { font-size: 10px; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .card-name { font-size: 18px; font-weight: 900; margin-bottom: 6px; color: var(--dark); }
-        .card-info { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+        .card-label { font-size: 10px; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+        .card-name { font-size: 19px; font-weight: 900; margin-bottom: 4px; color: var(--dark); }
+        .card-kr { font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+        .card-info { font-size: 13.5px; color: var(--text-muted); margin-bottom: 15px; line-height: 1.6; }
         
         .photo-guide {
             background: var(--primary-soft);
-            border-radius: 12px;
-            padding: 10px;
+            border-radius: 16px;
+            padding: 12px;
             margin-top: auto;
-            border-left: 3px solid var(--primary);
+            border-left: 4px solid var(--primary);
         }
-        .photo-guide b { display: block; font-size: 10px; color: var(--primary); margin-bottom: 3px; font-weight: 900; text-transform: uppercase; }
-        .photo-guide p { font-size: 11px; color: #7C2D12; }
+        .photo-guide b { display: block; font-size: 11px; color: var(--primary); margin-bottom: 4px; font-weight: 900; text-transform: uppercase; }
+        .photo-guide p { font-size: 12px; color: #7C2D12; }
 
-        .naver-link {
-            display: flex; align-items: center; justify-content: center; background: var(--accent); color: white;
-            text-decoration: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 800; margin-top: 12px; gap: 8px;
+        /* Maps Buttons Container */
+        .map-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .map-btn {
+            display: flex; align-items: center; justify-content: center; 
+            text-decoration: none; padding: 12px; border-radius: 12px; font-size: 12px; font-weight: 800; gap: 6px;
         }
-        .naver-link::before { content: 'N'; font-weight: 900; background: white; color: var(--accent); width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        .btn-google { background: var(--google); color: white; }
+        .btn-naver { background: var(--accent); color: white; }
 
-        .finale-card { background: var(--dark); color: white; padding: 25px; border-radius: 25px; margin: 30px 0; }
-        .bus-route-box { background: rgba(255,255,255,0.08); padding: 15px; border-radius: 15px; font-size: 12px; line-height: 1.7; margin-bottom: 15px; }
+        .finale-card { background: var(--dark); color: white; padding: 30px; border-radius: 30px; margin: 40px 0; }
+        .bus-route-box { background: rgba(255,255,255,0.08); padding: 18px; border-radius: 16px; font-size: 13px; margin-bottom: 20px; line-height: 1.8; }
+        .bus-route-box b { color: var(--primary); }
 
-        footer { text-align: center; padding: 40px 20px; font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        footer { text-align: center; padding: 50px 20px; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; }
     </style>
 </head>
 <body>
@@ -154,31 +160,35 @@
         </div>
     </header>
 
-    <div class="bus-warning">
+    <div class="banner">
         ⚠️ <b>2026 公車族必讀：</b><br>
-        • 全面無現金化。行程已依公車特性保守估時。<br>
-        • <b>Plan B 邏輯：</b>所有備選點均在同一村落，步行可達。
+        • 全面<b>無現金化</b>。本指南提供雙地圖連結，Google Map 連結已優化店名搜尋。<br>
+        • <b>Plan B 邏輯：</b>所有備選方案均在「步行 5-10 分鐘內」，確保原地有備案。
     </div>
 
     <nav class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab(this, 'day1')">DAY 01</button>
-        <button class="tab-btn" onclick="switchTab(this, 'day2')">DAY 02</button>
-        <button class="tab-btn" onclick="switchTab(this, 'day3')">DAY 03</button>
+        <button class="tab-btn active" onclick="switchTab(this, 'day1')">DAY 01 抵達</button>
+        <button class="tab-btn" onclick="switchTab(this, 'day2')">DAY 02 東線</button>
+        <button class="tab-btn" onclick="switchTab(this, 'day3')">DAY 03 西線</button>
     </nav>
 
     <!-- DAY 01 - ARRIVAL -->
     <div id="day1" class="day-view active">
         <div class="time-block">
             <div class="time-header"><span class="time-tag">18:00</span><span class="time-title">抵達濟州機場</span></div>
-            <p style="font-size: 13px; color: var(--text-muted);">機場內領取 WOWPASS，搭乘機場巴士前往飯店 Check-in。</p>
+            <p style="font-size: 13px; color: var(--text-muted);">完成入境，辦理 WOWPASS 與 T-money 加值。</p>
         </div>
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">20:00</span><span class="time-title">獨享晚餐 ✕ 第一餐</span></div>
+            <div class="time-header"><span class="time-tag">20:00</span><span class="time-title">獨食晚餐 ✕ 蓮洞炸雞</span></div>
             <div class="card">
-                <div class="card-label">市區名店</div>
+                <div class="card-label">韓式炸雞</div>
                 <div class="card-name">BHC 炸雞 (蓮洞店)</div>
-                <div class="card-info">享受第一頓獨旅餐。即使一個人，點一份芝士炸雞也是完美的開始。</div>
-                <a href="nmap://place?lat=33.4878&lng=126.4862&name=BHC치킨+제주연동점&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/BHC치킨+제주연동점', '_blank'); return false;">Naver Map</a>
+                <div class="card-kr">BHC치킨 제주연동점</div>
+                <div class="card-info">享受獨旅第一餐。位於新濟州市中心，強推起司粉炸雞。</div>
+                <div class="map-actions">
+                    <a href="https://www.google.com/maps/search/?api=1&query=BHC치킨+제주연동점" target="_blank" class="map-btn btn-google">Google Map</a>
+                    <a href="https://map.naver.com/v5/search/BHC치킨+제주연동점" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                </div>
             </div>
         </div>
     </div>
@@ -186,144 +196,242 @@
     <!-- DAY 02 - FULL EASTERN ROUTE -->
     <div id="day2" class="day-view">
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">08:00</span><span class="time-title">健身 ✕ 出發東線</span></div>
-            <p style="font-size: 13px; color: var(--text-muted);">飯店健身 1HR。搭乘急行 101 至咸德站轉 201。</p>
+            <div class="time-header"><span class="time-tag">08:00</span><span class="time-title">健身 ✕ 跨區移動</span></div>
+            <p style="font-size: 13px; color: var(--text-muted);">飯店健身 1HR。隨後前往「漢拏醫院」站搭乘 101/201。</p>
         </div>
 
-        <!-- 10:45 Dongbok-ri -->
+        <!-- Stop: Dongbok-ri Area -->
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">10:45</span><span class="time-title">東福里 ✕ 貝果攝影區</span><span class="bus-info">🚌 漢拏醫院出發</span></div>
+            <div class="time-header">
+                <span class="time-tag">10:45</span><span class="time-title">東福里站 ✕ 貝果預約區</span>
+                <span class="bus-meta">🚌 101/201 直達</span>
+            </div>
             <div class="card-scroller">
+                <!-- London Bagel -->
                 <div class="card">
-                    <div class="card-label">主推 | Catchtable 預約</div>
+                    <div class="card-label">主推 | 外帶首選</div>
                     <div class="card-name">倫敦貝果博物館</div>
-                    <div class="card-info"><b>下車站：東福里 (동복리)</b>。強烈建議外帶，拿去海邊長椅吃，省下 2HR 排隊。</div>
-                    <a href="nmap://place?lat=33.5115&lng=126.7121&name=런던베이글뮤지엄+제주&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/런던베이글뮤지엄+제주', '_blank'); return false;">Naver Map</a>
+                    <div class="card-kr">런던베이글뮤지엄 제주</div>
+                    <div class="card-info">下車站：<b>東福里 (동복리)</b>。強烈建議外帶到海邊吃。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=런던베이글뮤지엄+제주" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/런던베이글뮤지엄+제주" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
+                <!-- Cafe Layered (Immediate Next Door) -->
                 <div class="card">
-                    <div class="card-label">Plan B | 步行 5 分</div>
-                    <div class="card-name">Cafe Skog (스코г)</div>
-                    <div class="card-info"><b>就在同村。</b> 北歐極簡工業風。若貝果店人太多，這裏是絕佳的靜謐替代點。</div>
-                    <a href="nmap://place?lat=33.5126&lng=126.7153&name=스코그&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/스코그', '_blank'); return false;">Naver Map</a>
+                    <div class="card-label">Plan B | 就在隔壁 (正隔壁)</div>
+                    <div class="card-name">Cafe Layered</div>
+                    <div class="card-kr">카페레이어드 제주</div>
+                    <div class="card-info"><b>與貝果店在同一棟建築。</b>若貝果預約已滿，這裡的司康是同集團的頂級水準，視覺滿分。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=카페레이어드+제주" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/카페레이어드+제주" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
+                </div>
+                <!-- Cafe Skog (Plan C: 5 min walk) -->
+                <div class="card">
+                    <div class="card-label">Plan C | 步行 5 分鐘</div>
+                    <div class="card-name">Cafe Skog</div>
+                    <div class="card-kr">스코그</div>
+                    <div class="card-info">位於東福里村莊內。北歐極簡工業風，適合想安靜修圖的獨旅者。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=스코그+제주" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/스코그" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 12:30 Woljeong-ri -->
+        <!-- Stop: Woljeong-ri Area -->
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">12:30</span><span class="time-title">月汀里 ✕ 漸層海咖啡</span><span class="bus-info">🚌 201 號</span></div>
+            <div class="time-header">
+                <span class="time-tag">12:30</span><span class="time-title">月汀里站 ✕ 落地大窗區</span>
+                <span class="bus-meta">🚌 201 號 (15min)</span>
+            </div>
             <div class="card-scroller">
                 <div class="card">
-                    <div class="card-label">主推 | 畫框窗景</div>
-                    <div class="card-name">Moumoon (무문)</div>
-                    <div class="card-info"><b>下車站：月汀里 (월정리)</b>。二樓落地窗全景收錄海景。</div>
-                    <a href="nmap://place?lat=33.5561&lng=126.7958&name=무문&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/카페무문', '_blank'); return false;">Naver Map</a>
+                    <div class="card-label">主推 | 全景海景</div>
+                    <div class="card-name">Moumoon</div>
+                    <div class="card-kr">무문</div>
+                    <div class="card-info">下車站：<b>月汀里 (월정리)</b>。二樓落地窗裁切海景，視覺純淨度全島最高。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=무문+제주" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/무문" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
                 <div class="card">
-                    <div class="card-label">Plan B | 步行 2 分</div>
-                    <div class="card-name">Woodstock (우드스탁)</div>
-                    <div class="card-info">位於 Moumoon 同沙灘。美式海島放鬆感，二樓窗景同樣優越。</div>
-                    <a href="nmap://place?lat=33.5558&lng=126.7950&name=우드스탁&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/월정리우드스탁', '_blank'); return false;">Naver Map</a>
+                    <div class="card-label">Plan B | 同沙灘</div>
+                    <div class="card-name">Woodstock</div>
+                    <div class="card-kr">월정리우드스탁</div>
+                    <div class="card-info">步行 2 分鐘。美式放鬆感。若 Moumoon 沒靠窗位，這裏視野同樣無敵。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=월정리우드스탁" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/월정리우드스탁" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 14:00 Lunch (Pyeongdae-ri) -->
+        <!-- Stop: Lunch (Pyeongdae-ri) -->
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">14:00</span><span class="time-title">坪代里 ✕ 獨食午餐</span></div>
+            <div class="time-header"><span class="time-tag">14:00</span><span class="time-title">坪代里站 ✕ 獨食午餐</span></div>
             <div class="card-scroller">
                 <div class="card">
                     <div class="card-label">主推 | 鮑魚石鍋</div>
-                    <div class="card-name">明珍鮑魚 (명진전복)</div>
-                    <div class="card-info"><b>下車站：坪代里 (평대리)</b>。經典一人食名店。</div>
-                    <a href="nmap://place?lat=33.5413&lng=126.8444&name=명진전복&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/명진전복', '_blank'); return false;">Naver Map</a>
+                    <div class="card-name">明珍鮑魚</div>
+                    <div class="card-kr">명진전복</div>
+                    <div class="card-info">下車站：<b>坪代里 (평대리)</b>。火曜公休。飯後製作鍋巴湯是精髓，單人友善。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=명진전복" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/명진전복" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
                 <div class="card">
-                    <div class="card-label">Plan B | 步行 1 分</div>
-                    <div class="card-name">Bengdi (벵디)</div>
-                    <div class="card-info">就在明珍正隔壁。主打整隻章魚蓋飯。</div>
-                    <a href="nmap://place?lat=33.5410&lng=126.8440&name=벵디&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/벵디', '_blank'); return false;">Naver Map</a>
+                    <div class="card-label">Plan B | 步行 1 分鐘</div>
+                    <div class="card-name">Bengdi</div>
+                    <div class="card-kr">벵디</div>
+                    <div class="card-info"><b>就在隔壁。</b>主打整隻章魚蓋飯。設有單人面海吧台，風景比明珍更勝一籌。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=벵디+제주" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/벵디" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Day 2 Afternoon (The Missing Part) -->
+        <!-- Afternoon: Seongsan -->
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">15:30</span><span class="time-title">城山大景 ✕ 咖啡</span><span class="bus-info">🚌 201 號</span></div>
+            <div class="time-header"><span class="time-tag">16:00</span><span class="time-title">城山 ✕ 世界遺產</span></div>
             <div class="card-scroller">
                 <div class="card">
-                    <div class="card-label">景點 | 火山斷崖</div>
-                    <div class="card-name">城山日出峰 (左側步道)</div>
-                    <div class="card-info"><b>下車站：城山日出峰</b>。走海女之家步道，拍黑色岩層。</div>
-                    <a href="nmap://place?lat=33.4582&lng=126.9426&name=성산일출봉&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/성산일출봉', '_blank'); return false;">Naver Map</a>
+                    <div class="card-label">攝影 | 火山斷崖</div>
+                    <div class="card-name">城山日出峰 (步道)</div>
+                    <div class="card-kr">성산일출봉</div>
+                    <div class="card-info">走左側海女之家免費步道。下午光影層次最強。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=성산일출봉" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/성산일출봉" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
                 <div class="card">
-                    <div class="card-label">咖啡 | 雲朵堅果</div>
+                    <div class="card-label">咖啡 | 堅果雲朵</div>
                     <div class="card-name">Dorrell Coffee</div>
-                    <div class="card-info">必點 Nutty Cloud。下午 4 點前最後一杯咖啡。</div>
-                    <a href="nmap://place?lat=33.4720&lng=126.9328&name=도렐+제주본점&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/도렐+제주본점', '_blank'); return false;">Naver Map</a>
+                    <div class="card-kr">도렐 제주본점</div>
+                    <div class="card-info">必點招牌 Nutty Cloud。下午四點禁咖啡因前的最後一杯。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=도렐+제주본점" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/도렐+제주본점" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">18:30</span><span class="time-title">咸德晚餐 ✕ 夕陽</span><span class="bus-info">🚌 101 號返回</span></div>
+            <div class="time-header"><span class="time-tag">18:30</span><span class="time-title">咸德夕陽 ✕ 晚餐</span><span class="bus-meta">🚌 101 返回</span></div>
             <div class="card">
-                <div class="card-name">咸德馬當 (함덕마당)</div>
-                <div class="card-info">提供單人辣燉白帶魚套餐。就在海邊，視野極佳。</div>
-                <a href="nmap://place?lat=33.5434&lng=126.6669&name=함덕마당&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/함덕마당', '_blank'); return false;">Naver Map</a>
+                <div class="card-label">單人白帶魚</div>
+                <div class="card-name">咸德馬當</div>
+                <div class="card-kr">함덕마당</div>
+                <div class="card-info">提供罕見單人辣燉白帶魚套餐。</div>
+                <div class="map-actions">
+                    <a href="https://www.google.com/maps/search/?api=1&query=함덕마당" target="_blank" class="map-btn btn-google">Google Map</a>
+                    <a href="https://map.naver.com/v5/search/함덕마당" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- DAY 03 - WESTERN ROUTE -->
+    <!-- DAY 03 - FULL WESTERN ROUTE -->
     <div id="day3" class="day-view">
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">08:00</span><span class="time-title">健身 ✕ 退房</span></div>
-            <p style="font-size: 13px; color: var(--text-muted);">搭乘 102 急行巴士前往「狹才海灘」站。</p>
+            <div class="time-header"><span class="time-tag">08:00</span><span class="time-title">健身 ✕ Check-out</span></div>
+            <p style="font-size: 13px; color: var(--text-muted);">飯店健身 1HR。搭乘急行 102 直奔西線狹才。</p>
         </div>
 
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">10:45</span><span class="time-title">狹才站 ✕ 窗景攝影</span><span class="bus-info">🚌 102 號</span></div>
+            <div class="time-header">
+                <span class="time-tag">10:45</span><span class="time-title">狹才站 ✕ 攝影天堂</span>
+                <span class="bus-meta">🚌 102 號</span>
+            </div>
             <div class="card-scroller">
                 <div class="card">
                     <div class="card-label">主推 | 通窗海景</div>
-                    <div class="card-name">Beryl (베릴)</div>
-                    <div class="card-info">直面飛揚島。單人位多，攝影天堂。</div>
-                    <div class="photo-guide"><b>📸 構圖：</b>長焦壓縮島嶼置中。</div>
-                    <a href="nmap://place?lat=33.3932&lng=126.2400&name=베릴&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/베릴', '_blank'); return false;">Naver Map</a>
+                    <div class="card-name">Beryl</div>
+                    <div class="card-kr">베릴</div>
+                    <div class="card-info">直面飛揚島。單人座極多，獨旅攝影天堂。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=베릴+제주" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/베릴" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
                 <div class="card">
-                    <div class="card-label">Plan B | 步行 3 分</div>
+                    <div class="card-label">Plan B | 沙發看海</div>
                     <div class="card-name">Hotel Sand</div>
-                    <div class="card-info">峇里島風沙發。若 Beryl 沒位子，這裏就是最佳備案。</div>
-                    <a href="nmap://place?lat=33.3939&lng=126.2396&name=호텔샌드&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/호텔샌드', '_blank'); return false;">Naver Map</a>
+                    <div class="card-kr">호텔샌드</div>
+                    <div class="card-info">步行 2 分鐘。度假感爆棚。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=호텔샌드" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/호텔샌드" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="time-block">
-            <div class="time-header"><span class="time-tag">15:30</span><span class="time-title">涯月 ✕ 畫框視角</span><span class="bus-info">🚌 202 號</span></div>
-            <div class="card">
-                <div class="card-name">Slowboat (슬로우보트)</div>
-                <div class="card-info">二樓著名方窗，裁切絕美海景。下午 4 點後禁咖啡因。</div>
-                <a href="nmap://place?lat=33.4795&lng=126.3685&name=슬로우보트&appname=jeju-solo-guide" target="_blank" class="naver-link" onclick="window.open('https://map.naver.com/v5/search/슬로우보트', '_blank'); return false;">Naver Map</a>
+            <div class="time-header"><span class="time-tag">13:15</span><span class="time-title">涯月 ✕ 海景獨食</span></div>
+            <div class="card-scroller">
+                <div class="card">
+                    <div class="card-name">Nolaba</div>
+                    <div class="card-kr">노라바</div>
+                    <div class="card-info">設有面海單人吧台，一個人吃螃蟹拉麵絕不尷尬。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=노라바" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/노라바" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-name">西村祭</div>
+                    <div class="card-kr">서촌제</div>
+                    <div class="card-info"><b>就在隔壁。</b>炸豬排配特製豆腐，非常紮實。</div>
+                    <div class="map-actions">
+                        <a href="https://www.google.com/maps/search/?api=1&query=서촌제" target="_blank" class="map-btn btn-google">Google Map</a>
+                        <a href="https://map.naver.com/v5/search/서촌제" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="finale-card">
-            <h3 style="font-size: 20px; font-weight: 900; margin-bottom: 15px;">濟州君悅酒店 ✕ 機場公車</h3>
-            <div class="bus-route-box">
-                🚌 <b>機場導航 (NO TAXI)：</b><br>
-                1. 步行 4 分至<b>「老衡五岔路口」</b>站。<br>
-                2. 搭乘 <b>315、316 或 600 號</b>。<br>
-                ⏰ <b>19:45</b> 離汗蒸 ➡ <b>20:30</b> 機場 (15min 抵達)。
+        <div class="time-block">
+            <div class="time-header"><span class="time-tag">15:30</span><span class="time-title">下加里 ✕ 藝廊咖啡</span></div>
+            <div class="card">
+                <div class="card-name">Slowboat</div>
+                <div class="card-kr">슬로우보트</div>
+                <div class="card-info">二樓著名方窗裁切海景。16:00 後禁咖啡因。</div>
+                <div class="map-actions">
+                    <a href="https://www.google.com/maps/search/?api=1&query=슬로우보트" target="_blank" class="map-btn btn-google">Google Map</a>
+                    <a href="https://map.naver.com/v5/search/슬로우보트" target="_blank" class="map-btn btn-naver">Naver Map</a>
+                </div>
             </div>
-            <a href="nmap://place?lat=33.4851&lng=126.4813&name=그랜드+하얏特+제주&appname=jeju-solo-guide" target="_blank" class="naver-link" style="background: var(--gold); color: black;" onclick="window.open('https://map.naver.com/v5/search/그랜드하얏트제주', '_blank'); return false;">Naver Map 導航</a>
+        </div>
+
+        <!-- Finale -->
+        <div class="finale-card">
+            <h3 style="font-size: 20px; font-weight: 900; margin-bottom: 15px; color: var(--gold);">濟州君悅酒店 ✕ 機場返航</h3>
+            <div class="bus-route-box">
+                🚌 <b>全公車導航 (NO TAXI)：</b><br>
+                1. 離開酒店，步行 4 分至「老衡五岔路口」站。<br>
+                2. 搭乘 <b>315、316 或 600 號</b>。<br>
+                ⏰ <b>19:45</b> 離汗蒸 ➡ <b>20:30</b> 到達機場。
+            </div>
+            <div class="map-actions">
+                <a href="https://www.google.com/maps/search/?api=1&query=Grand+Hyatt+Jeju" target="_blank" class="map-btn btn-google">Google Map</a>
+                <a href="https://map.naver.com/v5/search/그랜드하얏트제주" target="_blank" class="map-btn btn-naver">Naver Map</a>
+            </div>
         </div>
     </div>
 
-    <footer><p>© 2026 JEJU SOLO ADVENTURE | VER 13.0</p></footer>
+    <footer><p>© 2026 JEJU SOLO ADVENTURE | VER 16.0</p></footer>
 </div>
 
 <script>
