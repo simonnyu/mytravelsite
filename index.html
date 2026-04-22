@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>北海道櫻花攝影快閃行程</title>
+    <title>北海道櫻花攝影快閃 (極致效能版)</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -14,6 +14,8 @@
             --accent-hover: #ff9eaa;
             --coffee-color: #8d6e63;
             --photo-color: #ffcc00;
+            --weather-color: #64b5f6;
+            --alert-color: #ef5350;
         }
         
         * {
@@ -92,6 +94,16 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .weather-banner {
+            background-color: rgba(100, 181, 246, 0.1);
+            border-left: 4px solid var(--weather-color);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            color: #bbdefb;
+        }
+
         .timeline-card {
             background-color: var(--card-bg);
             border-radius: 12px;
@@ -117,18 +129,6 @@
             color: #fff;
         }
 
-        .map-link {
-            display: inline-flex;
-            align-items: center;
-            margin-bottom: 12px;
-            color: #64b5f6;
-            text-decoration: none;
-            font-size: 0.9rem;
-            background-color: rgba(100, 181, 246, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
         .desc {
             font-size: 0.95rem;
             color: #ccc;
@@ -146,26 +146,31 @@
             background-color: rgba(255, 204, 0, 0.1);
             border-left: 3px solid var(--photo-color);
         }
-
         .photo-tip strong { color: var(--photo-color); }
 
         .coffee-tip {
             background-color: rgba(141, 110, 99, 0.15);
             border-left: 3px solid var(--coffee-color);
         }
-
         .coffee-tip strong { color: #bcaaa4; }
         
         .logistics-tip {
             background-color: rgba(255, 255, 255, 0.05);
             border-left: 3px solid #9e9e9e;
         }
+
+        .alert-tip {
+            background-color: rgba(239, 83, 80, 0.1);
+            border-left: 3px solid var(--alert-color);
+        }
+        .alert-tip strong { color: var(--alert-color); }
+
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🌸 北海道櫻花攝影快閃</h1>
+        <h1>🌸 北海道攝影快閃</h1>
     </header>
 
     <div class="tabs">
@@ -176,163 +181,172 @@
 
     <div class="content-container">
         <div id="day1" class="tab-content active">
+            <div class="weather-banner">
+                <strong>🌤️ 函館天氣：</strong> 晴時多雲，5°C - 12°C。港區海風強勁，日夜溫差極大，務必準備防風外套以利戶外長時間取景。
+            </div>
+
             <div class="timeline-card">
                 <div class="time">07:35 - 09:12</div>
-                <div class="title">抵達新千歲機場 & 轉乘</div>
-                <div class="desc">搭乘 VZ570 抵達。轉乘「快速機場線」至南千歲站，超商買點心備用。搭乘 09:12 北斗 6 號前往函館。</div>
+                <div class="title">抵達新千歲 & 極限轉乘</div>
+                <div class="desc">VZ570 抵達。轉乘「快速機場線」3 分鐘至南千歲站，超商買點心，搭乘 09:12 北斗 6 號。</div>
+                <div class="box logistics-tip">
+                    <strong>💡 戰術優勢：</strong> 首班國際線且無托運行李。直接快步走人工通關，避開人龍，極速前往 B1 JR 車站。
+                </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">12:33 - 13:15</div>
-                <div class="title">抵達函館 & 買便當</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=長谷川商店+函館車站" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">抵達函館車站，順手外帶「長谷川商店烤雞肉串便當」，搭乘市電前往五稜郭。</div>
+                <div class="title">函館抵達 & 午餐備勤</div>
+                <div class="desc">車站外帶「長谷川商店烤雞肉串便當」，搭乘市電直奔五稜郭。</div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">13:15 - 15:15</div>
                 <div class="title">五稜郭公園</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=五稜郭公園" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">帶著便當在櫻花樹下完食，展開今日首波拍攝。</div>
+                <div class="desc">櫻花樹下享用便當，展開首波單眼拍攝。</div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 買票上塔拍星形粉紅護城河全景，下塔後用單眼捕捉水面上的櫻花倒影。
+                    <strong>📸 構圖策略：</strong> 上塔拍粉色星形全景；下塔後尋找無風處，拍攝護城河水面的櫻花倒影。
                 </div>
                 <div class="box coffee-tip">
-                    <strong>☕ 咖啡推薦：</strong> 珈琲焙煎工房 菊地。老派專業自家烘焙，適合外帶手沖。
+                    <strong>☕ 珈琲焙煎工房 菊地：</strong> 附近的老派專業烘焙店，外帶高品質手沖。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">15:45 - 17:15</div>
                 <div class="title">金森紅磚倉庫 & 八幡坂</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=八幡坂" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">搭市電到「十字街」站，感受港町歷史氛圍。</div>
+                <div class="desc">搭市電至「十字街」站。</div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 掌握下午斜射光。八幡坂使用中長焦段壓縮畫面，將坡道與海港船隻框在一起。
+                    <strong>📸 構圖策略：</strong> 把握斜射光。八幡坂使用中長焦段壓縮畫面，將坡道與海港船隻完美同框。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">17:15 - 18:00</div>
                 <div class="title">函館公園</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=函館公園" target="_blank">📍 Google Maps 導航</a>
                 <div class="desc">從八幡坂步行前往。</div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 捕捉在地人賞櫻的寫實畫面與充滿生活感的復古遊樂設施。
+                    <strong>📸 構圖策略：</strong> 捕捉在地生活感、寫實的賞櫻人群與復古遊樂設施。
                 </div>
                 <div class="box coffee-tip">
-                    <strong>☕ 咖啡推薦：</strong> 立待珈琲。極度安靜的空間，烘焙度掌控極佳。
+                    <strong>☕ 立待珈琲 (Tachimachi Coffee)：</strong> 鄰近公園，安靜且烘焙度精準的職人店鋪。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">18:15 - 19:55</div>
-                <div class="title">前往機場 & 飛往札幌</div>
-                <div class="desc">抵達函館機場。19:15 搭乘 JL2756。19:55 降落札幌丘珠機場 (OKD)。</div>
+                <div class="title">強制撤退 & 飛往札幌</div>
+                <div class="desc">19:15 搭乘 JL2756，19:55 降落札幌丘珠機場 (OKD)。</div>
+                <div class="box alert-tip">
+                    <strong>🚨 死線警告：</strong> 17:15 必須離開攝影點前往機場。
+                </div>
                 <div class="box logistics-tip">
-                    💡 善用 JAL 藍寶石會籍走優先通道。丘珠出站極快，可直接搭車前往薄野。
+                    <strong>💎 JAL 權益：</strong> 善用藍寶石會籍走專屬通道縮短安檢時間。抵達 OKD 後因無行李，可秒出站搭車至薄野。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">20:30</div>
-                <div class="title">入住飯店</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=VESSEL+HOTEL+CAMPANA+SUSUKINO" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">入住 VESSEL HOTEL CAMPANA SUSUKINO，泡溫泉休息。</div>
+                <div class="title">入住 VESSEL HOTEL</div>
+                <div class="desc">抵達薄野，泡溫泉洗去一日疲勞。</div>
             </div>
         </div>
 
         <div id="day2" class="tab-content">
+            <div class="weather-banner">
+                <strong>⛅ 札幌天氣：</strong> 多雲時晴，3°C - 11°C。若前往 Moere 沼，請注意雲層厚度與空曠處的低溫。
+            </div>
+
             <div class="timeline-card">
                 <div class="time">08:30 - 09:30</div>
-                <div class="title">VESSEL 飯店早餐</div>
-                <div class="desc">享用飯店極具盛名的海鮮勝手丼早飯。</div>
+                <div class="title">重裝補給：VESSEL 早餐</div>
+                <div class="desc">享用飯店著名的海鮮勝手丼，儲備體力。</div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">09:30 - 11:30</div>
                 <div class="title">圓山公園 & 北海道神宮</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道神宮" target="_blank">📍 Google Maps 導航</a>
                 <div class="desc">搭地鐵東西線至圓山公園站。</div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 木造神宮建築與櫻花交織的莊嚴感，利用長焦段拍攝兩側櫻花參道。
+                    <strong>📸 構圖策略：</strong> 捕捉木造建築與櫻花的莊嚴感，長焦段拍攝參道景深。
                 </div>
                 <div class="box coffee-tip">
-                    <strong>☕ 咖啡推薦：</strong> りたる珈琲 (Ritaru Coffee)。圓山區精品手沖代表，木炭烘焙風味深邃。
+                    <strong>☕ りたる珈琲 (Ritaru Coffee)：</strong> 圓山區精品手沖代表，木炭烘焙風味深邃。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">13:30 - 15:30</div>
-                <div class="title">北海道大學</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道大學" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">校園腹地廣大，適合悠閒散策。</div>
+                <div class="title">北海道大學散策</div>
+                <div class="desc">廣大校園與歷史建物群。</div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 歐式紅磚建築（農學部、古河講堂），建築幾何線條能穩定畫面。
+                    <strong>📸 構圖策略：</strong> 農學部、古河講堂的紅磚幾何線條，能為畫面提供極佳的穩定感。
                 </div>
                 <div class="box coffee-tip">
-                    <strong>☕ 咖啡推薦：</strong> 石田珈琲店。北大北側的咖啡聖地，職人氣息濃厚，自家製布丁極佳。
+                    <strong>☕ 石田珈琲店：</strong> 北大北側的咖啡聖地，職人手沖搭配自家製布丁。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">16:30 - 18:30</div>
-                <div class="title">Moere 沼公園 (莫埃來沼公園)</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=莫埃來沼公園" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">搭東豐線轉乘中央巴士。</div>
+                <div class="title">Moere 沼公園 (決策點)</div>
+                <div class="desc">搭乘東豐線轉中央巴士。</div>
+                <div class="box alert-tip">
+                    <strong>🚨 天氣決策：</strong> 中午確認雲圖，若陰雨無光，果斷取消此行程，改留市區室內或提早拍夜櫻。
+                </div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 日落前夕陽逆光打在「玻璃金字塔」上，絕佳的廣角創作與幾何地景大景。
+                    <strong>📸 構圖策略：</strong> 天晴時，日落逆光打在「玻璃金字塔」上，是絕殺的廣角幾何大景。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">19:30 以後</div>
                 <div class="title">晚餐 & 中島公園夜櫻</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=中島公園" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">回薄野區吃湯咖哩或烤肉，餐後散步拍攝水池倒映的夜櫻。</div>
+                <div class="desc">薄野區享用湯咖哩/烤肉，餐後散步拍攝水池倒映的夜櫻與天文台。</div>
             </div>
         </div>
 
         <div id="day3" class="tab-content">
+            <div class="weather-banner">
+                <strong>🌤️ 札幌天氣：</strong> 晴朗，4°C - 12°C。完美的光線與飽和的櫻花色彩，進入黃金攝影日。
+            </div>
+
             <div class="timeline-card">
                 <div class="time">09:00 - 10:00</div>
-                <div class="title">退房 & 裝備輕量化</div>
-                <div class="desc">將行李鎖進 JR 札幌站投幣式置物櫃。確保身上只有單眼相機與隨身物品。</div>
+                <div class="title">裝備輕量化</div>
+                <div class="desc">退房。將行李鎖進 JR 札幌站投幣式置物櫃，確保身上僅帶單眼與鏡頭，解放雙手。</div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">10:15 - 12:30</div>
-                <div class="title">根室花丸 (Miredo 店) 備戰與用餐</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=回転寿司根室花まる+大同生命札幌ビルmiredo店" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">10:15 大樓排隊抽整理券，11:00 第一批入座吃爆壽司。</div>
+                <div class="title">根室花丸 Miredo 店</div>
+                <div class="desc">10:15 大樓排隊，確保 11:00 第一批入座吃爆壽司。</div>
                 <div class="box coffee-tip">
-                    <strong>☕ 咖啡推薦：</strong> 飯後若想解膩，步行至 Standard Coffee Lab.。單一產區手沖風味明亮。
+                    <strong>☕ Standard Coffee Lab.：</strong> 飯後解膩推薦，大通周邊的現代實驗室風格，單品手沖極佳。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">12:30 - 15:30</div>
-                <div class="title">黃金攝影三小時 (雙手淨空)</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=豐平館" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">搭地鐵直奔中島公園。這三小時完全沒有行李負擔。</div>
+                <div class="title">黃金攝影三小時 (無負載)</div>
+                <div class="desc">搭地鐵至中島公園。這三小時雙手淨空，專心創作。</div>
                 <div class="box photo-tip">
-                    <strong>📸 攝影重點：</strong> 拍攝經典的「豐平館」水藍色外牆與粉嫩枝垂櫻的強烈對比。
+                    <strong>📸 構圖策略：</strong> 經典必拍：「豐平館」水藍色外牆與粉嫩枝垂櫻的強烈對比色構圖。
                 </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">15:30 - 16:15</div>
-                <div class="title">六花亭 本店快閃採買</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=六花亭+札幌本店" target="_blank">📍 Google Maps 導航</a>
-                <div class="desc">清單式快速掃貨伴手禮，買完直接走回 JR 札幌站。</div>
+                <div class="title">六花亭 札幌本店</div>
+                <div class="desc">距離車站步行僅 5 分鐘。清單式精準掃貨，結帳後直接步回車站。</div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">16:15 - 17:20</div>
-                <div class="title">取件 & 前往機場</div>
-                <div class="desc">領出置物櫃行李，16:42 搭乘「JR 快速機場線」出發。17:20 抵達新千歲。</div>
+                <div class="title">取件 & 撤退往機場</div>
+                <div class="desc">領出置物櫃行李，16:42 搭乘「JR 快速機場線」。17:20 抵達新千歲。</div>
                 <div class="box logistics-tip">
-                    💡 17:30 前準時抵達報到櫃檯，準備搭乘 19:10 TR893 滿載美照與伴手禮回家！
+                    <strong>🛫 歸途：</strong> 17:30 前抵達櫃檯，從容辦理 19:10 TR893 報到手續，帶著滿滿的 SD 卡與戰利品回台！
                 </div>
             </div>
         </div>
@@ -340,23 +354,19 @@
 
     <script>
         function openTab(evt, dayId) {
-            // Hide all tab content
             var contents = document.getElementsByClassName("tab-content");
             for (var i = 0; i < contents.length; i++) {
                 contents[i].classList.remove("active");
             }
 
-            // Remove active class from all buttons
             var btns = document.getElementsByClassName("tab-btn");
             for (var i = 0; i < btns.length; i++) {
                 btns[i].classList.remove("active");
             }
 
-            // Show current tab and add active class to clicked button
             document.getElementById(dayId).classList.add("active");
             evt.currentTarget.classList.add("active");
             
-            // Scroll to top when switching tabs
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
