@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>北海道櫻花攝影快閃 (終極校正版)</title>
+    <title>北海道櫻花攝影快閃 (含海關日文版)</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -19,6 +19,7 @@
             --alert-color: #ef5350;
             --border-color: #333;
             --link-bg: rgba(255, 255, 255, 0.1);
+            --jp-color: #81c784; /* 日文版標識色 */
         }
         
         * {
@@ -74,6 +75,7 @@
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.2s ease;
+            min-width: 80px; /* 防止過度擠壓 */
         }
 
         .tab-btn.active {
@@ -120,32 +122,10 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        .time {
-            font-weight: 700;
-            color: var(--accent-color);
-            font-size: 1.1rem;
-            margin-bottom: 6px;
-        }
-
-        .title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-
-        .desc {
-            font-size: 0.95rem;
-            color: #ccc;
-            margin-bottom: 12px;
-        }
-
-        .box {
-            padding: 10px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
+        .time { font-weight: 700; color: var(--accent-color); font-size: 1.1rem; margin-bottom: 6px; }
+        .title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
+        .desc { font-size: 0.95rem; color: #ccc; margin-bottom: 12px; }
+        .box { padding: 10px 12px; border-radius: 6px; font-size: 0.9rem; margin-top: 10px; }
 
         .photo-tip { background-color: rgba(255, 204, 0, 0.1); border-left: 3px solid var(--photo-color); }
         .photo-tip strong { color: var(--photo-color); }
@@ -153,7 +133,6 @@
         .alert-tip { background-color: rgba(239, 83, 80, 0.1); border-left: 3px solid var(--alert-color); }
         .alert-tip strong { color: var(--alert-color); }
 
-        /* Map Links */
         .map-link {
             display: inline-flex;
             align-items: center;
@@ -167,9 +146,8 @@
             margin-bottom: 8px;
             transition: background 0.2s;
         }
-        .map-link:hover { background-color: rgba(255, 255, 255, 0.2); }
 
-        /* Food & Coffee List Styles */
+        /* Lists */
         .section-title {
             font-size: 1.15rem;
             margin: 25px 0 15px;
@@ -186,6 +164,8 @@
             margin-right: 10px;
             border-radius: 2px;
         }
+        
+        .jp-title::before { background: var(--jp-color); }
 
         .grid { display: grid; gap: 15px; }
 
@@ -196,11 +176,7 @@
             border: 1px solid var(--border-color);
         }
 
-        .tag-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
+        .tag-row { display: flex; gap: 8px; margin-bottom: 10px; }
         .tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
         .tag-coffee { background: rgba(161, 136, 127, 0.2); color: var(--coffee-color); border: 1px solid var(--coffee-color); }
         .tag-food { background: rgba(255, 183, 77, 0.2); color: var(--food-color); border: 1px solid var(--food-color); }
@@ -217,13 +193,32 @@
             margin-bottom: 10px;
         }
         .highlight {
-            font-size: 0.85rem;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed var(--border-color);
-            color: #bbb;
+            font-size: 0.85rem; margin-top: 10px; padding-top: 10px;
+            border-top: 1px dashed var(--border-color); color: #bbb;
         }
-        .highlight strong { color: #eee; }
+
+        /* JP Customs Styles */
+        .jp-card {
+            border-left: 4px solid var(--jp-color);
+        }
+        .jp-label {
+            font-size: 0.8rem;
+            color: var(--jp-color);
+            margin-bottom: 2px;
+        }
+        .jp-value {
+            font-size: 1.05rem;
+            color: #fff;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .jp-list {
+            padding-left: 20px;
+            margin-top: 5px;
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+        .jp-list li { margin-bottom: 6px; }
 
     </style>
 </head>
@@ -237,7 +232,8 @@
         <button class="tab-btn active" onclick="openTab(event, 'day1')">4/24 (五)</button>
         <button class="tab-btn" onclick="openTab(event, 'day2')">4/25 (六)</button>
         <button class="tab-btn" onclick="openTab(event, 'day3')">4/26 (日)</button>
-        <button class="tab-btn" onclick="openTab(event, 'food')">☕ 美食/咖啡</button>
+        <button class="tab-btn" onclick="openTab(event, 'food')">☕ 美食</button>
+        <button class="tab-btn" onclick="openTab(event, 'customs')">🇯🇵 審查</button>
     </div>
 
     <div class="content-container">
@@ -277,7 +273,7 @@
                 <div class="time">16:30 - 17:30</div>
                 <div class="title">八幡坂與元町光影</div>
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=八幡坂" target="_blank">📍 八幡坂</a>
-                <div class="desc">捨棄平地倉庫群，直奔坡道捕捉斜射夕陽。</div>
+                <div class="desc">直奔坡道捕捉斜射夕陽。</div>
                 <div class="box photo-tip">
                     <strong>📸 構圖策略：</strong> 把握黃金時刻。使用中長焦段壓縮畫面，將坡道與海港船隻完美同框。
                 </div>
@@ -287,9 +283,6 @@
                 <div class="time">17:30 - 17:50</div>
                 <div class="title">戰略撤退：折返車站</div>
                 <div class="desc">從「十字街」搭乘市電回到「函館駅前」，領出置物櫃的行李，準備搭巴士。</div>
-                <div class="box alert-tip">
-                    <strong>🚨 死線警告：</strong> 務必在 17:50 前領完行李並走到 11 號站牌。
-                </div>
             </div>
 
             <div class="timeline-card">
@@ -325,9 +318,6 @@
                 <div class="title">圓山公園 & 北海道神宮</div>
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道神宮" target="_blank">📍 圓山公園/北海道神宮</a>
                 <div class="desc">搭地鐵東西線至圓山公園站。</div>
-                <div class="box photo-tip">
-                    <strong>📸 構圖策略：</strong> 捕捉木造建築與櫻花的莊嚴感，長焦段拍攝參道景深。
-                </div>
             </div>
 
             <div class="timeline-card">
@@ -335,9 +325,6 @@
                 <div class="title">北海道大學散策</div>
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道大学" target="_blank">📍 北海道大學</a>
                 <div class="desc">廣大校園與歷史建物群。</div>
-                <div class="box photo-tip">
-                    <strong>📸 構圖策略：</strong> 農學部、古河講堂的紅磚幾何線條，能為畫面提供極佳的穩定感。
-                </div>
             </div>
 
             <div class="timeline-card">
@@ -346,10 +333,7 @@
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=モエレ沼公園" target="_blank">📍 Moere沼公園</a>
                 <div class="desc">搭乘東豐線轉中央巴士。</div>
                 <div class="box alert-tip">
-                    <strong>🚨 天氣決策：</strong> 中午確認雲圖，若陰雨無光，果斷取消此行程，改留市區室內或提早拍夜櫻。
-                </div>
-                <div class="box photo-tip">
-                    <strong>📸 構圖策略：</strong> 天晴時，日落逆光打在「玻璃金字塔」上，是絕殺的廣角幾何大景。
+                    <strong>🚨 天氣決策：</strong> 中午確認雲圖，若陰雨無光，改留市區室內或提早拍夜櫻。
                 </div>
             </div>
 
@@ -363,23 +347,20 @@
 
         <div id="day3" class="tab-content">
             <div class="weather-banner">
-                <strong>🌤️ 札幌天氣預測：</strong> 晴朗，4°C - 12°C。完美的光線與飽和的櫻花色彩，進入黃金攝影日。
+                <strong>🌤️ 札幌天氣預測：</strong> 晴朗，4°C - 12°C。完美的光線與飽和的櫻花色彩。
             </div>
 
             <div class="timeline-card">
                 <div class="time">09:00 - 10:00</div>
                 <div class="title">裝備輕量化</div>
-                <div class="desc">退房。將行李鎖進 JR 札幌站投幣式置物櫃，確保身上僅帶單眼與鏡頭，解放雙手。</div>
+                <div class="desc">退房。將行李鎖進 JR 札幌站投幣式置物櫃。</div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">10:15 - 12:30</div>
                 <div class="title">根室花丸 Miredo 店</div>
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=回転寿司根室花まる+大同生命札幌ビルmiredo店" target="_blank">📍 根室花丸 Miredo店</a>
-                <div class="desc">10:15 大樓排隊，確保 11:00 第一批入座吃爆壽司。</div>
-                <div class="box alert-tip">
-                    <strong>🚨 停損決策：</strong> 若 11:30 前無法入座點餐，果斷外帶高級餐盒至公園，嚴格保護下午拍攝時間。
-                </div>
+                <div class="desc">10:15 大樓排隊，確保 11:00 第一批入座。</div>
             </div>
 
             <div class="timeline-card">
@@ -387,16 +368,13 @@
                 <div class="title">黃金攝影三小時 (無負載)</div>
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=豊平館" target="_blank">📍 中島公園 豐平館</a>
                 <div class="desc">搭地鐵至中島公園。這三小時雙手淨空，專心創作。</div>
-                <div class="box photo-tip">
-                    <strong>📸 構圖策略：</strong> 經典必拍：「豐平館」水藍色外牆與粉嫩枝垂櫻的強烈對比色構圖。
-                </div>
             </div>
 
             <div class="timeline-card">
                 <div class="time">15:30 - 16:15</div>
                 <div class="title">六花亭 札幌本店</div>
                 <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=六花亭+札幌本店" target="_blank">📍 六花亭 札幌本店</a>
-                <div class="desc">距離車站步行僅 5 分鐘。清單式精準掃貨，結帳後直接步回車站。</div>
+                <div class="desc">距離車站步行僅 5 分鐘。清單式精準掃貨。</div>
             </div>
 
             <div class="timeline-card">
@@ -416,30 +394,14 @@
                 <div class="card">
                     <div class="tag-row"><span class="tag tag-coffee">職人烘焙</span></div>
                     <div class="name">cafe akira</div>
-                    <div class="info">自家烘焙世界各地精選咖啡豆，搭配濃厚起司蛋糕，無華麗裝潢但風味絕佳。</div>
                     <div class="best-time">⏱️ 函館車站步行 8 分鐘</div>
                     <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=cafe+akira+函館" target="_blank">📍 Google Maps</a>
                 </div>
                 <div class="card">
-                    <div class="tag-row"><span class="tag tag-coffee">最古老咖啡</span></div>
-                    <div class="name">十字屋珈琲店 (Jujiya Coffee)</div>
-                    <div class="info">據說是函館第一家自家烘焙咖啡，位於朝市內，充滿道地人文風情。</div>
-                    <div class="best-time">⏱️ 函館朝市內</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=十字屋珈琲店+函館" target="_blank">📍 Google Maps</a>
-                </div>
-                <div class="card">
                     <div class="tag-row"><span class="tag tag-food">靈魂美食</span></div>
-                    <div class="name">幸運小丑漢堡 (Lucky Pierrot)</div>
-                    <div class="info">函館發跡的超狂速食店，中華雞腿堡是絕對經典。</div>
+                    <div class="name">幸運小丑漢堡</div>
                     <div class="best-time">⏱️ 多家分店 (可順路外帶)</div>
                     <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=幸運小丑漢堡" target="_blank">📍 Google Maps</a>
-                </div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-food">百年和牛</span></div>
-                    <div class="name">阿佐利 本店 (Asari)</div>
-                    <div class="info">函館百年壽喜燒老店，A5 等級黑毛和牛。建築本身極具歷史感。</div>
-                    <div class="best-time">⏱️ 寶來町站旁</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=阿佐利本店+函館" target="_blank">📍 Google Maps</a>
                 </div>
             </div>
 
@@ -448,54 +410,91 @@
                 <div class="card">
                     <div class="tag-row"><span class="tag tag-coffee">傳奇老宅</span></div>
                     <div class="name">森彥咖啡本店 (Morihiko)</div>
-                    <div class="info">隱身於圓山高級住宅區的老房咖啡館，木質老屋光影極美。</div>
                     <div class="best-time">⏱️ 圓山公園拍攝間奏</div>
                     <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=森彦本店+札幌" target="_blank">📍 Google Maps</a>
-                    <div class="highlight"><strong>必試：</strong> 特調咖啡「森の雫」</div>
                 </div>
                 <div class="card">
                     <div class="tag-row"><span class="tag tag-coffee">硬核手沖</span></div>
                     <div class="name">石田珈琲店 (Ishida)</div>
-                    <div class="info">北大攝影師的秘密基地，自家烘豆、手做甜點，氛圍溫馨沉靜。</div>
                     <div class="best-time">⏱️ 北大拍攝空檔</div>
                     <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=石田珈琲店+札幌" target="_blank">📍 Google Maps</a>
-                    <div class="highlight"><strong>必試：</strong> 單品手沖 + 自家製布丁</div>
-                </div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-food">蝦湯咖哩</span></div>
-                    <div class="name">奧芝商店 (Okushiba Shoten)</div>
-                    <div class="info">以濃郁蝦頭熬製的高湯聞名，相較於常見的雞骨湯底更具層次特色。</div>
-                    <div class="best-time">⏱️ 札幌車站周邊</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=奧芝商店+札幌" target="_blank">📍 Google Maps</a>
                 </div>
             </div>
 
-            <div class="section-title">札幌 - 市中心 (薄野/大通)</div>
+            <div class="section-title">札幌 - 市中心</div>
             <div class="grid">
                 <div class="card">
                     <div class="tag-row"><span class="tag tag-coffee">現代職人</span></div>
                     <div class="name">Standard Coffee Lab.</div>
-                    <div class="info">由拉花冠軍創立，但手沖功力深厚，選用單一產區極佳。</div>
                     <div class="best-time">⏱️ 大通公園周邊</div>
                     <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Standard+Coffee+Lab+札幌" target="_blank">📍 Google Maps</a>
                 </div>
                 <div class="card">
                     <div class="tag-row"><span class="tag tag-food">成吉思汗烤肉</span></div>
-                    <div class="name">成吉思汗 だるま (Daruma) 本店</div>
-                    <div class="info">超過半世紀的指標性存在，新鮮羊肉搭配女將特製醬汁，完全無腥味。</div>
+                    <div class="name">成吉思汗 だるま 本店</div>
                     <div class="best-time">⏱️ 晚上避開人潮</div>
                     <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=成吉思汗だるま本店+札幌" target="_blank">📍 Google Maps</a>
-                </div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-food">味噌拉麵王者</span></div>
-                    <div class="name">麵屋 彩未 (Saimi)</div>
-                    <div class="info">札幌味噌拉麵的頂點。湯頭濃郁不油膩，生薑提味是神來之筆。</div>
-                    <div class="best-time">⏱️ 需轉乘地鐵前往</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=麵屋彩未+札幌" target="_blank">📍 Google Maps</a>
                 </div>
             </div>
 
         </div>
+
+        <div id="customs" class="tab-content">
+            <div class="weather-banner" style="border-left-color: #81c784; color: #a5d6a7; background-color: rgba(129, 199, 132, 0.1);">
+                💡 <strong>提示：</strong> 若入國審查官詢問行程，可直接出示此頁面。內容已去除複雜轉乘與攝影戰術，呈現純粹的觀光客行程。
+            </div>
+
+            <div class="section-title jp-title">旅行基本情報</div>
+            <div class="card jp-card">
+                <div class="jp-label">旅行の目的 (Purpose)</div>
+                <div class="jp-value">観光、お花見 (Sightseeing, Cherry blossom viewing)</div>
+                
+                <div class="jp-label">滞在期間 (Duration)</div>
+                <div class="jp-value">2026年4月24日 ～ 4月26日 (3日間)</div>
+                
+                <div class="jp-label">宿泊先 (Accommodation)</div>
+                <div class="jp-value" style="margin-bottom: 0;">
+                    ベッセルホテルカンパーナすすきの<br>
+                    <span style="font-size: 0.85rem; color: #aaa;">札幌市中央区南5条西6丁目16番地1</span><br>
+                    <span style="font-size: 0.85rem; color: #aaa;">(4/24 - 4/25, 2泊)</span>
+                </div>
+            </div>
+
+            <div class="section-title jp-title">滞在予定表 (Itinerary)</div>
+            
+            <div class="card jp-card">
+                <div class="jp-label">4月24日 (金)</div>
+                <ul class="jp-list">
+                    <li>【到着】 新千歳空港 着 (便名: VZ570)</li>
+                    <li>【移動】 JR特急で函館へ</li>
+                    <li>【観光】 函館市内観光（五稜郭公園、元町エリアで桜鑑賞）</li>
+                    <li>【移動】 函館空港から丘珠空港へ (便名: JL2756)</li>
+                    <li>【宿泊】 札幌市内のホテルへチェックイン</li>
+                </ul>
+            </div>
+
+            <div class="card jp-card">
+                <div class="jp-label">4月25日 (土)</div>
+                <ul class="jp-list">
+                    <li>【観光】 札幌市内観光</li>
+                    <li>円山公園、北海道神宮（お花見）</li>
+                    <li>北海道大学 散策</li>
+                    <li>モエレ沼公園 観光</li>
+                    <li>【宿泊】 札幌市内ホテル</li>
+                </ul>
+            </div>
+
+            <div class="card jp-card">
+                <div class="jp-label">4月26日 (日)</div>
+                <ul class="jp-list">
+                    <li>【観光】 札幌市内観光</li>
+                    <li>中島公園（お花見）</li>
+                    <li>市内ショッピング、食事</li>
+                    <li>【帰国】 新千歳空港より出国 (便名: TR893)</li>
+                </ul>
+            </div>
+        </div>
+
     </div>
 
     <script>
