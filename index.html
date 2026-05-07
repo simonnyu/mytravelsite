@@ -3,224 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JAL 2026 | 攝影行動基地</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>JAL 2026 MISSION</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --jal: #d00000; --gold: #d4af37; --dark: #111111; --bg: #f8f8f8;
-            --safe-top: env(safe-area-inset-top);
-        }
-        @media (prefers-color-scheme: dark) {
-            :root { --bg: #0a0a0a; --dark: #1a1a1a; }
-            body { color: #ddd; }
-            .card { background: #1f1f1f; }
-            .day-nav, .card-header { background: #1a1a1a !important; color: #eee; }
-        }
-
+        :root { --jal: #d00000; --gold: #af9662; --dark: #000; --bg: #f2f2f7; --safe-top: env(safe-area-inset-top); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background: var(--bg); color: #222; margin: 0; line-height: 1.6; font-size: 16px;
-        }
-
-        /* --- Header & Tabs --- */
-        header {
-            background: var(--dark); color: white; padding: calc(12px + var(--safe-top)) 16px 12px;
-            position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center;
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-        }
-        .title { font-weight: 700; letter-spacing: 1px; font-size: 1.1rem; }
-        .status { font-size: 0.85rem; color: var(--gold); }
-
-        nav.tabs {
-            background: var(--dark); display: flex; position: sticky; top: 52px; z-index: 999;
-            border-bottom: 1px solid #333;
-        }
-        .tab { flex: 1; padding: 14px 0; text-align: center; color: #888; font-size: 0.9rem; transition: 0.2s; }
-        .tab.active { color: white; border-bottom: 3px solid var(--jal); font-weight: 600; }
-
-        /* --- View Control (修復 Grok 跑版的核心) --- */
-        .view { display: none; }
-        .view.active { display: block; }
-
-        .day-nav {
-            display: flex; gap: 10px; padding: 14px 16px; overflow-x: auto;
-            background: white; position: sticky; top: 104px; z-index: 998;
-            scrollbar-width: none; border-bottom: 1px solid #eee;
-        }
-        .day-nav::-webkit-scrollbar { display: none; }
-        .day-btn {
-            min-width: 50px; height: 38px; border-radius: 19px; background: #eee;
-            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;
-        }
-        .day-btn.active { background: var(--jal); color: white; font-weight: 600; }
-
-        /* --- Cards --- */
-        .container { padding: 16px; max-width: 640px; margin: auto; padding-bottom: 100px; }
-        .card { background: white; border-radius: 16px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-        .card-header { padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #fff; }
-        .card-header h3 { margin: 0; font-size: 1rem; font-weight: 700; }
-        .card-body { padding: 0 18px 18px; display: none; border-top: 1px solid #f5f5f5; }
-        .card.open .card-body { display: block; }
-
-        /* --- Operational Elements --- */
-        .transport { background: #f0f7ff; padding: 12px; border-radius: 10px; margin: 12px 0; border-left: 4px solid #3182ce; font-size: 0.9rem; }
-        .photo-tip { background: #fff9e6; padding: 12px; border-radius: 10px; margin: 12px 0; border-left: 4px solid var(--gold); font-size: 0.9rem; }
-        .critical { background: #fff5f5; border: 1px solid #feb2b2; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 0.85rem; color: #c53030; }
-        .rain-plan { background: #f7fafc; padding: 10px; border-radius: 8px; font-size: 0.85rem; color: #4a5568; margin-top: 10px; }
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background: var(--bg); margin: 0; color: #1c1c1e; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-        th, td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; }
-        th { color: #888; font-weight: 400; }
+        /* iPhone 專屬 Header */
+        header { 
+            background: var(--dark); color: white; padding: calc(15px + var(--safe-top)) 20px 15px;
+            position: sticky; top: 0; z-index: 2000; display: flex; justify-content: space-between; align-items: center;
+        }
+        .title { font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; }
 
-        .fab { position: fixed; bottom: 30px; right: 20px; width: 56px; height: 56px; background: var(--jal); color: white; border-radius: 28px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(208,0,0,0.3); z-index: 1001; }
+        /* 導覽列 */
+        nav { 
+            background: var(--dark); display: flex; position: sticky; top: 56px; z-index: 1999; 
+            border-bottom: 0.5px solid #333;
+        }
+        .tab-btn { 
+            flex: 1; padding: 14px 0; text-align: center; color: #8e8e93; font-size: 0.9rem; border: none; background: none;
+        }
+        .tab-btn.active { color: white; border-bottom: 3px solid var(--jal); font-weight: 700; }
+
+        /* 內容區塊 */
+        .view-content { display: none; padding: 16px; max-width: 600px; margin: auto; }
+        .view-content.active { display: block; }
+
+        /* 行程卡片 */
+        .card { background: white; border-radius: 14px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 16px; border-bottom: 0.5px solid #eee; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .card-header h3 { margin: 0; font-size: 1rem; font-weight: 700; }
+        .card-body { padding: 16px; font-size: 0.95rem; }
+
+        /* 實務標記 */
+        .block { background: #f8f8f8; border-radius: 10px; padding: 12px; margin-bottom: 12px; border-left: 4px solid #ddd; }
+        .transport { border-left-color: #007aff; background: #f0f7ff; }
+        .photo { border-left-color: var(--gold); background: #fffcf2; }
+        .alert { border-left-color: var(--jal); background: #fff5f5; color: var(--jal); font-weight: 600; }
+
+        /* 表格優化 */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { text-align: left; padding: 10px 5px; border-bottom: 0.5px solid #eee; }
+        th { color: #8e8e93; font-weight: 400; }
+
+        /* 底部按鈕 */
+        .fab { position: fixed; bottom: 30px; right: 20px; width: 56px; height: 56px; background: var(--jal); color: white; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2001; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="title">JAL 2026 MISSION</div>
-    <div class="status" id="trip-status">D3 • 釧路濕原進行中</div>
+    <div class="title">JAL 2026 COMMAND</div>
+    <div style="font-size: 0.8rem; color: var(--gold);">5/30 - 6/07 行動手冊</div>
 </header>
 
-<nav class="tabs">
-    <div class="tab active" onclick="switchView(0)">行程</div>
-    <div class="tab" onclick="switchView(1)">航班</div>
-    <div class="tab" onclick="switchView(2)">交通</div>
-    <div class="tab" onclick="switchView(3)">實用</div>
+<nav id="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('itinerary')">行程</button>
+    <button class="tab-btn" onclick="showTab('flights')">航班</button>
+    <button class="tab-btn" onclick="showTab('transport')">交通</button>
+    <button class="tab-btn" onclick="showTab('stay')">住宿</button>
 </nav>
 
-<div class="container">
-    <!-- 行程頁 -->
-    <div id="view0" class="view active">
-        <div class="day-nav" id="dayNav"></div>
-
-        <div class="card" id="d1">
-            <div class="card-header" onclick="toggleCard('d1')"><h3>D1 • 5/30 移動東京</h3><span>Arrival</span></div>
-            <div class="card-body">
-                <div class="transport">🚆 京成 Access 特急 (直通京急) → 羽田</div>
-                <div class="critical">⚠️ <b>12:45 TPE 出發</b>。抵達羽田約 19:30。</div>
-                <p>🏨 <b>Hotel Metropolitan Haneda</b></p>
-                <div class="photo-tip">📸 夜拍：羽田創新城足湯觀景台 (免收費)</div>
-            </div>
-        </div>
-
-        <div class="card" id="d2">
-            <div class="card-header" onclick="toggleCard('d2')"><h3>D2 • 5/31 初探道東</h3><span>Kushiro</span></div>
-            <div class="card-body">
-                <div class="critical">⏱️ <b>07:45 HND 起飛</b> (JL541)。預留 60min 安檢。</div>
-                <p>• <b>和商市場</b>：勝手丼 (人文攝影素材)。<br>• <b>幣舞橋夕陽</b>：黃金採光 18:30-18:55。</p>
-                <div class="rain-plan">雨天：釧路市立博物館 (建築攝影) + 咖啡館巡禮。</div>
-                <p>🏨 <b>ANA Crowne Plaza Kushiro</b></p>
-            </div>
-        </div>
-
-        <div class="card open" id="d3">
-            <div class="card-header" onclick="toggleCard('d3')"><h3>D3 • 6/01 濕原光影</h3><span>Marsh</span></div>
-            <div class="card-body">
-                <div class="transport">🚃 JR 釧網本線 (11:06 往網走方向) → 釧路濕原站</div>
-                <div class="photo-tip">📸 <b>細岡展望台</b>：黃金採光 18:35-19:00。長焦拍濕原曲線。</div>
-                <div class="note">☕ 咖啡豆：於市區尋找適合 1:20 冷萃的深焙豆。</div>
-                <div class="rain-plan">雨天：車站周邊精品咖啡店 (測試 18 刻度磨豆)。</div>
-            </div>
-        </div>
-
-        <div class="card" id="d4">
-            <div class="card-header" onclick="toggleCard('d4')"><h3>D4 • 6/02 三湖巡禮</h3><span>Akan Bus</span></div>
-            <div class="card-body">
-                <div class="critical">⏱️ <b>08:20 站前集合</b>。觀光巴士 Pirika 號 (已預約)。</div>
-                <p>• 摩周湖 ➔ 硫磺山 ➔ 屈斜路湖 ➔ 阿寒湖。</p>
-                <div class="photo-tip">📸 摩周湖：若起霧，可拍出神秘感，無須腳架。</div>
-            </div>
-        </div>
-
-        <div class="card" id="d5">
-            <div class="card-header" onclick="toggleCard('d5')"><h3>D5 • 6/03 跨區移動</h3><span>Transition</span></div>
-            <div class="card-body">
-                <table>
-                    <tr><th>段次</th><th>班次</th><th>時間</th></tr>
-                    <tr><td>KUH-HND</td><td>JL540</td><td>10:00-11:50</td></tr>
-                    <tr><td>HND-IZO</td><td>JL283</td><td>14:55-16:15</td></tr>
-                </table>
-                <div class="critical">⚠️ 轉機 3hr。若同 PNR 行李可直掛出雲 (IZO)。</div>
-                <p>🏨 <b>御宿 野乃 松江</b> (連住 3 晚)</p>
-            </div>
-        </div>
-
-        <div class="card" id="d6">
-            <div class="card-header" onclick="toggleCard('d6')"><h3>D6 • 6/04 山陰視覺</h3><span>Tottori</span></div>
-            <div class="card-body">
-                <div class="transport">🚆 JR 特急 Super Matsukaze (使用 JR Pass)</div>
-                <p>• <b>鳥取砂丘</b>：早起光影較立體。<br>• <b>砂之美術館</b>：室內沙雕攝影。</p>
-                <div class="photo-tip">☕ 站前採購「砂場咖啡」豆。</div>
-            </div>
-        </div>
-
-        <div class="card" id="d7">
-            <div class="card-header" onclick="toggleCard('d7')"><h3>D7 • 6/05 神話夕陽</h3><span>Izumo</span></div>
-            <div class="card-body">
-                <div class="transport">🚃 一畑電車 (復古車廂攝影)。</div>
-                <div class="photo-tip">📸 <b>宍道湖夕陽</b>：黃金採光 18:58-19:20。</div>
-                <div class="rain-plan">日御碕取消，改為松江市區和菓子與茶體驗。</div>
-            </div>
-        </div>
-
-        <div class="card" id="d8">
-            <div class="card-header" onclick="toggleCard('d8')"><h3>D8 • 6/06 庭園美學</h3><span>End Point</span></div>
-            <div class="card-body">
-                <div class="critical">⏱️ <b>09:00 前抵達足立美術館</b>。保留 3hr。</div>
-                <div class="transport">✈️ <b>19:10 IZO 起飛</b> (JL286)。</div>
-                <p>🏨 <b>京急 EX Inn 羽田</b></p>
-            </div>
-        </div>
-
-        <div class="card" id="d9">
-            <div class="card-header" onclick="toggleCard('d9')"><h3>D9 • 6/07 返台</h3><span>Home</span></div>
-            <div class="card-body">
-                <div class="critical">⏱️ <b>08:55 HND 起飛</b> (JL97)。</div>
-                <p>抵達松山機場 (TSA) 11:15。結束 100k FOP 衝刺旅程。</p>
-            </div>
+<!-- 行程頁 -->
+<div id="itinerary" class="view-content active">
+    <!-- D1 -->
+    <div class="card">
+        <div class="card-header"><h3>D1 5/30 台北 ➔ 羽田</h3><span>Arrival</span></div>
+        <div class="card-body">
+            <div class="block transport">🚆 NRT ➔ 羽田：京成 Access 特急 (直通京急)</div>
+            <p>• 17:15 抵達 NRT，入境後銜接 18:30 左右班次。<br>• 入住 Metropolitan Haneda 後直通 **羽田創新城** 夜拍。</p>
         </div>
     </div>
-
-    <!-- 航班頁 -->
-    <div id="view1" class="view">
-        <div class="card open">
-            <div class="card-header"><h3>JAL 航班與 PNR 資訊</h3></div>
-            <div class="card-body" style="padding:0">
-                <table>
-                    <tr><th>日期</th><th>編號</th><th>航段</th><th>時間</th></tr>
-                    <tr><td>5/30</td><td>JL8664</td><td>TPE-NRT</td><td>12:45-17:15</td></tr>
-                    <tr><td>5/31</td><td>JL541</td><td>HND-KUH</td><td>07:45-09:20</td></tr>
-                    <tr><td>6/3</td><td>JL540</td><td>KUH-HND</td><td>10:00-11:50</td></tr>
-                    <tr><td>6/3</td><td>JL283</td><td>HND-IZO</td><td>14:55-16:15</td></tr>
-                    <tr><td>6/6</td><td>JL286</td><td>IZO-HND</td><td>19:10-20:35</td></tr>
-                    <tr><td>6/7</td><td>JL97</td><td>HND-TSA</td><td>08:55-11:15</td></tr>
-                </table>
-            </div>
+    <!-- D2 -->
+    <div class="card">
+        <div class="card-header"><h3>D2 5/31 抵達釧路</h3><span>Kushiro</span></div>
+        <div class="card-body">
+            <div class="block alert">⏱️ 07:45 HND 起飛 (JL541) ➔ 09:20 抵達</div>
+            <div class="block transport">🚌 釧路機場 ➔ 釧路站：搭乘阿寒巴士機場線 (45min)</div>
+            <p>• **和商市場**：午餐勝手丼。<br>• **幣舞橋夕陽**：18:30 抵達，18:50 攝取最後餘光。</p>
         </div>
     </div>
-
-    <!-- 交通頁 -->
-    <div id="view2" class="view">
-        <div class="card open">
-            <div class="card-header"><h3>大眾運輸連結</h3></div>
-            <div class="card-body">
-                <div class="transport">🎟️ <b>山陰岡山 JR Pass</b>：D6~D8 使用。</div>
-                <div class="transport">🎟️ <b>阿寒巴士 Pirika</b>：D4 已預約。</div>
-                <p>• <b>機場巴士 (KUH)</b>：往返幣舞橋約 45min。<br>• <b>接駁巴士 (安來)</b>：往返足立美術館 (免費)。</p>
-            </div>
+    <!-- D3 -->
+    <div class="card">
+        <div class="card-header"><h3>D3 6/01 濕原攝影</h3><span>Marsh</span></div>
+        <div class="card-body">
+            <div class="block transport">🚃 釧路 11:06 ➔ 釧路濕原站 (JR 釧網本線)</div>
+            <div class="block photo">📸 細岡展望台：拍攝釧路川大拐彎。</div>
+            <p>• 步行至展望台後可延伸至**塘路湖**，15:00 左右搭車回市區。</p>
         </div>
     </div>
+    <!-- D4 -->
+    <div class="card">
+        <div class="card-header"><h3>D4 6/02 三湖大冒險</h3><span>Bus Tour</span></div>
+        <div class="card-body">
+            <div class="block alert">⏱️ 08:20 站前 15 號月台報到 (Pirika 號)</div>
+            <p>• 摩周湖 ➔ 硫磺山 ➔ 屈斜路湖 ➔ 阿寒湖。<br>• 16:50 返抵釧路站。晚餐：**爐端燒 煉瓦**。</p>
+        </div>
+    </div>
+    <!-- D5 -->
+    <div class="card">
+        <div class="card-header"><h3>D5 6/03 橫越山陰</h3><span>Transfer</span></div>
+        <div class="card-body">
+            <div class="block alert">✈️ JL540 (10:00) ➔ HND ➔ JL283 (14:55) ➔ 出雲</div>
+            <p>• 抵達 IZO 後搭接駁巴士往**松江站** (約 35min)。<br>• 入住野乃松江，頂樓溫泉舒壓。</p>
+        </div>
+    </div>
+    <!-- D6 -->
+    <div class="card">
+        <div class="card-header"><h3>D6 6/04 鳥取砂丘</h3><span>Tottori</span></div>
+        <div class="card-body">
+            <div class="block transport">🚆 JR 特急 (08:30 左右) ➔ 鳥取 ➔ 巴士往砂丘</div>
+            <div class="block photo">📸 砂之美術館 + 砂丘稜線拍攝。</div>
+            <p>• 推薦在鳥取站前購買**砂場咖啡**精品豆。</p>
+        </div>
+    </div>
+    <!-- D7 -->
+    <div class="card">
+        <div class="card-header"><h3>D7 6/05 出雲神話</h3><span>Izumo</span></div>
+        <div class="card-body">
+            <div class="block transport">🚃 一畑電車：松江 ➔ 出雲大社前 (懷舊風格)</div>
+            <div class="block photo">📸 宍道湖夕陽：18:45 前就位。</div>
+            <p>• 備案：若天氣不佳，取消日御碕，改為松江城散步。</p>
+        </div>
+    </div>
+    <!-- D8 -->
+    <div class="card">
+        <div class="card-header"><h3>D8 6/06 庭園之巔</h3><span>Final</span></div>
+        <div class="card-body">
+            <div class="block transport">🚌 安來站接駁巴士 ➔ 足立美術館</div>
+            <div class="block alert">✈️ 19:10 IZO 起飛 (JL286) ➔ 返回羽田</div>
+            <p>• 入住羽田 EX Inn。最後採購機會。</p>
+        </div>
+    </div>
+    <!-- D9 -->
+    <div class="card">
+        <div class="card-header"><h3>D9 6/07 返台</h3><span>Home</span></div>
+        <div class="card-body">
+            <div class="block alert">⏱️ 08:55 HND 起飛 (JL97) ➔ 11:15 TSA</div>
+            <p>• 抵達台北松山。優雅回家。</p>
+        </div>
+    </div>
+</div>
 
-    <!-- 實用頁 -->
-    <div id="view3" class="view">
-        <div class="card open">
-            <div class="card-header"><h3>生活與備忘錄</h3></div>
-            <div class="card-body">
-                <p>☕ <b>Coffee Note</b>：磨豆刻度 18，比例 1:20 冷萃。<br>🔋 <b>Power Bank</b>：Day 4 長途巴士務必充飽。</p>
-                <div class="photo-tip">📸 夕陽卡位提醒：幣舞橋(18:00)、宍道湖(18:30)。</div>
-            </div>
+<!-- 航班頁 -->
+<div id="flights" class="view-content">
+    <div class="card">
+        <div class="card-body">
+            <table>
+                <tr><th>Flight</th><th>Route</th><th>Time</th></tr>
+                <tr><td>JL8664</td><td>TPE-NRT</td><td>12:45-17:15</td></tr>
+                <tr><td>JL541</td><td>HND-KUH</td><td>07:45-09:20</td></tr>
+                <tr><td>JL540</td><td>KUH-HND</td><td>10:00-11:50</td></tr>
+                <tr><td>JL283</td><td>HND-IZO</td><td>14:55-16:15</td></tr>
+                <tr><td>JL286</td><td>IZO-HND</td><td>19:10-20:35</td></tr>
+                <tr><td>JL97</td><td>HND-TSA</td><td>08:55-11:15</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 交通頁 -->
+<div id="transport" class="view-content">
+    <div class="card">
+        <div class="card-header"><h3>關鍵票券與指令</h3></div>
+        <div class="card-body">
+            <div class="block transport">🎟️ 山陰岡山 JR PASS (4日券)：D6-D8 使用。</div>
+            <div class="block alert">🆘 轉機提醒：D5 羽田轉機 3hr，確認行李直掛。</div>
+            <p>• 釧路機場巴士：自動售票機購票。<br>• 安來接駁車：出車站右側搭乘。</p>
+        </div>
+    </div>
+</div>
+
+<!-- 住宿頁 -->
+<div id="stay" class="view-content">
+    <div class="card">
+        <div class="card-body">
+            <p>• **5/30**: Metropolitan Haneda (機場旁)<br>
+               • **5/31-6/03**: ANA Crowne Plaza Kushiro (幣舞橋旁)<br>
+               • **6/03-6/06**: Onyado Nono Matsue (站前溫泉)<br>
+               • **6/06**: Keikyu EX Inn Haneda (末班轉機首選)</p>
         </div>
     </div>
 </div>
@@ -228,29 +191,12 @@
 <div class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 
 <script>
-    function switchView(n) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById('view' + n).classList.add('active');
-        document.querySelectorAll('.tab')[n].classList.add('active');
+    function showTab(tabId) {
+        document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
         window.scrollTo(0,0);
-    }
-
-    function toggleCard(id) {
-        document.getElementById(id).classList.toggle('open');
-    }
-
-    const nav = document.getElementById('dayNav');
-    for(let i=1; i<=9; i++) {
-        const btn = document.createElement('div');
-        btn.className = `day-btn ${i===3?'active':''}`;
-        btn.textContent = `D${i}`;
-        btn.onclick = () => {
-            document.getElementById(`d${i}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
-            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        };
-        nav.appendChild(btn);
     }
 </script>
 </body>
