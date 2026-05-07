@@ -3,252 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JAL 2026 Trip | Operational Utility</title>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <title>JAL 2026 | 攝影行動基地</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --jal-red: #d00000; --gold: #af9662; --dark: #1a1a1a;
-            --bg: #f5f5f5; --card-bg: #ffffff; --text: #333;
-            --safe-top: env(safe-area-inset-top);
+            --jal: #d00000;
+            --gold: #d4af37;
+            --dark: #111111;
+            --bg: #f8f8f8;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        @media (prefers-color-scheme: dark) {
+            :root { --bg: #0a0a0a; --dark: #1a1a1a; }
+            body { color: #ddd; }
+            .card { background: #1f1f1f; }
+        }
+
+        * { box-sizing: border-box; }
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
-            background: var(--bg); color: var(--text); margin: 0; padding: 0;
-            overflow-x: hidden; scroll-behavior: smooth;
+            background: var(--bg);
+            color: #222;
+            margin: 0;
+            line-height: 1.65;
+            font-size: 15.8px;
         }
 
-        /* --- Header & Nav --- */
         header {
-            background: var(--dark); color: white; padding: calc(15px + var(--safe-top)) 20px 15px;
-            position: sticky; top: 0; z-index: 1000; transition: 0.3s;
-            display: flex; justify-content: space-between; align-items: center;
+            background: var(--dark);
+            color: white;
+            padding: max(16px, env(safe-area-inset-top)) 16px 12px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        header.shrink { padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        header .title { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; }
-        header .status { font-size: 0.8rem; color: var(--gold); }
+        .title { font-weight: 700; letter-spacing: 1px; font-size: 1.28rem; }
+        .status { font-size: 0.88rem; color: var(--gold); }
 
         nav.tabs {
-            background: var(--dark); display: flex; overflow-x: auto;
-            position: sticky; top: 56px; z-index: 999; border-top: 1px solid #333;
+            background: var(--dark);
+            display: flex;
+            position: sticky;
+            top: 56px;
+            z-index: 999;
         }
         .tab {
-            flex: 1; padding: 12px; text-align: center; color: #888;
-            font-size: 0.85rem; border-bottom: 2px solid transparent; white-space: nowrap;
+            flex: 1;
+            padding: 14px 10px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
         }
-        .tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 700; }
+        .tab.active {
+            color: white;
+            border-bottom: 3px solid var(--jal);
+            font-weight: 600;
+        }
 
-        /* --- Day Selector --- */
         .day-nav {
-            display: flex; gap: 10px; padding: 15px; overflow-x: auto;
-            background: white; border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 8px;
+            padding: 14px 16px;
+            overflow-x: auto;
+            background: white;
+            border-bottom: 1px solid #eee;
         }
         .day-btn {
-            min-width: 60px; height: 40px; border-radius: 20px; background: #eee;
-            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;
+            min-width: 54px;
+            height: 44px;
+            border-radius: 999px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
         }
-        .day-btn.active { background: var(--jal-red); color: white; font-weight: bold; }
-        .day-btn.done { background: #333; color: #888; }
-        .day-btn.done::before { content: '✓ '; }
+        .day-btn.active { background: var(--jal); color: white; font-weight: 600; }
 
-        /* --- Content Container --- */
-        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 100px; }
-        .view { display: none; }
-        .view.active { display: block; }
+        .container { padding: 16px; max-width: 640px; margin: auto; padding-bottom: 90px; }
 
-        /* --- Itinerary Card --- */
         .card {
-            background: var(--card-bg); border-radius: 12px; margin-bottom: 15px;
-            overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
         }
         .card-header {
-            padding: 15px; background: #fff; border-bottom: 1px solid #eee;
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
-        .card-header h3 { margin: 0; font-size: 1rem; color: var(--jal-red); }
-        .energy-bar { width: 40px; height: 6px; background: #eee; border-radius: 3px; position: relative; }
-        .energy-fill { height: 100%; border-radius: 3px; background: #4caf50; }
+        .card-header h3 { margin: 0; font-size: 1.08rem; color: #1a1a1a; }
 
-        .card-body { padding: 15px; display: none; }
+        .card-body { padding: 0 18px 18px; display: none; }
         .card.open .card-body { display: block; }
 
-        /* --- Operational Elements --- */
-        .cutoff { background: #fff5f5; border: 1px solid #feb2b2; padding: 10px; border-radius: 8px; margin-bottom: 12px; }
-        .cutoff b { color: var(--jal-red); font-size: 1rem; }
-        
-        .photo-utility { background: #fdfaf3; border: 1px solid #e9d8a6; padding: 10px; border-radius: 8px; margin: 10px 0; }
-        .photo-utility .label { font-size: 0.75rem; color: #886b1c; font-weight: bold; text-transform: uppercase; }
+        .transport { background: #f0f4ff; padding: 12px; border-radius: 10px; margin: 12px 0; border-left: 4px solid var(--jal); }
+        .photo-tip { background: #fff9e6; padding: 12px; border-radius: 10px; margin: 12px 0; }
+        .rain-plan { background: #f0f4f8; padding: 12px; border-radius: 10px; font-size: 0.9rem; margin-top: 12px; }
 
-        .rain-plan { background: #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.85rem; margin-top: 10px; color: #4a5568; }
-        .rain-plan::before { content: '🌧️ 雨天備案：'; font-weight: bold; }
-
-        /* --- Flight/Transport Tables --- */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
-        th { color: #888; font-weight: normal; }
-
-        /* --- Floating Action --- */
         .fab {
-            position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px;
-            background: var(--jal-red); border-radius: 30px; color: white;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(208,0,0,0.4); font-size: 1.5rem;
+            position: fixed;
+            bottom: 24px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--jal);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            box-shadow: 0 5px 20px rgba(208,0,0,0.4);
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
-
-<header id="main-header">
-    <div class="title">JAL 2026 TRIP</div>
-    <div class="status" id="trip-progress">D3 IN PROGRESS</div>
+<header>
+    <div class="title">JAL 2026 攝影行動基地</div>
+    <div class="status" id="current-day">D3 • 進行中</div>
 </header>
 
 <nav class="tabs">
-    <div class="tab active" onclick="switchView('itinerary')">行程行程</div>
-    <div class="tab" onclick="switchView('flight')">航班資訊</div>
-    <div class="tab" onclick="switchView('transport')">交通樞紐</div>
-    <div class="tab" onclick="switchView('map')">地圖 GPS</div>
+    <div class="tab active" onclick="switchView(0)">行程</div>
+    <div class="tab" onclick="switchView(1)">航班</div>
+    <div class="tab" onclick="switchView(2)">交通</div>
+    <div class="tab" onclick="switchView(3)">實用</div>
 </nav>
 
 <div class="container">
-    <!-- --- ITINERARY VIEW --- -->
-    <div id="itinerary" class="view active">
-        <div class="day-nav">
-            <div class="day-btn done">D1</div>
-            <div class="day-btn done">D2</div>
-            <div class="day-btn active">D3</div>
-            <div class="day-btn">D4</div>
-            <div class="day-btn">D5</div>
-            <div class="day-btn">D6</div>
-            <div class="day-btn">D7</div>
-            <div class="day-btn">D8</div>
-            <div class="day-btn">D9</div>
-        </div>
 
-        <!-- Day 3 (Current) -->
-        <div class="card open" id="d3">
-            <div class="card-header" onclick="toggleCard('d3')">
-                <h3>D3 釧路濕原 | 鐵道與原始</h3>
-                <div class="energy-bar"><div class="energy-fill" style="width: 60%;"></div></div>
+    <!-- ==================== 行程主頁 ==================== -->
+    <div id="view0" class="view active">
+        <div class="day-nav" id="dayNav"></div>
+
+        <!-- Day 1 -->
+        <div class="card" id="d1">
+            <div class="card-header" onclick="toggleCard('d1')">
+                <h3>D1 • 5/30 移動日</h3>
+                <span>Arrival</span>
             </div>
             <div class="card-body">
-                <div class="cutoff">⏱️ <b>11:06</b> 必須登上 JR 釧網本線 (往網走)</div>
-                <div class="photo-utility">
-                    <div class="label">Golden Hour 攝影</div>
-                    <div>細岡展望台: <b>18:35 - 19:00</b></div>
-                    <div style="font-size: 0.8rem; color: #666;">適合捕捉濕原河流曲折的反光</div>
-                </div>
-                <p>• <b>細岡展望台</b>：拍攝濕原全景 (廣角拍攝)。<br>• <b>塘路湖散策</b>：沿鐵道步行，享受孤獨質感。</p>
-                <div class="rain-plan">改往「釧路市立博物館」+ 精品咖啡館巡禮。</div>
+                <div class="transport">🚆 京成 Access 特急 → 羽田 (HND)</div>
+                <p><b>🏨 Hotel Metropolitan Haneda</b></p>
+                <div class="photo-tip">🌃 羽田創新城夜拍或品川輕探索</div>
+            </div>
+        </div>
+
+        <!-- Day 2 -->
+        <div class="card" id="d2">
+            <div class="card-header" onclick="toggleCard('d2')">
+                <h3>D2 • 5/31 初探道東</h3>
+                <span>Kushiro</span>
+            </div>
+            <div class="card-body">
+                <div class="transport">✈️ JL541 (07:45 HND → 09:20 KUH)</div>
+                <p>• 和商市場：勝手丼 + 人文街拍<br>• 幣舞橋夕陽（18:00 前架機）</p>
+                <div class="photo-tip">晚上可拍幣舞橋燈光倒影</div>
+                <p><b>宿：</b> ANA Crowne Plaza Kushiro</p>
+            </div>
+        </div>
+
+        <!-- Day 3 -->
+        <div class="card open" id="d3">
+            <div class="card-header" onclick="toggleCard('d3')">
+                <h3>D3 • 6/01 濕原光影</h3>
+                <span>Kushiro Marsh</span>
+            </div>
+            <div class="card-body">
+                <div class="transport">🚃 JR 釧網本線 → 釧路濕原站（20分）</div>
+                <p>• <b>細岡展望台</b>：晨昏長焦拍濕原大拐彎<br>• <b>塘路湖</b>：沿鐵道步行，孤獨感極強</p>
+                <div class="photo-tip">📸 建議帶 ND 濾鏡做慢速流水</div>
             </div>
         </div>
 
         <!-- Day 4 -->
         <div class="card" id="d4">
             <div class="card-header" onclick="toggleCard('d4')">
-                <h3>D4 道東三湖 | 巴士長征</h3>
-                <div class="energy-bar"><div class="energy-fill" style="width: 100%;"></div></div>
+                <h3>D4 • 6/02 三湖巡禮</h3>
+                <span>Akan-Mashu</span>
             </div>
             <div class="card-body">
-                <div class="cutoff">⏱️ <b>08:20</b> 釧路站前 15 號月台報到 (Pirika號)</div>
-                <p>• 摩周湖 (霧之拍) ➔ 硫磺山 ➔ 屈斜路湖 ➔ 阿寒湖。</p>
-                <div class="rain-plan">巴士照常運作，縮短戶外時間，增加阿寒湖愛努村室內活動。</div>
+                <div class="transport">🚌 Pirika 號觀光巴士（08:30 釧路出發）</div>
+                <p>• 摩周湖・屈斜路湖・硫磺山・阿寒湖</p>
+                <div class="photo-tip">重點：摩周湖藍色火山口、屈斜路湖蒸氣</div>
+            </div>
+        </div>
+
+        <!-- Day 5 -->
+        <div class="card" id="d5">
+            <div class="card-header" onclick="toggleCard('d5')">
+                <h3>D5 • 6/03 跨區移動</h3>
+                <span>Kushiro → Izumo</span>
+            </div>
+            <div class="card-body">
+                <div class="transport">✈️ JL540 (10:00 KUH) → HND → JL283 (14:55) → 出雲 (IZO)</div>
+                <p>確認同 PNR 可行李直掛</p>
+                <p><b>宿：</b> 御宿 野乃 松江（頂樓溫泉）</p>
+            </div>
+        </div>
+
+        <!-- Day 6 -->
+        <div class="card" id="d6">
+            <div class="card-header" onclick="toggleCard('d6')">
+                <h3>D6 • 6/04 山陰沙漠衝擊</h3>
+                <span>Tottori</span>
+            </div>
+            <div class="card-body">
+                <div class="transport">🚆 JR 特急 Super Matsukaze（山陰 JR Pass）</div>
+                <p>• <b>鳥取砂丘</b>：早晚光線差異大，可滑沙<br>• <b>砂之美術館</b></p>
+                <div class="photo-tip">砂場咖啡豆採購</div>
             </div>
         </div>
 
         <!-- Day 7 -->
         <div class="card" id="d7">
             <div class="card-header" onclick="toggleCard('d7')">
-                <h3>D7 出雲/松江 | 神話夕陽</h3>
-                <div class="energy-bar"><div class="energy-fill" style="width: 80%;"></div></div>
+                <h3>D7 • 6/05 神話與夕陽</h3>
+                <span>Izumo</span>
             </div>
             <div class="card-body">
-                <div class="photo-utility">
-                    <div class="label">Sunset Window</div>
-                    <div>宍道湖畔: <b>18:58 - 19:18</b></div>
-                    <div style="font-size: 0.8rem; color: #666;">最佳位置：島根縣立美術館旁</div>
-                </div>
-                <p>• 出雲大社 ➔ 稻佐之濱 ➔ 宍道湖夕陽。</p>
-                <div class="rain-plan">取消日御碕，改為松江市內和菓子與抹茶體驗。</div>
+                <div class="transport">🚃 一畑電車（懷舊車廂可拍）</div>
+                <p>• 出雲大社<br>• 宍道湖夕陽（縣立美術館旁最佳）</p>
+                <div class="photo-tip">📸 日御碕燈塔 <span style="color:#666">(Optional)</span></div>
+            </div>
+        </div>
+
+        <!-- Day 8 -->
+        <div class="card" id="d8">
+            <div class="card-header" onclick="toggleCard('d8')">
+                <h3>D8 • 6/06 庭園美學</h3>
+                <span>Matsue</span>
+            </div>
+            <div class="card-body">
+                <div class="transport">🚌 安來站接駁 → 足立美術館</div>
+                <p>• <b>足立美術館</b>（建議一開館就去，預留 3.5 小時）<br>• 松江城</p>
+                <div class="transport">✈️ JL286 (19:10 IZO → 20:35 HND)</div>
+                <p><b>宿：</b> 京急 EX Inn Haneda</p>
+            </div>
+        </div>
+
+        <!-- Day 9 -->
+        <div class="card" id="d9">
+            <div class="card-header" onclick="toggleCard('d9')">
+                <h3>D9 • 6/07 返台</h3>
+                <span>Home</span>
+            </div>
+            <div class="card-body">
+                <div class="transport">✈️ JL97 (08:55 HND → 11:15 TSA)</div>
+                <p>結束這趟高強度攝影之旅！</p>
             </div>
         </div>
     </div>
 
-    <!-- --- FLIGHT VIEW --- -->
-    <div id="flight" class="view">
-        <div class="card open">
-            <div class="card-header"><h3>JAL 航班核對表</h3></div>
-            <div class="card-body" style="padding:0">
-                <table>
-                    <tr><th>航班</th><th>航段</th><th>Terminal</th><th>PNR</th></tr>
-                    <tr><td>JL8664</td><td>TPE-NRT</td><td>T2</td><td>6-CHARS</td></tr>
-                    <tr><td>JL541</td><td>HND-KUH</td><td>T1 (Gate 12)</td><td>6-CHARS</td></tr>
-                    <tr><td>JL540</td><td>KUH-HND</td><td>T1</td><td>6-CHARS</td></tr>
-                    <tr><td>JL283</td><td>HND-IZO</td><td>T1</td><td>6-CHARS</td></tr>
-                </table>
-                <div class="note" style="margin: 15px;">⚠️ <b>Day 5 轉機：</b> JL540 ➔ JL283。若同訂位號，行李可直掛出雲。</div>
+    <!-- ==================== 航班頁 ==================== -->
+    <div id="view1" class="view">
+        <div class="card">
+            <div class="card-header"><h3>JAL 航班總覽</h3></div>
+            <div class="card-body">
+                <p><b>JL8664</b> TPE → NRT/HND<br>
+                   <b>JL541</b> HND → KUH (D2)<br>
+                   <b>JL540 + JL283</b> KUH → IZO (D5)<br>
+                   <b>JL286</b> IZO → HND (D8)<br>
+                   <b>JL97</b> HND → TSA (D9)</p>
             </div>
         </div>
     </div>
 
-    <!-- --- TRANSPORT VIEW --- -->
-    <div id="transport" class="view">
-        <div class="card open">
-            <div class="card-header"><h3>關鍵票券與位置</h3></div>
+    <!-- ==================== 交通頁 ==================== -->
+    <div id="view2" class="view">
+        <div class="card">
+            <div class="card-header"><h3>關鍵票券</h3></div>
             <div class="card-body">
-                <p><b>1. 山陰岡山 JR PASS</b><br>D5-D8 使用。涵蓋松江-鳥取特急列車。</p>
-                <p><b>2. Pirika 號觀光巴士</b><br>D4 預約完成，釧路站前搭乘。</p>
-                <div class="cutoff">🆘 <b>備援：</b> 若 JR 停駛，鳥取-松江改搭高速巴士 (一畑/日之丸)。</div>
+                <p><b>山陰岡山 JR Pass</b> — D6~D8 使用</p>
+                <p><b>Pirika 號</b> — D4 預約完成</p>
+                <p><b>一畑電車</b> — D7 出雲大社</p>
             </div>
         </div>
     </div>
 
-    <!-- --- MAP VIEW --- -->
-    <div id="map" class="view">
-        <div class="card open">
-            <div class="card-header"><h3>GPS 快速導航</h3></div>
+    <!-- ==================== 實用頁 ==================== -->
+    <div id="view3" class="view">
+        <div class="card">
+            <div class="card-header"><h3>實用資訊</h3></div>
             <div class="card-body">
-                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 釧路和商市場</a></div>
-                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 細岡展望台</a></div>
-                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 鳥取砂丘</a></div>
-                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 出雲大社</a></div>
+                <p>📍 Google Maps 捷徑<br>
+                   ☀️ Golden Hour 提醒<br>
+                   🌧️ 雨天備案<br>
+                   📸 攝影裝備清單</p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="fab" onclick="window.scrollTo(0,0)">↑</div>
+<div class="fab" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 
 <script>
-    // --- Header Shrink ---
-    window.onscroll = function() {
-        const header = document.getElementById("main-header");
-        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-            header.classList.add("shrink");
-        } else {
-            header.classList.remove("shrink");
-        }
-    };
-
-    // --- Tab Switching ---
-    function switchView(viewId) {
+    // Tab 切換
+    function switchView(n) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.getElementById(viewId).classList.add('active');
-        event.currentTarget.classList.add('active');
-        window.scrollTo(0,0);
+        document.getElementById('view' + n).classList.add('active');
+        document.querySelectorAll('.tab')[n].classList.add('active');
     }
 
-    // --- Accordion ---
+    // Accordion
     function toggleCard(id) {
-        const card = document.getElementById(id);
-        card.classList.toggle('open');
+        document.getElementById(id).classList.toggle('open');
     }
 
-    // --- GPS Placeholder Info ---
-    console.log("App Initialized: Operational Mode.");
-</script>
+    // Day Nav
+    const days = [
+        {id:"d1", label:"D1"},
+        {id:"d2", label:"D2"},
+        {id:"d3", label:"D3"},
+        {id:"d4", label:"D4"},
+        {id:"d5", label:"D5"},
+        {id:"d6", label:"D6"},
+        {id:"d7", label:"D7"},
+        {id:"d8", label:"D8"},
+        {id:"d9", label:"D9"}
+    ];
 
+    const nav = document.getElementById('dayNav');
+    days.forEach(day => {
+        const btn = document.createElement('div');
+        btn.className = 'day-btn';
+        btn.textContent = day.label;
+        btn.onclick = () => {
+            document.getElementById(day.id).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        };
+        nav.appendChild(btn);
+    });
+</script>
 </body>
 </html>
