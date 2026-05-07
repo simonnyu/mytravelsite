@@ -3,221 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JAL 2026 MISSION | 終極實務路書</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>2026 絕景雙境 ｜ 頂級攝影路書</title>
+    <!-- 導入高端排版所需的黑體與明體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --jal: #d00000; --gold: #af9662; --dark: #000; --card: #ffffff; --text: #1c1c1e; --bg: #f2f2f7;
+            --jal-red: #A30014; --jal-gold: #C0A16B; --dark: #121212; --surface: #ffffff;
+            --text-main: #2C2C2C; --text-muted: #7A7A7A; --bg: #F9F9F7;
             --safe-top: env(safe-area-inset-top); --safe-bottom: env(safe-area-inset-bottom);
         }
         @media (prefers-color-scheme: dark) {
-            :root { --bg: #000; --card: #1c1c1e; --text: #f2f2f7; }
+            :root { --bg: #0A0A0A; --surface: #1A1A1A; --text-main: #E0E0E0; --text-muted: #999999; }
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
+        body { font-family: 'Noto Sans TC', 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 0; line-height: 1.7; letter-spacing: 0.5px; }
         
-        header { 
-            background: var(--dark); color: white; padding: calc(15px + var(--safe-top)) 20px 15px;
-            position: sticky; top: 0; z-index: 2000; border-bottom: 2px solid var(--jal);
+        /* 雜誌風 Header */
+        header {
+            background: var(--dark); color: #fff; padding: calc(16px + var(--safe-top)) 20px 20px;
+            position: sticky; top: 0; z-index: 2000;
+            background-image: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(18,18,18,1) 100%);
         }
-        .header-main { display: flex; justify-content: space-between; align-items: center; }
-        .title { font-weight: 800; letter-spacing: 1.5px; font-size: 1.1rem; }
+        .cover-subtitle { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--jal-gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
+        .cover-title { font-family: 'Noto Serif TC', serif; font-size: 1.3rem; font-weight: 900; letter-spacing: 2px; margin: 0; }
         
-        nav { background: var(--dark); display: flex; position: sticky; top: calc(52px + var(--safe-top)); z-index: 1999; border-bottom: 0.5px solid #333; }
-        .tab-btn { flex: 1; padding: 14px 0; text-align: center; color: #888; font-size: 0.85rem; border: none; background: none; }
-        .tab-btn.active { color: white; border-bottom: 3px solid var(--jal); font-weight: 700; }
+        /* 精品導覽列 */
+        nav { background: var(--dark); display: flex; position: sticky; top: calc(75px + var(--safe-top)); z-index: 1999; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+        .tab-btn { flex: 1; padding: 14px 0; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 500; border: none; background: none; transition: 0.3s; letter-spacing: 1px; }
+        .tab-btn.active { color: #fff; border-bottom: 2px solid var(--jal-gold); }
 
-        .container { padding: 16px; max-width: 600px; margin: auto; padding-bottom: calc(100px + var(--safe-bottom)); }
-        .view { display: none; }
+        .container { padding: 20px 16px; max-width: 600px; margin: auto; padding-bottom: calc(100px + var(--safe-bottom)); }
+        .view { display: none; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
         .view.active { display: block; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card); border-radius: 18px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
-        .card-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 0.5px solid #eee; }
-        .card-header h3 { margin: 0; font-size: 1rem; font-weight: 700; color: var(--jal); }
-        .card-header .day-badge { background: #eee; color: #666; padding: 2px 8px; border-radius: 6px; font-size: 0.75rem; }
+        /* 頂級卡片排版 */
+        .card { background: var(--surface); border-radius: 12px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; }
+        .card-header { padding: 24px; cursor: pointer; border-bottom: 1px solid rgba(150,150,150,0.1); position: relative; }
+        .day-mark { font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--jal-red); font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; display: block; }
+        .card-header h3 { font-family: 'Noto Serif TC', serif; margin: 0; font-size: 1.4rem; font-weight: 700; color: var(--text-main); line-height: 1.4; }
+        .card-header .subtitle { font-size: 0.85rem; color: var(--text-muted); margin-top: 6px; }
         
-        .card-body { padding: 18px; display: none; }
+        .card-body { padding: 0 24px 24px; display: none; margin-top: 20px; }
         .card.open .card-body { display: block; }
 
-        .item { display: flex; margin-bottom: 14px; }
-        .time { min-width: 60px; font-weight: 700; color: var(--jal); font-size: 0.9rem; }
-        .content { flex: 1; font-size: 0.95rem; }
-        
-        .guide { background: #fdfaf3; border-left: 4px solid var(--gold); padding: 12px; border-radius: 6px; margin: 12px 0; font-size: 0.9rem; color: #4a372d; }
-        @media (prefers-color-scheme: dark) { .guide { background: #2c2518; color: #e9d8a6; } }
+        /* 詩意敘事區塊 */
+        .story-block { font-family: 'Noto Serif TC', serif; font-size: 0.95rem; color: var(--text-main); line-height: 1.8; margin-bottom: 24px; }
+        .story-block::first-letter { font-size: 1.8rem; color: var(--jal-red); float: left; margin-right: 6px; line-height: 1; font-weight: 900; }
 
-        .alert { background: #fff5f5; border: 1px solid #feb2b2; padding: 10px; border-radius: 8px; color: #c53030; font-size: 0.85rem; margin: 10px 0; font-weight: 600; }
-        .photo-tip { border: 1px dashed var(--gold); padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 0.85rem; font-style: italic; }
+        /* 嚴謹時程表 */
+        .timeline { border-left: 2px solid rgba(192, 161, 107, 0.3); margin-left: 6px; padding-left: 16px; margin-bottom: 24px; }
+        .time-node { position: relative; margin-bottom: 16px; }
+        .time-node::before { content: ''; position: absolute; left: -21px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--jal-gold); }
+        .time-node.alert::before { background: var(--jal-red); box-shadow: 0 0 0 3px rgba(163,0,20,0.2); }
+        .t-time { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--jal-gold); margin-bottom: 2px; }
+        .time-node.alert .t-time { color: var(--jal-red); }
+        .t-event { font-size: 0.95rem; }
 
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
-        th, td { text-align: left; padding: 10px 8px; border-bottom: 0.5px solid #eee; }
-        th { color: #888; font-weight: 400; }
+        /* 攝影大師筆記 */
+        .photo-note { background: rgba(192, 161, 107, 0.05); border: 1px solid rgba(192, 161, 107, 0.2); padding: 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); }
+        .photo-note strong { color: var(--jal-gold); font-size: 0.9rem; }
 
-        .fab { position: fixed; bottom: calc(30px + var(--safe-bottom)); right: 20px; width: 56px; height: 56px; background: var(--jal); color: white; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(208,0,0,0.3); z-index: 2001; }
+        .fab { position: fixed; bottom: calc(25px + var(--safe-bottom)); right: 20px; width: 50px; height: 50px; background: var(--dark); color: var(--jal-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 2001; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="header-main">
-        <div class="title">JAL 2026 MISSION</div>
-        <div style="font-size: 0.8rem; color: var(--gold);">PRE-FLIGHT MODE</div>
-    </div>
+    <div class="cover-subtitle">JAPAN AIRLINES 2026</div>
+    <h1 class="cover-title">道東之森・山陰神話</h1>
 </header>
 
 <nav>
-    <button class="tab-btn active" onclick="showView('itinerary')">九日行程</button>
-    <button class="tab-btn" onclick="showView('flights')">航班/住宿</button>
-    <button class="tab-btn" onclick="showView('logistics')">交通/提醒</button>
+    <button class="tab-btn active" onclick="showView('itinerary')">美學行旅</button>
+    <button class="tab-btn" onclick="showView('flights')">尊榮禮遇</button>
+    <button class="tab-btn" onclick="showView('logistics')">實務奧秘</button>
 </nav>
 
 <div class="container">
-    <!-- 行程詳細頁 -->
+    <!-- ==================== 深度美學行旅 ==================== -->
     <div id="itinerary" class="view active">
         
         <!-- Day 1 -->
         <div class="card open" id="d1">
-            <div class="card-header" onclick="toggleCard('d1')"><h3>D1 5/30 東京：啟程之夜</h3><span class="day-badge">TPE-NRT</span></div>
+            <div class="card-header" onclick="toggleCard('d1')">
+                <span class="day-mark">DAY 1 ｜ 05.30</span>
+                <h3>星翼啟航：羽田夜泊的科技光廊</h3>
+                <div class="subtitle">台北 ➔ 成田 ➔ 羽田</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">12:45</div><div class="content">JL8664 台北起飛</div></div>
-                <div class="item"><div class="time">17:15</div><div class="content">抵達成田 NRT，搭乘京成 Access 特急直通羽田</div></div>
-                <div class="guide">羽田創新城 (HICity) 融合現代建築與航空感。今晚是為了明日清晨的道東飛行爭取體力。</div>
-                <div class="photo-tip">📸 2樓足湯觀景台可拍飛機起降流光。</div>
-                <p>🏨 <b>Hotel Metropolitan Haneda</b></p>
+                <div class="story-block">
+                    告別台北的喧囂，JAL客機劃破天際。今夜的東京不僅是中轉站，更是光影藝術的序章。羽田創新城（HICity）以冰冷的鋼材與溫潤的木構交織，為明日的極北之旅沉澱心靈。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">12:45 - 17:15</div><div class="t-event">JL8664 豪華客機飛往成田 (NRT)。</div></div>
+                    <div class="time-node"><div class="t-time">18:15 - 19:40</div><div class="t-event">搭乘「京成 Access 特急」直抵天空橋站。</div></div>
+                    <div class="time-node"><div class="t-time">20:00</div><div class="t-event">入住 <b>Hotel Metropolitan Tokyo Haneda</b>。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    夜間前往 2 樓足湯觀景台。無須沉重的腳架，以您穩定的雙手與大光圈，定格跑道上如流星般的起降軌跡。
+                </div>
             </div>
         </div>
 
         <!-- Day 2 -->
         <div class="card" id="d2">
-            <div class="card-header" onclick="toggleCard('d2')"><h3>D2 5/31 釧路：琥珀時刻</h3><span class="day-badge">HND-KUH</span></div>
+            <div class="card-header" onclick="toggleCard('d2')">
+                <span class="day-mark">DAY 2 ｜ 05.31</span>
+                <h3>霧都琥珀：世界三大夕陽的洗禮</h3>
+                <div class="subtitle">東京羽田 ➔ 北海道釧路</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">07:45</div><div class="content">JL541 羽田起飛 ➔ 09:20 抵達</div></div>
-                <div class="item"><div class="time">09:40</div><div class="activity">機場接駁巴士往幣舞橋 (45min)</div></div>
-                <div class="item"><div class="time">11:30</div><div class="activity"><b>和商市場</b>：勝手丼攝影與午餐</div></div>
-                <div class="guide">幣舞橋夕陽位列世界三大。水氣過濾了短波，留下純淨琥珀色。</div>
-                <div class="photo-tip">📸 <b>18:35-19:00</b> 幣舞橋夕陽窗口。</div>
-                <p>🏨 <b>ANA Crowne Plaza Kushiro</b> (Night 1)</p>
+                <div class="story-block">
+                    步入釧路的庶民廚房「和商市場」，在海味交織的熱氣中，親手挑選晶瑩剔透的時令海鮮，成就一碗專屬的勝手丼。當逢魔時刻降臨，幣舞橋畔的海霧濾去了刺眼的強光，為大地披上一層迷幻的琥珀色薄紗。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">07:45 - 09:20</div><div class="t-event">搭乘 JL541 躍入北國領空。</div></div>
+                    <div class="time-node"><div class="t-time">09:40 - 10:25</div><div class="t-event">機場巴士迎賓，直抵幣舞橋畔。</div></div>
+                    <div class="time-node"><div class="t-time">11:00 - 13:00</div><div class="t-event"><b>和商市場</b>尋味之旅。</div></div>
+                    <div class="time-node alert"><div class="t-time">18:35 - 18:55</div><div class="t-event"><b>【極致絕景】</b> 幣舞橋琥珀夕陽。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    立於橋畔南側，將「四季女神」銅像化為深邃的剪影，與染成橘紅色的江面相互輝映，留下不朽的瞬間。
+                    <br><br>🏨 <b>ANA Crowne Plaza Kushiro</b>（第1晚）
+                </div>
             </div>
         </div>
 
-        <!-- Day 3 (校對補完) -->
+        <!-- Day 3 -->
         <div class="card" id="d3">
-            <div class="card-header" onclick="toggleCard('d3')"><h3>D3 6/01 濕原：原始蛇行</h3><span class="day-badge">Marsh</span></div>
+            <div class="card-header" onclick="toggleCard('d3')">
+                <span class="day-mark">DAY 3 ｜ 06.01</span>
+                <h3>萬年之息：濕原的綠色迷宮與原始蛇行</h3>
+                <div class="subtitle">釧路濕原・細岡展望台</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">08:00</div><div class="content">飯店早餐，觀察晨間光影</div></div>
-                <div class="item"><div class="time">09:15</div><div class="content"><b>【晨霧攝影】</b> 沿碼頭區拍攝海霧中的漁船線條</div></div>
-                <div class="item"><div class="time">11:06</div><div class="content">JR 釧網本線 (往網走) ➔ 釧路濕原站</div></div>
-                <div class="guide">細岡展望台俯瞰的是冰河時期留下的原始蛇行，毫無人工堤防阻隔。</div>
-                <div class="photo-tip">📸 <b>手持長焦</b> 捕捉河流Ｓ型大拐彎。</div>
-                <p>🏨 <b>ANA Crowne Plaza Kushiro</b> (Night 2)</p>
+                <div class="story-block">
+                    晨霧未散之際，港口的起重機宛如沉睡的鋼鐵巨獸。隨後搭上穿梭於森林間的 JR 釧網本線，深入地球的呼吸中樞。站在細岡展望台，釧路川在平原上肆意蜿蜒，這是冰河時期留給人類最奢華的綠色遺產。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">08:00 - 08:45</div><div class="t-event">於飯店高樓層佐以河景享用晨食。</div></div>
+                    <div class="time-node"><div class="t-time">09:15 - 10:30</div><div class="t-event">沿港區漫步，捕捉北國特有的海霧線條。</div></div>
+                    <div class="time-node"><div class="t-time">11:06 - 11:27</div><div class="t-event">搭乘 <b>JR 釧網本線</b> 駛入釧路濕原站。</div></div>
+                    <div class="time-node"><div class="t-time">15:46 - 16:21</div><div class="t-event">搭乘返程列車回到充滿歷史感的市區。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    面對浩瀚的濕原，舉起 100-200mm 的長焦鏡頭，切割出河流Ｓ型大拐彎的完美幾何。
+                    <br><br>🏨 <b>ANA Crowne Plaza Kushiro</b>（第2晚・免退房）
+                </div>
             </div>
         </div>
 
-        <!-- Day 4 (修正續住邏輯) -->
+        <!-- Day 4 -->
         <div class="card" id="d4">
-            <div class="card-header" onclick="toggleCard('d4')"><h3>D4 6/02 三湖：眾神湛藍</h3><span class="day-badge">Pirika Bus</span></div>
+            <div class="card-header" onclick="toggleCard('d4')">
+                <span class="day-mark">DAY 4 ｜ 06.02</span>
+                <h3>眾神之境：摩周藍的深邃與愛努之魂</h3>
+                <div class="subtitle">道東三湖：摩周・屈斜路・阿寒</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">08:20</div><div class="content">釧路站前 15 號月台報到</div></div>
-                <div class="item"><div class="time">08:30</div><div class="content"><b>Pirika 號發車</b>：摩周湖 ➔ 硫磺山 ➔ 屈斜路湖 ➔ 阿寒湖</div></div>
-                <div class="guide">摩周湖水極度純淨，能吸收紅色光譜折射出深邃的「摩周藍」。</div>
-                <div class="photo-tip">📸 阿寒湖愛努村 (Ainu Kotan) 的木雕人文線條。</div>
-                <p>🏨 <b>ANA Crowne Plaza Kushiro</b> (Night 3 - 續住免退房)</p>
+                <div class="story-block">
+                    免去自駕的勞頓，專屬觀光巴士 Pirika 號將帶您深入道東腹地。凝視全日本透明度最高的「摩周湖」，那深邃到彷彿能吸走靈魂的「摩周藍」，與硫磺山噴發的粗獷煙霧，形成大自然最劇烈的對比。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">08:20</div><div class="t-event">釧路站前 15 號月台悠然報到。</div></div>
+                    <div class="time-node"><div class="t-time">08:30 - 16:50</div><div class="t-event"><b>Pirika 號</b> 巡禮：摩周湖 ➔ 硫磺山 ➔ 屈斜路湖 ➔ 阿寒湖。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    在阿寒湖畔的愛努村，鏡頭對準充滿靈性的原住民木雕，手持快拍展現純粹的人文張力。
+                    <br><br>🏨 <b>ANA Crowne Plaza Kushiro</b>（第3晚・免退房）
+                </div>
             </div>
         </div>
 
-        <!-- Day 5 (精確機場銜接) -->
+        <!-- Day 5 -->
         <div class="card" id="d5">
-            <div class="card-header" onclick="toggleCard('d5')"><h3>D5 6/03 橫越：山陰神話</h3><span class="day-badge">Transfer</span></div>
+            <div class="card-header" onclick="toggleCard('d5')">
+                <span class="day-mark">DAY 5 ｜ 06.03</span>
+                <h3>雲端跨越：從極北荒野躍入神話山陰</h3>
+                <div class="subtitle">釧路 ➔ 羽田 ➔ 出雲 ➔ 松江</div>
+            </div>
             <div class="card-body">
-                <div class="alert">🚨 08:35 釧路站機場巴士 (此班必搭，以銜接10:00航班)</div>
-                <div class="item"><div class="time">10:00</div><div class="content">JL540 (KUH ➔ HND)</div></div>
-                <div class="item"><div class="time">14:55</div><div class="content">JL283 (HND ➔ IZO)</div></div>
-                <div class="guide">行李直掛出雲。羽田轉機 3hr 建議在 T1 航廈悠閒午餐。</div>
-                <p>🏨 <b>御宿 野乃 松江</b> (Night 1)</p>
+                <div class="story-block">
+                    這是一場跨越半個日本的史詩級移動。行李將由日本航空無縫遞送，您只需兩手空空，在三萬英尺的高空品味雲端時光。傍晚抵達水都松江，御宿野乃的榻榻米與溫泉，將為您洗去千里的塵埃。
+                </div>
+                <div class="timeline">
+                    <div class="time-node alert"><div class="t-time">08:35</div><div class="t-event"><b>【極致死線】</b> 搭乘釧路站前機場巴士。</div></div>
+                    <div class="time-node"><div class="t-time">10:00 - 11:50</div><div class="t-event">JL540 飛往羽田。於 T1 航廈從容午餐。</div></div>
+                    <div class="time-node"><div class="t-time">14:55 - 16:15</div><div class="t-event">JL283 降落神話之門出雲 (IZO)。</div></div>
+                    <div class="time-node"><div class="t-time">16:30 - 17:15</div><div class="t-event">機場巴士直達松江站。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【尊榮禮遇】</strong><br>
+                    於釧路辦理報到時，請優雅地出示 PNR，要求行李直掛出雲，享受毫無負擔的轉機體驗。
+                    <br><br>🏨 <b>御宿 野乃 松江</b>（第1晚・頂樓溫泉）
+                </div>
             </div>
         </div>
 
         <!-- Day 6 -->
         <div class="card" id="d6">
-            <div class="card-header" onclick="toggleCard('d6')"><h3>D6 6/04 鳥取：超現實砂丘</h3><span class="day-badge">Tottori</span></div>
+            <div class="card-header" onclick="toggleCard('d6')">
+                <span class="day-mark">DAY 6 ｜ 06.04</span>
+                <h3>風砂詩篇：鳥取砂丘的十萬年刻痕</h3>
+                <div class="subtitle">特急 Super Matsukaze・鳥取砂丘</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">08:30</div><div class="content">JR 特急 Super Matsukaze ➔ 鳥取站</div></div>
-                <div class="item"><div class="time">10:30</div><div class="content">鳥取砂丘 & 砂之美術館攝影</div></div>
-                <div class="guide">砂丘風紋會隨風速變換，像大地的指紋。低角度拍攝能強化層次感。</div>
-                <div class="photo-tip">📸 「馬之背」頂端俯瞰深藍日本海。</div>
-                <p>🏨 <b>御宿 野乃 松江</b> (Night 2)</p>
+                <div class="story-block">
+                    搭乘山陰海岸線的特急列車，直抵日本唯一的壯闊沙海。鳥取砂丘不僅是沙，它是火山灰與日本海狂風交織了十萬年的地景藝術。砂面上的「風紋」如大地的指紋，隨光影瞬息萬變。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">08:30 - 09:56</div><div class="t-event">搭乘 JR 特急抵達鳥取。</div></div>
+                    <div class="time-node"><div class="t-time">10:30 - 13:30</div><div class="t-event">探索鳥取砂丘與砂之美術館。</div></div>
+                    <div class="time-node"><div class="t-time">15:00</div><div class="t-event">站前品嚐當地名物「砂場咖啡」。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    踏上「馬之背」沙丘制高點，壓低鏡頭視角，讓斜射的陽光強化風紋的立體陰影，拍出超現實的異星感。
+                    <br><br>🏨 <b>御宿 野乃 松江</b>（第2晚・免退房）
+                </div>
             </div>
         </div>
 
         <!-- Day 7 -->
         <div class="card" id="d7">
-            <div class="card-header" onclick="toggleCard('d7')"><h3>D7 6/05 出雲：神話與日落</h3><span class="day-badge">Izumo</span></div>
+            <div class="card-header" onclick="toggleCard('d7')">
+                <span class="day-mark">DAY 7 ｜ 06.05</span>
+                <h3>神明之契：出雲大社與宍道湖落日</h3>
+                <div class="subtitle">一畑電車・出雲大社・島根美術館</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">09:44</div><div class="content">一畑電車 (松江溫泉站發) ➔ 出雲大社</div></div>
-                <div class="item"><div class="time">11:00</div><div class="content">出雲大社參拜 / 割子蕎麥麵午餐</div></div>
-                <div class="guide">神樂殿 5.2 噸大注連繩震撼感十足。傍晚守候島根縣立美術館湖畔。</div>
-                <div class="photo-tip">📸 <b>18:50-19:15</b> 宍道湖夕陽窗口 (嫁島剪影)。</div>
-                <p>🏨 <b>御宿 野乃 松江</b> (Night 3)</p>
+                <div class="story-block">
+                    搭上懷舊的一畑電車，穿越時光迴廊來到出雲大社。這裡是全日本八百萬神明每年集結的聖域，那重達5.2噸的注連繩，訴說著千年的敬畏。黃昏時分，宍道湖畔的夕陽將湖中的「嫁島」化為神聖的孤影。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">09:44 - 10:46</div><div class="t-event">一畑電車：松江溫泉站 ➔ 出雲大社前。</div></div>
+                    <div class="time-node"><div class="t-time">11:00 - 14:00</div><div class="t-event">出雲參拜，享用傳承百年的割子蕎麥麵。</div></div>
+                    <div class="time-node alert"><div class="t-time">18:50 - 19:15</div><div class="t-event"><b>【極致絕景】</b> 宍道湖日本百選夕陽。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    立於島根縣立美術館外，使用 50mm 焦段，屏息等待太陽完美落入嫁島與湖面交界的那一瞬間。
+                    <br><br>🏨 <b>御宿 野乃 松江</b>（第3晚・免退房）
+                </div>
             </div>
         </div>
 
-        <!-- Day 8 (精確返程) -->
+        <!-- Day 8 -->
         <div class="card" id="d8">
-            <div class="card-header" onclick="toggleCard('d8')"><h3>D8 6/06 安來：名畫庭園</h3><span class="day-badge">Adachi</span></div>
+            <div class="card-header" onclick="toggleCard('d8')">
+                <span class="day-mark">DAY 8 ｜ 06.06</span>
+                <h3>活著的名畫：足立美術館的極致借景</h3>
+                <div class="subtitle">足立美術館・松江城 ➔ 羽田</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">09:30</div><div class="content">足立美術館 (預留3.5小時，框景攝影)</div></div>
-                <div class="alert">🚨 17:30 松江站機場巴士 (銜接19:10班機)</div>
-                <div class="item"><div class="time">19:10</div><div class="content">JL286 (IZO ➔ HND)</div></div>
-                <p>🏨 <b>京急 EX Inn Haneda</b></p>
+                <div class="story-block">
+                    蟬聯二十年日本第一的足立美術館，將大自然馴化為畫布。創辦人深信「庭園本身就是一幅畫」，館內的窗櫺被精密計算，化為天然的畫框。隨後我們將告別山陰，乘著夜色飛返東京。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">08:00</div><div class="t-event">退房，行李優雅寄放於松江車站。</div></div>
+                    <div class="time-node"><div class="t-time">09:00 - 12:30</div><div class="t-event">安來站轉乘接駁車，沉浸於足立庭園。</div></div>
+                    <div class="time-node alert"><div class="t-time">17:30</div><div class="t-event"><b>【極致死線】</b> 松江站搭乘機場巴士。</div></div>
+                    <div class="time-node"><div class="t-time">19:10 - 20:35</div><div class="t-event">JL286 躍升夜空，返抵羽田機場。</div></div>
+                </div>
+                <div class="photo-note">
+                    <strong>【光影捕捉】</strong><br>
+                    無需刻意尋找角度，只要站在美術館指定的「框景窗」前，按下快門，即是一幅無可挑惕的東方水墨。
+                    <br><br>🏨 <b>京急 EX Inn Haneda</b>
+                </div>
             </div>
         </div>
 
         <!-- Day 9 -->
         <div class="card" id="d9">
-            <div class="card-header" onclick="toggleCard('d9')"><h3>D9 6/07 台北：歸途</h3><span class="day-badge">Home</span></div>
+            <div class="card-header" onclick="toggleCard('d9')">
+                <span class="day-mark">DAY 9 ｜ 06.07</span>
+                <h3>滿載星光：晨翼歸鄉的優雅謝幕</h3>
+                <div class="subtitle">東京羽田 ➔ 台北松山</div>
+            </div>
             <div class="card-body">
-                <div class="item"><div class="time">08:55</div><div class="content">JL97 (HND ➔ TSA)</div></div>
-                <div class="guide">抵達松山機場離家近。這場跨越道東與山陰的飛行跳島圓滿謝幕。</div>
+                <div class="story-block">
+                    旅程的尾聲，不需在龐大的成田機場奔波。從羽田優雅起飛，降落於台北市中心的松山機場。1500公里的跨距、三萬英尺的俯瞰、無數張精準的光影，全數化為這趟絕景雙境最珍貴的靈魂印記。
+                </div>
+                <div class="timeline">
+                    <div class="time-node"><div class="t-time">08:55</div><div class="t-event">JL97 準時自羽田 (HND) 啟航。</div></div>
+                    <div class="time-node"><div class="t-time">11:15</div><div class="t-event">平安降落台北松山 (TSA)，從容返家。</div></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 航班住宿頁 -->
+    <!-- ==================== 尊榮航班與住宿 ==================== -->
     <div id="flights" class="view">
         <div class="card open">
-            <div class="card-header"><h3>JAL 航班核對表</h3></div>
+            <div class="card-header"><h3>JAPAN AIRLINES 御用航班</h3></div>
             <div class="card-body" style="padding:0">
                 <table>
-                    <tr><th>日期</th><th>編號</th><th>航段</th><th>時間</th></tr>
-                    <tr><td>5/30</td><td>JL8664</td><td>TPE-NRT</td><td>12:45-17:15</td></tr>
-                    <tr><td>5/31</td><td>JL541</td><td>HND-KUH</td><td>07:45-09:20</td></tr>
-                    <tr><td>6/03</td><td>JL540</td><td>KUH-HND</td><td>10:00-11:50</td></tr>
-                    <tr><td>6/03</td><td>JL283</td><td>HND-IZO</td><td>14:55-16:15</td></tr>
-                    <tr><td>6/06</td><td>JL286</td><td>IZO-HND</td><td>19:10-20:35</td></tr>
-                    <tr><td>6/07</td><td>JL97</td><td>HND-TSA</td><td>08:55-11:15</td></tr>
+                    <tr style="background:rgba(192, 161, 107, 0.1);"><th>日期</th><th>航班</th><th>航線</th><th>時間</th></tr>
+                    <tr><td>05.30</td><td><b>JL8664</b></td><td>TPE - NRT</td><td>12:45-17:15</td></tr>
+                    <tr><td>05.31</td><td><b>JL541</b></td><td>HND - KUH</td><td>07:45-09:20</td></tr>
+                    <tr><td>06.03</td><td><b>JL540</b></td><td>KUH - HND</td><td>10:00-11:50</td></tr>
+                    <tr><td>06.03</td><td><b>JL283</b></td><td>HND - IZO</td><td>14:55-16:15</td></tr>
+                    <tr><td>06.06</td><td><b>JL286</b></td><td>IZO - HND</td><td>19:10-20:35</td></tr>
+                    <tr><td>06.07</td><td><b>JL97</b></td><td>HND - TSA</td><td>08:55-11:15</td></tr>
                 </table>
             </div>
         </div>
         <div class="card open">
-            <div class="card-header"><h3>住宿清單 (全含早)</h3></div>
+            <div class="card-header"><h3>奢華泊宿（全尊享晨食）</h3></div>
             <div class="card-body">
-                <p>5/30 ➔ Metropolitan Haneda</p>
-                <p>5/31-6/03 ➔ ANA Crowne Plaza Kushiro (3晚)</p>
-                <p>6/03-6/06 ➔ 御宿 野乃 松江 (3晚)</p>
-                <p>6/06 ➔ 京急 EX Inn Haneda</p>
+                <p>📍 <b>5/30 (1晚)｜羽田</b><br>Hotel Metropolitan Tokyo Haneda<br><span style="font-size:0.8rem; color:var(--text-muted);">洗去國際線的疲勞，備戰清晨飛航。</span></p>
+                <hr style="border:0; border-top:1px solid rgba(150,150,150,0.15); margin:12px 0;">
+                <p>📍 <b>5/31 - 6/03 (連住3晚)｜釧路</b><br>ANA Crowne Plaza Kushiro<br><span style="font-size:0.8rem; color:var(--text-muted);">坐擁幣舞橋第一排，無需更替飯店的從容。</span></p>
+                <hr style="border:0; border-top:1px solid rgba(150,150,150,0.15); margin:12px 0;">
+                <p>📍 <b>6/03 - 6/06 (連住3晚)｜松江</b><br>御宿 野乃 松江 (Onyado Nono)<br><span style="font-size:0.8rem; color:var(--text-muted);">全館榻榻米，頂樓天然溫泉，極致和風體驗。</span></p>
+                <hr style="border:0; border-top:1px solid rgba(150,150,150,0.15); margin:12px 0;">
+                <p>📍 <b>6/06 (1晚)｜羽田</b><br>Keikyu EX Inn Haneda</p>
             </div>
         </div>
     </div>
 
-    <!-- 交通實務頁 -->
+    <!-- ==================== 實務與美學奧秘 ==================== -->
     <div id="logistics" class="view">
         <div class="card open">
-            <div class="card-header"><h3>交通關鍵提醒</h3></div>
+            <div class="card-header"><h3>移動美學與行李禮遇</h3></div>
             <div class="card-body">
-                <p>🎟️ <b>山陰岡山 JR PASS</b>：D6-D8 使用。</p>
-                <p>🚌 <b>Pirika 號巴士</b>：D4 08:20 站前 15 號月台。</p>
-                <div class="alert">💡 行李直掛：D5 於釧路辦理登機時務必告知直掛出雲 (IZO)。</div>
-                <p>📍 <b>咖啡備註</b>：冷萃1:20，磨豆刻度18。</p>
+                <p>🎟️ <b>山陰岡山 JR PASS (4日)</b><br><span style="color:var(--text-muted); font-size:0.9rem;">無縫解鎖 D6-D8 所有的特急列車與轉乘。</span></p>
+                <div class="alert" style="background:rgba(192, 161, 107, 0.1); border-color:var(--jal-gold); color:var(--text-main);">
+                    💡 <b>尊榮行李直掛 (Day 5)</b><br>於釧路機場出示 PNR，行李將如影隨形直達出雲。
+                </div>
+                <p>🧳 <b>Coin Locker 魔法</b><br><span style="color:var(--text-muted); font-size:0.9rem;">D8 退房後將行囊安放於松江站，輕盈鑑賞足立美術館。</span></p>
+            </div>
+        </div>
+        <div class="card open">
+            <div class="card-header"><h3>生活感與感官萃取</h3></div>
+            <div class="card-body">
+                <p>📸 <b>單眼手持的哲學</b><br><span style="color:var(--text-muted); font-size:0.9rem;">拋下沉重的腳架，以您穩定的核心與相機防手震，在每一次逢魔時刻（黃昏）精準捕捉大地的溫度。</span></p>
+                <p>☕ <b>Cold Brew 絕對參數</b><br><span style="color:var(--text-muted); font-size:0.9rem;">若於鳥取砂場咖啡購入精品豆，請記住最佳冷萃密碼：刻度 18，粉水比 1:20。</span></p>
             </div>
         </div>
     </div>
@@ -231,8 +357,9 @@
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.currentTarget.classList.add('active');
-        window.scrollTo(0,0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    
     function toggleCard(id) {
         const card = document.getElementById(id);
         card.classList.toggle('open');
