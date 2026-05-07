@@ -2,518 +2,253 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>北海道櫻花攝影快閃 (含海關日文版)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>JAL 2026 Trip | Operational Utility</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #9e9e9e;
-            --accent-color: #FFB7C5; /* 櫻花粉 */
-            --accent-hover: #ff9eaa;
-            --coffee-color: #a1887f;
-            --food-color: #ffb74d;
-            --photo-color: #ffcc00;
-            --weather-color: #64b5f6;
-            --alert-color: #ef5350;
-            --border-color: #333;
-            --link-bg: rgba(255, 255, 255, 0.1);
-            --jp-color: #81c784; /* 日文版標識色 */
+            --jal-red: #d00000; --gold: #af9662; --dark: #1a1a1a;
+            --bg: #f5f5f5; --card-bg: #ffffff; --text: #333;
+            --safe-top: env(safe-area-inset-top);
         }
-        
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background: var(--bg); color: var(--text); margin: 0; padding: 0;
+            overflow-x: hidden; scroll-behavior: smooth;
         }
 
+        /* --- Header & Nav --- */
         header {
-            background-color: var(--card-bg);
-            padding: 16px 20px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            background: var(--dark); color: white; padding: calc(15px + var(--safe-top)) 20px 15px;
+            position: sticky; top: 0; z-index: 1000; transition: 0.3s;
+            display: flex; justify-content: space-between; align-items: center;
         }
+        header.shrink { padding: 10px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        header .title { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; }
+        header .status { font-size: 0.8rem; color: var(--gold); }
 
-        h1 { 
-            margin: 0; 
-            font-size: 1.2rem; 
-            color: var(--accent-color); 
-            letter-spacing: 1px;
+        nav.tabs {
+            background: var(--dark); display: flex; overflow-x: auto;
+            position: sticky; top: 56px; z-index: 999; border-top: 1px solid #333;
         }
-
-        /* Tabs Navigation */
-        .tabs {
-            display: flex;
-            background-color: var(--card-bg);
-            position: sticky;
-            top: 58px;
-            z-index: 99;
-            border-bottom: 1px solid var(--border-color);
-            overflow-x: auto;
-            white-space: nowrap;
+        .tab {
+            flex: 1; padding: 12px; text-align: center; color: #888;
+            font-size: 0.85rem; border-bottom: 2px solid transparent; white-space: nowrap;
         }
+        .tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 700; }
 
-        .tab-btn {
-            flex: 1;
-            padding: 12px 15px;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s ease;
-            min-width: 80px; /* 防止過度擠壓 */
+        /* --- Day Selector --- */
+        .day-nav {
+            display: flex; gap: 10px; padding: 15px; overflow-x: auto;
+            background: white; border-bottom: 1px solid #ddd;
         }
-
-        .tab-btn.active {
-            color: var(--accent-color);
-            border-bottom: 3px solid var(--accent-color);
+        .day-btn {
+            min-width: 60px; height: 40px; border-radius: 20px; background: #eee;
+            display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0;
         }
+        .day-btn.active { background: var(--jal-red); color: white; font-weight: bold; }
+        .day-btn.done { background: #333; color: #888; }
+        .day-btn.done::before { content: '✓ '; }
 
-        .content-container {
-            padding: 15px;
-            padding-bottom: 40px;
-        }
+        /* --- Content Container --- */
+        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 100px; }
+        .view { display: none; }
+        .view.active { display: block; }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Elements */
-        .weather-banner {
-            background-color: rgba(100, 181, 246, 0.1);
-            border-left: 4px solid var(--weather-color);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 0.95rem;
-            color: #bbdefb;
-        }
-
-        .timeline-card {
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--accent-color);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .time { font-weight: 700; color: var(--accent-color); font-size: 1.1rem; margin-bottom: 6px; }
-        .title { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; color: #fff; }
-        .desc { font-size: 0.95rem; color: #ccc; margin-bottom: 12px; }
-        .box { padding: 10px 12px; border-radius: 6px; font-size: 0.9rem; margin-top: 10px; }
-
-        .photo-tip { background-color: rgba(255, 204, 0, 0.1); border-left: 3px solid var(--photo-color); }
-        .photo-tip strong { color: var(--photo-color); }
-        .logistics-tip { background-color: rgba(255, 255, 255, 0.05); border-left: 3px solid #9e9e9e; }
-        .alert-tip { background-color: rgba(239, 83, 80, 0.1); border-left: 3px solid var(--alert-color); }
-        .alert-tip strong { color: var(--alert-color); }
-
-        .map-link {
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--link-bg);
-            color: #90caf9;
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            transition: background 0.2s;
-        }
-
-        /* Lists */
-        .section-title {
-            font-size: 1.15rem;
-            margin: 25px 0 15px;
-            display: flex;
-            align-items: center;
-            color: #fff;
-            font-weight: bold;
-        }
-        .section-title::before {
-            content: "";
-            width: 4px;
-            height: 1.15rem;
-            background: var(--accent-color);
-            margin-right: 10px;
-            border-radius: 2px;
-        }
-        
-        .jp-title::before { background: var(--jp-color); }
-
-        .grid { display: grid; gap: 15px; }
-
+        /* --- Itinerary Card --- */
         .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid var(--border-color);
+            background: var(--card-bg); border-radius: 12px; margin-bottom: 15px;
+            overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
+        .card-header {
+            padding: 15px; background: #fff; border-bottom: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .card-header h3 { margin: 0; font-size: 1rem; color: var(--jal-red); }
+        .energy-bar { width: 40px; height: 6px; background: #eee; border-radius: 3px; position: relative; }
+        .energy-fill { height: 100%; border-radius: 3px; background: #4caf50; }
 
-        .tag-row { display: flex; gap: 8px; margin-bottom: 10px; }
-        .tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
-        .tag-coffee { background: rgba(161, 136, 127, 0.2); color: var(--coffee-color); border: 1px solid var(--coffee-color); }
-        .tag-food { background: rgba(255, 183, 77, 0.2); color: var(--food-color); border: 1px solid var(--food-color); }
+        .card-body { padding: 15px; display: none; }
+        .card.open .card-body { display: block; }
 
-        .name { font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; color: #fff; }
-        .info { font-size: 0.85rem; color: var(--text-main); margin-bottom: 10px; line-height: 1.4; }
-        .best-time {
-            font-size: 0.8rem;
-            color: var(--accent-color);
-            background: rgba(255, 183, 197, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .highlight {
-            font-size: 0.85rem; margin-top: 10px; padding-top: 10px;
-            border-top: 1px dashed var(--border-color); color: #bbb;
-        }
+        /* --- Operational Elements --- */
+        .cutoff { background: #fff5f5; border: 1px solid #feb2b2; padding: 10px; border-radius: 8px; margin-bottom: 12px; }
+        .cutoff b { color: var(--jal-red); font-size: 1rem; }
+        
+        .photo-utility { background: #fdfaf3; border: 1px solid #e9d8a6; padding: 10px; border-radius: 8px; margin: 10px 0; }
+        .photo-utility .label { font-size: 0.75rem; color: #886b1c; font-weight: bold; text-transform: uppercase; }
 
-        /* JP Customs Styles */
-        .jp-card {
-            border-left: 4px solid var(--jp-color);
-        }
-        .jp-label {
-            font-size: 0.8rem;
-            color: var(--jp-color);
-            margin-bottom: 2px;
-        }
-        .jp-value {
-            font-size: 1.05rem;
-            color: #fff;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        .jp-list {
-            padding-left: 20px;
-            margin-top: 5px;
-            color: #ccc;
-            font-size: 0.95rem;
-        }
-        .jp-list li { margin-bottom: 6px; }
+        .rain-plan { background: #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.85rem; margin-top: 10px; color: #4a5568; }
+        .rain-plan::before { content: '🌧️ 雨天備案：'; font-weight: bold; }
 
+        /* --- Flight/Transport Tables --- */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        th { color: #888; font-weight: normal; }
+
+        /* --- Floating Action --- */
+        .fab {
+            position: fixed; bottom: 30px; right: 20px; width: 60px; height: 60px;
+            background: var(--jal-red); border-radius: 30px; color: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(208,0,0,0.4); font-size: 1.5rem;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🌸 北海道攝影快閃</h1>
-    </header>
+<header id="main-header">
+    <div class="title">JAL 2026 TRIP</div>
+    <div class="status" id="trip-progress">D3 IN PROGRESS</div>
+</header>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'day1')">4/24 (五)</button>
-        <button class="tab-btn" onclick="openTab(event, 'day2')">4/25 (六)</button>
-        <button class="tab-btn" onclick="openTab(event, 'day3')">4/26 (日)</button>
-        <button class="tab-btn" onclick="openTab(event, 'food')">☕ 美食</button>
-        <button class="tab-btn" onclick="openTab(event, 'customs')">🇯🇵 審查</button>
+<nav class="tabs">
+    <div class="tab active" onclick="switchView('itinerary')">行程行程</div>
+    <div class="tab" onclick="switchView('flight')">航班資訊</div>
+    <div class="tab" onclick="switchView('transport')">交通樞紐</div>
+    <div class="tab" onclick="switchView('map')">地圖 GPS</div>
+</nav>
+
+<div class="container">
+    <!-- --- ITINERARY VIEW --- -->
+    <div id="itinerary" class="view active">
+        <div class="day-nav">
+            <div class="day-btn done">D1</div>
+            <div class="day-btn done">D2</div>
+            <div class="day-btn active">D3</div>
+            <div class="day-btn">D4</div>
+            <div class="day-btn">D5</div>
+            <div class="day-btn">D6</div>
+            <div class="day-btn">D7</div>
+            <div class="day-btn">D8</div>
+            <div class="day-btn">D9</div>
+        </div>
+
+        <!-- Day 3 (Current) -->
+        <div class="card open" id="d3">
+            <div class="card-header" onclick="toggleCard('d3')">
+                <h3>D3 釧路濕原 | 鐵道與原始</h3>
+                <div class="energy-bar"><div class="energy-fill" style="width: 60%;"></div></div>
+            </div>
+            <div class="card-body">
+                <div class="cutoff">⏱️ <b>11:06</b> 必須登上 JR 釧網本線 (往網走)</div>
+                <div class="photo-utility">
+                    <div class="label">Golden Hour 攝影</div>
+                    <div>細岡展望台: <b>18:35 - 19:00</b></div>
+                    <div style="font-size: 0.8rem; color: #666;">適合捕捉濕原河流曲折的反光</div>
+                </div>
+                <p>• <b>細岡展望台</b>：拍攝濕原全景 (廣角拍攝)。<br>• <b>塘路湖散策</b>：沿鐵道步行，享受孤獨質感。</p>
+                <div class="rain-plan">改往「釧路市立博物館」+ 精品咖啡館巡禮。</div>
+            </div>
+        </div>
+
+        <!-- Day 4 -->
+        <div class="card" id="d4">
+            <div class="card-header" onclick="toggleCard('d4')">
+                <h3>D4 道東三湖 | 巴士長征</h3>
+                <div class="energy-bar"><div class="energy-fill" style="width: 100%;"></div></div>
+            </div>
+            <div class="card-body">
+                <div class="cutoff">⏱️ <b>08:20</b> 釧路站前 15 號月台報到 (Pirika號)</div>
+                <p>• 摩周湖 (霧之拍) ➔ 硫磺山 ➔ 屈斜路湖 ➔ 阿寒湖。</p>
+                <div class="rain-plan">巴士照常運作，縮短戶外時間，增加阿寒湖愛努村室內活動。</div>
+            </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="card" id="d7">
+            <div class="card-header" onclick="toggleCard('d7')">
+                <h3>D7 出雲/松江 | 神話夕陽</h3>
+                <div class="energy-bar"><div class="energy-fill" style="width: 80%;"></div></div>
+            </div>
+            <div class="card-body">
+                <div class="photo-utility">
+                    <div class="label">Sunset Window</div>
+                    <div>宍道湖畔: <b>18:58 - 19:18</b></div>
+                    <div style="font-size: 0.8rem; color: #666;">最佳位置：島根縣立美術館旁</div>
+                </div>
+                <p>• 出雲大社 ➔ 稻佐之濱 ➔ 宍道湖夕陽。</p>
+                <div class="rain-plan">取消日御碕，改為松江市內和菓子與抹茶體驗。</div>
+            </div>
+        </div>
     </div>
 
-    <div class="content-container">
-        
-        <div id="day1" class="tab-content active">
-            <div class="weather-banner">
-                <strong>🌤️ 函館天氣預測：</strong> 晴時多雲，5°C - 12°C。港區海風強勁，日夜溫差極大，務必準備防風外套。
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">07:35 - 09:12</div>
-                <div class="title">抵達新千歲 & 極限轉乘</div>
-                <div class="desc">VZ570 抵達。轉乘「快速機場線」3 分鐘至南千歲站，超商買點心，搭乘 09:12 北斗 6 號。</div>
-                <div class="box logistics-tip">
-                    <strong>💡 戰術優勢：</strong> 首班國際線且無托運行李。快步走人工通關，極速前往 B1 JR 車站。
-                </div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">12:33 - 13:00</div>
-                <div class="title">抵達函館 & 裝備輕量化</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=JR函館駅" target="_blank">📍 JR 函館駅</a>
-                <div class="desc">第一步：將非攝影裝備鎖進車站置物櫃。第二步：外帶「長谷川商店烤雞肉串便當」。搭乘市電出發。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">13:30 - 16:00</div>
-                <div class="title">五稜郭重火力拍攝 (2.5hr)</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=五稜郭公園" target="_blank">📍 五稜郭公園</a>
-                <div class="desc">時間充裕，在櫻花樹下享用便當，展開第一波單眼拍攝。</div>
-                <div class="box photo-tip">
-                    <strong>📸 構圖策略：</strong> 上塔拍粉色星形全景；下塔後尋找無風處，拍攝護城河水面的櫻花倒影。
-                </div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">16:30 - 17:30</div>
-                <div class="title">八幡坂與元町光影</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=八幡坂" target="_blank">📍 八幡坂</a>
-                <div class="desc">直奔坡道捕捉斜射夕陽。</div>
-                <div class="box photo-tip">
-                    <strong>📸 構圖策略：</strong> 把握黃金時刻。使用中長焦段壓縮畫面，將坡道與海港船隻完美同框。
-                </div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">17:30 - 17:50</div>
-                <div class="title">戰略撤退：折返車站</div>
-                <div class="desc">從「十字街」搭乘市電回到「函館駅前」，領出置物櫃的行李，準備搭巴士。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">17:50 - 18:10</div>
-                <div class="title">帝產巴士 往機場</div>
-                <div class="desc">搭乘直達函館機場的聯絡巴士，車程約 20 分鐘。</div>
-                <div class="box logistics-tip">
-                    <strong>🛫 19:15 JL2756：</strong> 18:10 抵達機場，善用 JAL 藍寶石優先通道安檢。19:55 降落丘珠機場 (OKD)。
-                </div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">20:30</div>
-                <div class="title">入住 VESSEL HOTEL</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=VESSEL+HOTEL+CAMPANA+SUSUKINO" target="_blank">📍 飯店導航</a>
-                <div class="desc">抵達薄野，泡溫泉洗去一日疲勞。</div>
+    <!-- --- FLIGHT VIEW --- -->
+    <div id="flight" class="view">
+        <div class="card open">
+            <div class="card-header"><h3>JAL 航班核對表</h3></div>
+            <div class="card-body" style="padding:0">
+                <table>
+                    <tr><th>航班</th><th>航段</th><th>Terminal</th><th>PNR</th></tr>
+                    <tr><td>JL8664</td><td>TPE-NRT</td><td>T2</td><td>6-CHARS</td></tr>
+                    <tr><td>JL541</td><td>HND-KUH</td><td>T1 (Gate 12)</td><td>6-CHARS</td></tr>
+                    <tr><td>JL540</td><td>KUH-HND</td><td>T1</td><td>6-CHARS</td></tr>
+                    <tr><td>JL283</td><td>HND-IZO</td><td>T1</td><td>6-CHARS</td></tr>
+                </table>
+                <div class="note" style="margin: 15px;">⚠️ <b>Day 5 轉機：</b> JL540 ➔ JL283。若同訂位號，行李可直掛出雲。</div>
             </div>
         </div>
-
-        <div id="day2" class="tab-content">
-            <div class="weather-banner">
-                <strong>⛅ 札幌天氣預測：</strong> 多雲時晴，3°C - 11°C。若前往 Moere 沼，請注意雲層厚度與空曠處的低溫。
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">08:30 - 09:30</div>
-                <div class="title">重裝補給：VESSEL 早餐</div>
-                <div class="desc">享用飯店著名的海鮮勝手丼，儲備體力。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">09:30 - 11:30</div>
-                <div class="title">圓山公園 & 北海道神宮</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道神宮" target="_blank">📍 圓山公園/北海道神宮</a>
-                <div class="desc">搭地鐵東西線至圓山公園站。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">13:30 - 15:30</div>
-                <div class="title">北海道大學散策</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道大学" target="_blank">📍 北海道大學</a>
-                <div class="desc">廣大校園與歷史建物群。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">16:30 - 18:30</div>
-                <div class="title">Moere 沼公園 (決策點)</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=モエレ沼公園" target="_blank">📍 Moere沼公園</a>
-                <div class="desc">搭乘東豐線轉中央巴士。</div>
-                <div class="box alert-tip">
-                    <strong>🚨 天氣決策：</strong> 中午確認雲圖，若陰雨無光，改留市區室內或提早拍夜櫻。
-                </div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">19:30 以後</div>
-                <div class="title">晚餐 & 中島公園夜櫻</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=中島公園" target="_blank">📍 中島公園</a>
-                <div class="desc">薄野區享用晚餐，餐後散步拍攝水池倒映的夜櫻與天文台。</div>
-            </div>
-        </div>
-
-        <div id="day3" class="tab-content">
-            <div class="weather-banner">
-                <strong>🌤️ 札幌天氣預測：</strong> 晴朗，4°C - 12°C。完美的光線與飽和的櫻花色彩。
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">09:00 - 10:00</div>
-                <div class="title">裝備輕量化</div>
-                <div class="desc">退房。將行李鎖進 JR 札幌站投幣式置物櫃。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">10:15 - 12:30</div>
-                <div class="title">根室花丸 Miredo 店</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=回転寿司根室花まる+大同生命札幌ビルmiredo店" target="_blank">📍 根室花丸 Miredo店</a>
-                <div class="desc">10:15 大樓排隊，確保 11:00 第一批入座。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">12:30 - 15:30</div>
-                <div class="title">黃金攝影三小時 (無負載)</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=豊平館" target="_blank">📍 中島公園 豐平館</a>
-                <div class="desc">搭地鐵至中島公園。這三小時雙手淨空，專心創作。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">15:30 - 16:15</div>
-                <div class="title">六花亭 札幌本店</div>
-                <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=六花亭+札幌本店" target="_blank">📍 六花亭 札幌本店</a>
-                <div class="desc">距離車站步行僅 5 分鐘。清單式精準掃貨。</div>
-            </div>
-
-            <div class="timeline-card">
-                <div class="time">16:15 - 17:20</div>
-                <div class="title">取件 & 撤退往機場</div>
-                <div class="desc">領出置物櫃行李，16:42 搭乘「JR 快速機場線」。17:20 抵達新千歲。</div>
-                <div class="box logistics-tip">
-                    <strong>🛫 歸途：</strong> 17:30 前抵達櫃檯，從容辦理 19:10 TR893 報到手續。
-                </div>
-            </div>
-        </div>
-
-        <div id="food" class="tab-content">
-            
-            <div class="section-title">函館區域 (Hakodate)</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-coffee">職人烘焙</span></div>
-                    <div class="name">cafe akira</div>
-                    <div class="best-time">⏱️ 函館車站步行 8 分鐘</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=cafe+akira+函館" target="_blank">📍 Google Maps</a>
-                </div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-food">靈魂美食</span></div>
-                    <div class="name">幸運小丑漢堡</div>
-                    <div class="best-time">⏱️ 多家分店 (可順路外帶)</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=幸運小丑漢堡" target="_blank">📍 Google Maps</a>
-                </div>
-            </div>
-
-            <div class="section-title">札幌 - 圓山/北大</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-coffee">傳奇老宅</span></div>
-                    <div class="name">森彥咖啡本店 (Morihiko)</div>
-                    <div class="best-time">⏱️ 圓山公園拍攝間奏</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=森彦本店+札幌" target="_blank">📍 Google Maps</a>
-                </div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-coffee">硬核手沖</span></div>
-                    <div class="name">石田珈琲店 (Ishida)</div>
-                    <div class="best-time">⏱️ 北大拍攝空檔</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=石田珈琲店+札幌" target="_blank">📍 Google Maps</a>
-                </div>
-            </div>
-
-            <div class="section-title">札幌 - 市中心</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-coffee">現代職人</span></div>
-                    <div class="name">Standard Coffee Lab.</div>
-                    <div class="best-time">⏱️ 大通公園周邊</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Standard+Coffee+Lab+札幌" target="_blank">📍 Google Maps</a>
-                </div>
-                <div class="card">
-                    <div class="tag-row"><span class="tag tag-food">成吉思汗烤肉</span></div>
-                    <div class="name">成吉思汗 だるま 本店</div>
-                    <div class="best-time">⏱️ 晚上避開人潮</div>
-                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=成吉思汗だるま本店+札幌" target="_blank">📍 Google Maps</a>
-                </div>
-            </div>
-
-        </div>
-
-        <div id="customs" class="tab-content">
-            <div class="weather-banner" style="border-left-color: #81c784; color: #a5d6a7; background-color: rgba(129, 199, 132, 0.1);">
-                💡 <strong>提示：</strong> 若入國審查官詢問行程，可直接出示此頁面。內容已去除複雜轉乘與攝影戰術，呈現純粹的觀光客行程。
-            </div>
-
-            <div class="section-title jp-title">旅行基本情報</div>
-            <div class="card jp-card">
-                <div class="jp-label">旅行の目的 (Purpose)</div>
-                <div class="jp-value">観光、お花見 (Sightseeing, Cherry blossom viewing)</div>
-                
-                <div class="jp-label">滞在期間 (Duration)</div>
-                <div class="jp-value">2026年4月24日 ～ 4月26日 (3日間)</div>
-                
-                <div class="jp-label">宿泊先 (Accommodation)</div>
-                <div class="jp-value" style="margin-bottom: 0;">
-                    ベッセルホテルカンパーナすすきの<br>
-                    <span style="font-size: 0.85rem; color: #aaa;">札幌市中央区南5条西6丁目16番地1</span><br>
-                    <span style="font-size: 0.85rem; color: #aaa;">(4/24 - 4/25, 2泊)</span>
-                </div>
-            </div>
-
-            <div class="section-title jp-title">滞在予定表 (Itinerary)</div>
-            
-            <div class="card jp-card">
-                <div class="jp-label">4月24日 (金)</div>
-                <ul class="jp-list">
-                    <li>【到着】 新千歳空港 着 (便名: VZ570)</li>
-                    <li>【移動】 JR特急で函館へ</li>
-                    <li>【観光】 函館市内観光（五稜郭公園、元町エリアで桜鑑賞）</li>
-                    <li>【移動】 函館空港から丘珠空港へ (便名: JL2756)</li>
-                    <li>【宿泊】 札幌市内のホテルへチェックイン</li>
-                </ul>
-            </div>
-
-            <div class="card jp-card">
-                <div class="jp-label">4月25日 (土)</div>
-                <ul class="jp-list">
-                    <li>【観光】 札幌市内観光</li>
-                    <li>円山公園、北海道神宮（お花見）</li>
-                    <li>北海道大学 散策</li>
-                    <li>モエレ沼公園 観光</li>
-                    <li>【宿泊】 札幌市内ホテル</li>
-                </ul>
-            </div>
-
-            <div class="card jp-card">
-                <div class="jp-label">4月26日 (日)</div>
-                <ul class="jp-list">
-                    <li>【観光】 札幌市内観光</li>
-                    <li>中島公園（お花見）</li>
-                    <li>市内ショッピング、食事</li>
-                    <li>【帰国】 新千歳空港より出国 (便名: TR893)</li>
-                </ul>
-            </div>
-        </div>
-
     </div>
 
-    <script>
-        function openTab(evt, tabId) {
-            var contents = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
+    <!-- --- TRANSPORT VIEW --- -->
+    <div id="transport" class="view">
+        <div class="card open">
+            <div class="card-header"><h3>關鍵票券與位置</h3></div>
+            <div class="card-body">
+                <p><b>1. 山陰岡山 JR PASS</b><br>D5-D8 使用。涵蓋松江-鳥取特急列車。</p>
+                <p><b>2. Pirika 號觀光巴士</b><br>D4 預約完成，釧路站前搭乘。</p>
+                <div class="cutoff">🆘 <b>備援：</b> 若 JR 停駛，鳥取-松江改搭高速巴士 (一畑/日之丸)。</div>
+            </div>
+        </div>
+    </div>
 
-            var btns = document.getElementsByClassName("tab-btn");
-            for (var i = 0; i < btns.length; i++) {
-                btns[i].classList.remove("active");
-            }
+    <!-- --- MAP VIEW --- -->
+    <div id="map" class="view">
+        <div class="card open">
+            <div class="card-header"><h3>GPS 快速導航</h3></div>
+            <div class="card-body">
+                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 釧路和商市場</a></div>
+                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 細岡展望台</a></div>
+                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 鳥取砂丘</a></div>
+                <div class="main-activity"><a href="https://maps.app.goo.gl/xxx" style="color:var(--jal-red)">📍 出雲大社</a></div>
+            </div>
+        </div>
+    </div>
+</div>
 
-            document.getElementById(tabId).classList.add("active");
-            evt.currentTarget.classList.add("active");
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+<div class="fab" onclick="window.scrollTo(0,0)">↑</div>
+
+<script>
+    // --- Header Shrink ---
+    window.onscroll = function() {
+        const header = document.getElementById("main-header");
+        if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+            header.classList.add("shrink");
+        } else {
+            header.classList.remove("shrink");
         }
-    </script>
+    };
+
+    // --- Tab Switching ---
+    function switchView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        event.currentTarget.classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    // --- Accordion ---
+    function toggleCard(id) {
+        const card = document.getElementById(id);
+        card.classList.toggle('open');
+    }
+
+    // --- GPS Placeholder Info ---
+    console.log("App Initialized: Operational Mode.");
+</script>
+
 </body>
 </html>
