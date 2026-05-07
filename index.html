@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>2026 絕景雙境 ｜ 頂級攝影路書</title>
-    <!-- 導入高端排版所需的黑體與明體 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,7 +17,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Noto Sans TC', 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; padding: 0; line-height: 1.7; letter-spacing: 0.5px; }
         
-        /* 雜誌風 Header */
         header {
             background: var(--dark); color: #fff; padding: calc(16px + var(--safe-top)) 20px 20px;
             position: sticky; top: 0; z-index: 2000;
@@ -27,7 +25,6 @@
         .cover-subtitle { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--jal-gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 4px; }
         .cover-title { font-family: 'Noto Serif TC', serif; font-size: 1.3rem; font-weight: 900; letter-spacing: 2px; margin: 0; }
         
-        /* 精品導覽列 */
         nav { background: var(--dark); display: flex; position: sticky; top: calc(75px + var(--safe-top)); z-index: 1999; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
         .tab-btn { flex: 1; padding: 14px 0; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 500; border: none; background: none; transition: 0.3s; letter-spacing: 1px; }
         .tab-btn.active { color: #fff; border-bottom: 2px solid var(--jal-gold); }
@@ -37,7 +34,6 @@
         .view.active { display: block; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 頂級卡片排版 */
         .card { background: var(--surface); border-radius: 12px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; }
         .card-header { padding: 24px; cursor: pointer; border-bottom: 1px solid rgba(150,150,150,0.1); position: relative; }
         .day-mark { font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--jal-red); font-weight: 700; letter-spacing: 2px; margin-bottom: 8px; display: block; }
@@ -47,11 +43,9 @@
         .card-body { padding: 0 24px 24px; display: none; margin-top: 20px; }
         .card.open .card-body { display: block; }
 
-        /* 詩意敘事區塊 */
         .story-block { font-family: 'Noto Serif TC', serif; font-size: 0.95rem; color: var(--text-main); line-height: 1.8; margin-bottom: 24px; }
         .story-block::first-letter { font-size: 1.8rem; color: var(--jal-red); float: left; margin-right: 6px; line-height: 1; font-weight: 900; }
 
-        /* 嚴謹時程表 */
         .timeline { border-left: 2px solid rgba(192, 161, 107, 0.3); margin-left: 6px; padding-left: 16px; margin-bottom: 24px; }
         .time-node { position: relative; margin-bottom: 16px; }
         .time-node::before { content: ''; position: absolute; left: -21px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--jal-gold); }
@@ -60,7 +54,6 @@
         .time-node.alert .t-time { color: var(--jal-red); }
         .t-event { font-size: 0.95rem; }
 
-        /* 攝影大師筆記 */
         .photo-note { background: rgba(192, 161, 107, 0.05); border: 1px solid rgba(192, 161, 107, 0.2); padding: 16px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); }
         .photo-note strong { color: var(--jal-gold); font-size: 0.9rem; }
 
@@ -93,7 +86,7 @@
             </div>
             <div class="card-body">
                 <div class="story-block">
-                    告別台北的喧囂，JAL客機劃破天際。今夜的東京不僅是中轉站，更是光影藝術的序章。羽田創新城（HICity）以冰冷的鋼材與溫潤的木構交織，為明日的極北之旅沉澱心靈。
+                    告別台北的喧囂，客機劃破天際。今夜的東京不僅是中轉站，更是光影藝術的序章。羽田創新城（HICity）以冰冷的鋼材與溫潤的木構交織，為明日的極北之旅沉澱心靈。
                 </div>
                 <div class="timeline">
                     <div class="time-node"><div class="t-time">12:45 - 17:15</div><div class="t-event">JL8664 豪華客機飛往成田 (NRT)。</div></div>
@@ -189,7 +182,7 @@
             </div>
             <div class="card-body">
                 <div class="story-block">
-                    這是一場跨越半個日本的史詩級移動。行李將由日本航空無縫遞送，您只需兩手空空，在三萬英尺的高空品味雲端時光。傍晚抵達水都松江，御宿野乃的榻榻米與溫泉，將為您洗去千里的塵埃。
+                    這是一場跨越半個日本的史詩級移動。行李將被無縫遞送，您只需兩手空空，在三萬英尺的高空品味雲端時光。傍晚抵達水都松江，御宿野乃的榻榻米與溫泉，將為您洗去千里的塵埃。
                 </div>
                 <div class="timeline">
                     <div class="time-node alert"><div class="t-time">08:35</div><div class="t-event"><b>【極致死線】</b> 搭乘釧路站前機場巴士。</div></div>
@@ -219,7 +212,6 @@
                 <div class="timeline">
                     <div class="time-node"><div class="t-time">08:30 - 09:56</div><div class="t-event">搭乘 JR 特急抵達鳥取。</div></div>
                     <div class="time-node"><div class="t-time">10:30 - 13:30</div><div class="t-event">探索鳥取砂丘與砂之美術館。</div></div>
-                    <div class="time-node"><div class="t-time">15:00</div><div class="t-event">站前品嚐當地名物「砂場咖啡」。</div></div>
                 </div>
                 <div class="photo-note">
                     <strong>【光影捕捉】</strong><br>
@@ -300,7 +292,7 @@
     <!-- ==================== 尊榮航班與住宿 ==================== -->
     <div id="flights" class="view">
         <div class="card open">
-            <div class="card-header"><h3>JAPAN AIRLINES 御用航班</h3></div>
+            <div class="card-header"><h3>航班時刻一覽</h3></div>
             <div class="card-body" style="padding:0">
                 <table>
                     <tr style="background:rgba(192, 161, 107, 0.1);"><th>日期</th><th>航班</th><th>航線</th><th>時間</th></tr>
@@ -340,10 +332,9 @@
             </div>
         </div>
         <div class="card open">
-            <div class="card-header"><h3>生活感與感官萃取</h3></div>
+            <div class="card-header"><h3>攝影視窗備忘錄</h3></div>
             <div class="card-body">
                 <p>📸 <b>單眼手持的哲學</b><br><span style="color:var(--text-muted); font-size:0.9rem;">拋下沉重的腳架，以您穩定的核心與相機防手震，在每一次逢魔時刻（黃昏）精準捕捉大地的溫度。</span></p>
-                <p>☕ <b>Cold Brew 絕對參數</b><br><span style="color:var(--text-muted); font-size:0.9rem;">若於鳥取砂場咖啡購入精品豆，請記住最佳冷萃密碼：刻度 18，粉水比 1:20。</span></p>
             </div>
         </div>
     </div>
