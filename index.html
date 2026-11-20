@@ -16,7 +16,7 @@
         :root,
         :root[data-theme="dark"] {
             --bg-app: #090b0e;
-            --bg-elevated: rgba(15, 19, 26, 0.92);
+            --bg-elevated: rgba(15, 19, 26, 0.94);
             --bg-dock: #0e1219;
             --bg-card: #131720;
             --bg-card-alt: #1a202c;
@@ -44,7 +44,7 @@
 
         :root[data-theme="paper"] {
             --bg-app: #f8f5ef;
-            --bg-elevated: rgba(248, 245, 239, 0.94);
+            --bg-elevated: rgba(248, 245, 239, 0.96);
             --bg-dock: #ffffff;
             --bg-card: #ffffff;
             --bg-card-alt: #f2ece1;
@@ -75,40 +75,51 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html, body {
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            background-color: var(--bg-app);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
             background-color: var(--bg-app);
             color: var(--text-primary);
             font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Inter', sans-serif;
             line-height: 1.52;
-            overscroll-behavior: none;
             -webkit-font-smoothing: antialiased;
         }
 
         .tabular-nums { font-variant-numeric: tabular-nums; }
         .mono { font-family: 'JetBrains Mono', 'Inter', monospace; }
 
-        /* 三段式彈性佈局：Topbar / Canvas / Bottom Dock 各自獨立，絕不重疊、絕不漏底 */
+        /* 固定頂部 + 固定底部導覽列 + 原生文件捲動（避免 iOS 100dvh 與 fixed/sticky 疊層裁切） */
         .app-shell {
             width: 100%;
             max-width: 480px;
-            height: 100vh;
-            height: 100dvh;
+            min-height: 100vh;
+            min-height: 100dvh;
             margin: 0 auto;
             background-color: var(--bg-app);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
             position: relative;
         }
 
         .app-topbar {
-            flex-shrink: 0;
-            padding: calc(env(safe-area-inset-top, 0px) + 8px) 14px 9px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px));
+            padding: env(safe-area-inset-top, 0px) 14px 0;
             background: var(--bg-elevated);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -117,7 +128,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            z-index: 120;
+            z-index: 220;
         }
 
         .topbar-left {
@@ -173,18 +184,14 @@
         .icon-pill-btn:active { transform: scale(0.95); }
 
         .app-canvas {
-            flex: 1;
-            min-height: 0;
             width: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: contain;
-            padding: 12px 14px 24px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding-top: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px) + 10px);
+            padding-left: 14px;
+            padding-right: 14px;
+            padding-bottom: calc(var(--dock-h, 54px) + env(safe-area-inset-bottom, 0px) + 18px);
         }
-
-        .app-canvas::-webkit-scrollbar { display: none; }
-        .app-canvas { scrollbar-width: none; }
 
         .view {
             display: none;
@@ -199,17 +206,22 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 底部滿版導覽列：直接作為 Flex 底部元素，貼合 Safe Area 且永不遮擋畫布內容 */
+        /* 底部滿版導覽列：緊貼螢幕最底與 Home Indicator Safe Area */
         .bottom-dock {
-            flex-shrink: 0;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
-            padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+            max-width: 480px;
+            height: calc(var(--dock-h, 54px) + env(safe-area-inset-bottom, 0px));
+            padding: 5px 4px env(safe-area-inset-bottom, 0px);
             background: var(--bg-dock);
             border-top: 1px solid var(--border-subtle);
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             align-items: center;
-            z-index: 200;
+            z-index: 220;
         }
 
         .b-tab {
@@ -220,7 +232,7 @@
             align-items: center;
             justify-content: center;
             gap: 2px;
-            padding: 3px 0;
+            padding: 2px 0;
             color: var(--text-muted);
             cursor: pointer;
             min-width: 0;
@@ -228,7 +240,7 @@
 
         .b-tab-icon {
             width: 36px;
-            height: 23px;
+            height: 22px;
             border-radius: 11px;
             display: flex;
             align-items: center;
@@ -237,7 +249,7 @@
         }
 
         .b-tab-icon svg { width: 18px; height: 18px; stroke-width: 2; }
-        .b-tab-label { font-size: 0.65rem; font-weight: 700; white-space: nowrap; }
+        .b-tab-label { font-size: 0.65rem; font-weight: 700; white-space: nowrap; line-height: 1.15; }
         .b-tab.active { color: var(--accent); }
         .b-tab.active .b-tab-icon { background: var(--accent-soft); color: var(--accent); }
         .b-tab.active .b-tab-label { font-weight: 900; }
@@ -253,8 +265,8 @@
             gap: 3px;
             margin-bottom: 12px;
             position: sticky;
-            top: 0;
-            z-index: 40;
+            top: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px));
+            z-index: 90;
         }
 
         .seg-btn {
@@ -653,17 +665,19 @@
         .panel-title { font-size: 0.85rem; font-weight: 800; color: var(--text-primary); min-width: 0; }
         .panel-link { font-size: 0.74rem; font-weight: 700; color: var(--accent); cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 
-        /* 單日分頁導覽條 */
+        /* 單日分頁導覽條：緊貼固定 Topbar 下方 */
         .day-tab-strip {
             position: sticky;
-            top: 0;
-            z-index: 45;
+            top: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px));
+            z-index: 95;
             display: flex;
             gap: 7px;
             overflow-x: auto;
-            padding: 2px 1px 9px;
+            padding: 6px 2px 8px;
+            margin-top: -2px;
             margin-bottom: 6px;
             background: var(--bg-app);
+            border-bottom: 1px solid var(--border-subtle);
             scrollbar-width: none;
         }
         .day-tab-strip::-webkit-scrollbar { display: none; }
@@ -997,7 +1011,7 @@
 
 <div class="app-shell">
 
-    <header class="app-topbar">
+    <header class="app-topbar" id="app-topbar">
         <div class="topbar-left">
             <span id="meta-sub" class="topbar-kicker">TRAVEL COMPASS</span>
             <span id="topbar-title" class="topbar-heading">旅程看板</span>
@@ -1088,7 +1102,7 @@
         </div>
     </main>
 
-    <nav class="bottom-dock">
+    <nav class="bottom-dock" id="bottom-dock">
         <button class="b-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
             <div class="b-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
             <span class="b-tab-label">看板</span>
@@ -1114,6 +1128,22 @@
 </div>
 
 <script>
+    function syncChromeHeights() {
+        const topbar = document.getElementById('app-topbar');
+        const dock = document.getElementById('bottom-dock');
+        if (topbar) {
+            const h = Math.round(topbar.getBoundingClientRect().height);
+            if (h > 0) document.documentElement.style.setProperty('--topbar-h', `${h}px`);
+        }
+        if (dock) {
+            const h = Math.round(dock.getBoundingClientRect().height);
+            if (h > 0) document.documentElement.style.setProperty('--dock-h', `${h}px`);
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', syncChromeHeights);
+    window.addEventListener('resize', syncChromeHeights);
+    window.addEventListener('orientationchange', () => setTimeout(syncChromeHeights, 150));
 
     function applySavedTheme() {
         const saved = localStorage.getItem('trip_ui_theme') || 'dark';
@@ -1178,6 +1208,7 @@
         renderEmergency(globalData.emergency || { guides: [] });
         initCurrencyWidget((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy');
         updateTopbarContext(currentMainTab);
+        syncChromeHeights();
     }
 
     function switchTab(id) {
@@ -1195,8 +1226,8 @@
         const targetBtn = document.querySelector(`.b-tab[data-tab="${id}"]`);
         if (targetBtn) targetBtn.classList.add('active');
         updateTopbarContext(id);
-        const canvas = document.getElementById('app-canvas');
-        if (canvas) canvas.scrollTo({ top: 0, behavior: 'smooth' });
+        syncChromeHeights();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function switchSubPane(parentId, paneId) {
@@ -1228,8 +1259,7 @@
             page.classList.toggle('active', Number(page.dataset.day) === Number(dayNum));
         });
 
-        const canvas = document.getElementById('app-canvas');
-        if (canvas) canvas.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function calculateDiff() {
@@ -1266,7 +1296,7 @@
     const LIVE_SCHED_CACHE_KEY = 'live_flight_schedule_cache_v1';
     const LIVE_API_CONFIG_KEY = 'flight_live_api_config_v1';
     const ADSBDB_TTL_MS = 7 * 24 * 60 * 60 * 1000;
-    const LIVE_SCHED_TTL_MS = 30 * 60 * 1000; // 即時時刻表快取 30 分鐘
+    const LIVE_SCHED_TTL_MS = 30 * 60 * 1000;
 
     let adsbdbMemoryCache = {};
     let liveSchedMemoryCache = {};
@@ -1316,7 +1346,6 @@
         return regMatch ? regMatch[1] : '';
     }
 
-    // 常用國際機場座標與時區表（涵蓋第五航權延遠航段與主要樞紐，確保即使 ADSBdb 只回傳其中一段也能精準計算該段大圓距離與飛行時間）
     const AIRPORT_REF_DB = {
         TPE: { icao: 'RCTP', name: 'Taiwan Taoyuan International Airport', city: '台北桃園', lat: 25.0777, lon: 121.2328, tz: 8 },
         TSA: { icao: 'RCSS', name: 'Taipei Songshan Airport', city: '台北松山', lat: 25.0694, lon: 121.5525, tz: 8 },
@@ -1386,7 +1415,7 @@
 
     function extractAllTimesFromText(str) {
         if (!str) return [];
-        const matches = String(str).match(/([01]?\d|2[0-3]):[0-5]\d(?:\s*\+\d)?/g);
+        const matches = String(str).match(/\b([01]?\d|2[0-3]):[0-5]\d(?:\s*\+\d)?\b/g);
         return matches ? matches.map(t => t.replace(/\s+/g, '')) : [];
     }
 
@@ -1527,7 +1556,6 @@
         return adsbdbInFlight[cacheKey];
     }
 
-    /* 真實即時時刻表 API 查詢引擎 (支援 AirLabs / AviationStack / AeroDataBox，支援指定 dep_iata / arr_iata 精準過濾第五航權延遠航段) */
     async function queryLiveScheduleForFlight(f, forceRefresh = false) {
         const callsign = sanitizeCallsign(f.flight_no);
         if (!callsign) return null;
@@ -1553,7 +1581,6 @@
             let liveResult = null;
             try {
                 if (provider === 'airlabs') {
-                    // 使用 schedules 端點並帶入 dep_iata / arr_iata，可精準抓到第五航權指定航段（例如 CX565 KIX->TPE 而非 TPE->HKG）
                     const schedParams = new URLSearchParams({ flight_iata: callsign, api_key: apiKey });
                     if (wantDep) schedParams.set('dep_iata', wantDep);
                     if (wantArr) schedParams.set('arr_iata', wantArr);
@@ -1709,7 +1736,6 @@
 
     function resolveAirportEndpoint(iataCode, adsb) {
         const code = String(iataCode || '').toUpperCase();
-        // 僅當 ADSBdb 航點 IATA 與使用者實際航段 IATA 一致時才採用，絕不把延遠段 (如 TPE->HKG) 錯套到 KIX->TPE 上
         const adsbAp = adsb?.airportsByIata?.[code] || null;
         const refAp = AIRPORT_REF_DB[code] || null;
         if (!adsbAp && !refAp) return null;
@@ -1735,7 +1761,6 @@
         const cachedEntry = adsbdbMemoryCache[`${callsign}|${reg}`];
         const adsb = cachedEntry ? cachedEntry.data : null;
 
-        // 1. 先確定使用者實際搭乘的起降機場 IATA（優先依 JSON 指定的 route / dep_code / arr_code）
         const depCode = (f.dep_code || (iataMatches && iataMatches[0]) || adsb?.origin?.iata || (parts[0] ? parts[0].slice(0, 4) : 'DEP')).toUpperCase();
         const arrCode = (f.arr_code || (iataMatches && iataMatches[1]) || adsb?.destination?.iata || (parts[1] ? parts[1].slice(0, 4) : 'ARR')).toUpperCase();
 
@@ -1743,7 +1768,6 @@
         const liveEntry = liveSchedMemoryCache[`${cfg.provider || 'airlabs'}|${callsign}|${depCode}-${arrCode}|${f.date || ''}`];
         const live = liveEntry ? liveEntry.data : null;
 
-        // 2. 嚴格依據 depCode / arrCode 解析各自的機場資料（絕不張冠李戴）
         const depEndpoint = resolveAirportEndpoint(depCode, adsb);
         const arrEndpoint = resolveAirportEndpoint(arrCode, adsb);
 
@@ -1753,12 +1777,10 @@
         const depCity = parsedDepCity || depEndpoint?.city || depCode;
         const arrCity = parsedArrCity || arrEndpoint?.city || arrCode;
 
-        // 3. 以「實際搭乘的 depEndpoint -> arrEndpoint」計算大圓距離與航程時間（修正 CX565 KIX->TPE 錯算成 TPE->HKG 806km 的問題）
         const legStats = (depEndpoint && arrEndpoint)
             ? calcGreatCircleStats(depEndpoint.lat, depEndpoint.lon, arrEndpoint.lat, arrEndpoint.lon)
             : null;
 
-        // 4. 智慧解析起降時間
         const extractedTimes = [
             ...extractAllTimesFromText(timeStr),
             ...extractAllTimesFromText(f.note)
@@ -1791,7 +1813,6 @@
             live?.arrGate ? `抵達門 ${live.arrGate}` : ''
         ].filter(Boolean).join(' · ');
 
-        // 標記是否為第五航權多段航班（例如 CX565 KIX -> TPE -> HKG）
         const isFifthFreedomLeg = Boolean(
             adsb && adsb.matchedRoute &&
             (adsb.origin?.iata !== depCode || adsb.destination?.iata !== arrCode) &&
@@ -1989,7 +2010,7 @@
                     <span class="panel-title">🗓️ 快速切換天數分頁</span>
                     <span class="panel-link" onclick="switchTab('itinerary')">進入行程 ›</span>
                 </div>
-                <div class="day-tab-strip" style="position: static; padding-bottom: 2px; margin-bottom: 0; background: transparent;">
+                <div class="day-tab-strip" style="position: static; padding-bottom: 2px; margin-bottom: 0; background: transparent; border-bottom: none;">
                     ${quickDaysHtml}
                 </div>
             </div>
