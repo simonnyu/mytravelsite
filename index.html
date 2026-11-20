@@ -514,6 +514,82 @@
             color: var(--text-secondary);
         }
 
+
+        .flighty-airline-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-top: -5px;
+            margin-bottom: 9px;
+            font-size: 0.68rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+        }
+
+        .flighty-airline-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .adsb-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.58rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            padding: 2px 6px;
+            border-radius: 5px;
+            background: rgba(16, 185, 129, 0.14);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.28);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .adsb-badge.loading {
+            background: var(--sky-soft);
+            color: var(--sky);
+            border-color: rgba(56, 189, 248, 0.28);
+        }
+
+        .airport-icao {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.61rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .airport-fullname {
+            font-size: 0.62rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .adsb-sync-btn {
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card-alt);
+            color: var(--sky);
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 4px 9px;
+            border-radius: 999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .adsb-sync-btn:active { transform: scale(0.96); }
+
         /* Bento Grid */
         .bento-row {
             display: grid;
@@ -1093,6 +1169,7 @@
         calculateDiff();
         renderItinerary(days);
         renderFlights(globalData.flights_and_hotels || { flights: [], hotels: [] });
+        enrichAllFlightsWithAdsbdb(false);
         renderLogistics(globalData.logistics || { items: [], alerts: [] });
         renderBudget(globalData.budget || { regions: [] });
         renderTheme(globalData.theme_guide || []);
@@ -1184,49 +1261,609 @@
         return Math.round((validChecked / items.length) * 100) + '%';
     }
 
+    /* ================= 雙引擎即時航班時刻與航線系統 (Aviation Edge / AirLabs / AviationStack + ADSBdb) ================= */
+    const ADSBDB_CACHE_KEY = 'adsbdb_flight_cache_v2';
+    const LIVE_SCHED_CACHE_KEY = 'live_flight_schedule_cache_v1';
+    const LIVE_API_CONFIG_KEY = 'flight_live_api_config_v1';
+    const ADSBDB_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+    const LIVE_SCHED_TTL_MS = 30 * 60 * 1000; // 即時時刻表快取 30 分鐘
+
+    let adsbdbMemoryCache = {};
+    let liveSchedMemoryCache = {};
+    let adsbdbInFlight = {};
+    let liveSchedInFlight = {};
+
+    try {
+        adsbdbMemoryCache = JSON.parse(localStorage.getItem(ADSBDB_CACHE_KEY) || '{}') || {};
+        liveSchedMemoryCache = JSON.parse(localStorage.getItem(LIVE_SCHED_CACHE_KEY) || '{}') || {};
+    } catch (e) {
+        adsbdbMemoryCache = {};
+        liveSchedMemoryCache = {};
+    }
+
+    function getLiveApiConfig() {
+        try {
+            return JSON.parse(localStorage.getItem(LIVE_API_CONFIG_KEY) || '{}') || {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function saveLiveApiConfig(cfg) {
+        try {
+            localStorage.setItem(LIVE_API_CONFIG_KEY, JSON.stringify(cfg));
+        } catch (e) {}
+    }
+
+    function saveAdsbdbCache() {
+        try { localStorage.setItem(ADSBDB_CACHE_KEY, JSON.stringify(adsbdbMemoryCache)); } catch (e) {}
+    }
+
+    function saveLiveSchedCache() {
+        try { localStorage.setItem(LIVE_SCHED_CACHE_KEY, JSON.stringify(liveSchedMemoryCache)); } catch (e) {}
+    }
+
+    function sanitizeCallsign(raw) {
+        return String(raw || '').toUpperCase().replace(/[^A-Z0-9]/g, '').trim();
+    }
+
+    function extractRegOrHex(f) {
+        if (f.aircraft_reg) return sanitizeCallsign(f.aircraft_reg);
+        if (f.reg) return sanitizeCallsign(f.reg);
+        if (f.icao24) return sanitizeCallsign(f.icao24);
+        const note = String(f.note || '').toUpperCase();
+        const regMatch = note.match(/\b([A-Z]{1,2}-[A-Z0-9]{3,5}|JA[0-9]{3,4}[A-Z]{0,2}|HL[0-9]{4}|N[0-9]{1,5}[A-Z]{0,2})\b/);
+        return regMatch ? regMatch[1] : '';
+    }
+
+    // 常用國際機場座標與時區表（涵蓋第五航權延遠航段與主要樞紐，確保即使 ADSBdb 只回傳其中一段也能精準計算該段大圓距離與飛行時間）
+    const AIRPORT_REF_DB = {
+        TPE: { icao: 'RCTP', name: 'Taiwan Taoyuan International Airport', city: '台北桃園', lat: 25.0777, lon: 121.2328, tz: 8 },
+        TSA: { icao: 'RCSS', name: 'Taipei Songshan Airport', city: '台北松山', lat: 25.0694, lon: 121.5525, tz: 8 },
+        KHH: { icao: 'RCKH', name: 'Kaohsiung International Airport', city: '高雄小港', lat: 22.5771, lon: 120.3500, tz: 8 },
+        RMQ: { icao: 'RCMQ', name: 'Taichung International Airport', city: '台中清泉崗', lat: 24.2647, lon: 120.6206, tz: 8 },
+        HKG: { icao: 'VHHH', name: 'Hong Kong International Airport', city: '香港', lat: 22.3080, lon: 113.9185, tz: 8 },
+        MFM: { icao: 'VMMC', name: 'Macau International Airport', city: '澳門', lat: 22.1496, lon: 113.5915, tz: 8 },
+        KIX: { icao: 'RJBB', name: 'Kansai International Airport', city: '大阪關西', lat: 34.4347, lon: 135.2440, tz: 9 },
+        ITM: { icao: 'RJOO', name: 'Osaka International Airport (Itami)', city: '大阪伊丹', lat: 34.7855, lon: 135.4380, tz: 9 },
+        NRT: { icao: 'RJAA', name: 'Narita International Airport', city: '東京成田', lat: 35.7647, lon: 140.3864, tz: 9 },
+        HND: { icao: 'RJTT', name: 'Tokyo Haneda Airport', city: '東京羽田', lat: 35.5523, lon: 139.7798, tz: 9 },
+        CTS: { icao: 'RJCC', name: 'New Chitose Airport', city: '札幌新千歲', lat: 42.7752, lon: 141.6923, tz: 9 },
+        HKD: { icao: 'RJCH', name: 'Hakodate Airport', city: '函館', lat: 41.7700, lon: 140.8219, tz: 9 },
+        NGO: { icao: 'RJGG', name: 'Chubu Centrair International Airport', city: '名古屋中部', lat: 34.8584, lon: 136.8054, tz: 9 },
+        FUK: { icao: 'RJFF', name: 'Fukuoka Airport', city: '福岡', lat: 33.5859, lon: 130.4510, tz: 9 },
+        OKA: { icao: 'ROAH', name: 'Naha Airport', city: '沖繩那霸', lat: 26.1958, lon: 127.6458, tz: 9 },
+        TAK: { icao: 'RJOT', name: 'Takamatsu Airport', city: '高松', lat: 34.2142, lon: 134.0156, tz: 9 },
+        MYJ: { icao: 'RJOM', name: 'Matsuyama Airport', city: '松山', lat: 33.8272, lon: 132.6997, tz: 9 },
+        ICN: { icao: 'RKSI', name: 'Incheon International Airport', city: '首爾仁川', lat: 37.4602, lon: 126.4407, tz: 9 },
+        GMP: { icao: 'RKSS', name: 'Gimpo International Airport', city: '首爾金浦', lat: 37.5583, lon: 126.7906, tz: 9 },
+        CJU: { icao: 'RKPC', name: 'Jeju International Airport', city: '濟州', lat: 33.5113, lon: 126.4930, tz: 9 },
+        SIN: { icao: 'WSSS', name: 'Singapore Changi Airport', city: '新加坡樟宜', lat: 1.3644, lon: 103.9915, tz: 8 },
+        KUL: { icao: 'WMKK', name: 'Kuala Lumpur International Airport', city: '吉隆坡', lat: 2.7456, lon: 101.7099, tz: 8 },
+        BKI: { icao: 'WBKK', name: 'Kota Kinabalu International Airport', city: '亞庇', lat: 5.9372, lon: 116.0512, tz: 8 },
+        BKK: { icao: 'VTBS', name: 'Suvarnabhumi Airport', city: '曼谷素萬那普', lat: 13.6900, lon: 100.7501, tz: 7 },
+        DMK: { icao: 'VTBD', name: 'Don Mueang International Airport', city: '曼谷廊曼', lat: 13.9126, lon: 100.6068, tz: 7 },
+        HKT: { icao: 'VTSP', name: 'Phuket International Airport', city: '普吉島', lat: 8.1132, lon: 98.3169, tz: 7 },
+        MNL: { icao: 'RPLL', name: 'Ninoy Aquino International Airport', city: '馬尼拉', lat: 14.5086, lon: 121.0194, tz: 8 },
+        DVO: { icao: 'RPMD', name: 'Francisco Bangoy International Airport', city: '達沃', lat: 7.1255, lon: 125.6458, tz: 8 },
+        CGK: { icao: 'WIII', name: 'Soekarno-Hatta International Airport', city: '雅加達', lat: -6.1256, lon: 106.6559, tz: 7 },
+        LOP: { icao: 'WADL', name: 'Lombok International Airport', city: '龍目島', lat: -8.7573, lon: 116.2767, tz: 8 },
+        LHR: { icao: 'EGLL', name: 'London Heathrow Airport', city: '倫敦希斯洛', lat: 51.4700, lon: -0.4543, tz: 0 },
+        HEL: { icao: 'EFHK', name: 'Helsinki-Vantaa Airport', city: '赫爾辛基', lat: 60.3172, lon: 24.9633, tz: 2 },
+        KEF: { icao: 'BIKF', name: 'Keflavik International Airport', city: '雷克雅維克凱夫拉維克', lat: 63.9850, lon: -22.6056, tz: 0 },
+        PRG: { icao: 'LKPR', name: 'Vaclav Havel Airport Prague', city: '布拉格', lat: 50.1008, lon: 14.2600, tz: 1 },
+        BUD: { icao: 'LHBP', name: 'Budapest Ferenc Liszt International Airport', city: '布達佩斯', lat: 47.4298, lon: 19.2611, tz: 1 },
+        LIS: { icao: 'LPPT', name: 'Humberto Delgado Airport', city: '里斯本', lat: 38.7742, lon: -9.1342, tz: 0 },
+        OPO: { icao: 'LPPR', name: 'Francisco Sa Carneiro Airport', city: '波多', lat: 41.2481, lon: -8.6814, tz: 0 },
+        BCN: { icao: 'LEBL', name: 'Josep Tarradellas Barcelona-El Prat Airport', city: '巴塞隆納', lat: 41.2974, lon: 2.0833, tz: 1 }
+    };
+
+    function calcGreatCircleStats(lat1, lon1, lat2, lon2) {
+        if ([lat1, lon1, lat2, lon2].some(v => typeof v !== 'number' || isNaN(v))) return null;
+        const R = 6371;
+        const toRad = d => d * Math.PI / 180;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat / 2) ** 2 +
+                  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+        const km = Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+        if (km <= 0) return null;
+        const estMins = Math.round((km / 820) * 60 + 30);
+        const h = Math.floor(estMins / 60);
+        const m = estMins % 60;
+        return { km, estMins, estDuration: h > 0 ? `~${h}h ${m}m` : `~${m}m` };
+    }
+
+    function formatIsoToLocalHHMM(isoOrStr) {
+        if (!isoOrStr) return '';
+        const s = String(isoOrStr).trim();
+        const directMatch = s.match(/(?:T|\s)(\d{2}:\d{2})/);
+        if (directMatch) return directMatch[1];
+        const hhmmMatch = s.match(/^(\d{1,2}:\d{2})$/);
+        if (hhmmMatch) return hhmmMatch[1].padStart(5, '0');
+        return '';
+    }
+
+    function extractAllTimesFromText(str) {
+        if (!str) return [];
+        const matches = String(str).match(/([01]?\d|2[0-3]):[0-5]\d(?:\s*\+\d)?/g);
+        return matches ? matches.map(t => t.replace(/\s+/g, '')) : [];
+    }
+
+    function parseDurationToMins(durStr) {
+        if (!durStr) return 0;
+        const s = String(durStr);
+        const hm = s.match(/(\d+)\s*h(?:ours?|r)?\s*(\d+)?/i);
+        if (hm) return parseInt(hm[1], 10) * 60 + (hm[2] ? parseInt(hm[2], 10) : 0);
+        const zhHm = s.match(/(\d+)\s*小時\s*(\d+)?/);
+        if (zhHm) return parseInt(zhHm[1], 10) * 60 + (zhHm[2] ? parseInt(zhHm[2], 10) : 0);
+        return 0;
+    }
+
+    function estimateArrivalWithTimezone(depHHMM, durationMins, depTz, arrTz) {
+        if (!depHHMM || !durationMins) return '';
+        const m = depHHMM.match(/^(\d{1,2}):(\d{2})/);
+        if (!m) return '';
+        const depMins = parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+        let tzShiftMins = 0;
+        if (typeof depTz === 'number' && !isNaN(depTz) && typeof arrTz === 'number' && !isNaN(arrTz)) {
+            tzShiftMins = Math.round((arrTz - depTz) * 60);
+        }
+        let total = depMins + durationMins + tzShiftMins;
+        let dayOffset = 0;
+        while (total >= 1440) { total -= 1440; dayOffset += 1; }
+        while (total < 0) { total += 1440; dayOffset -= 1; }
+        const hh = String(Math.floor(total / 60)).padStart(2, '0');
+        const mm = String(total % 60).padStart(2, '0');
+        const suffix = dayOffset > 0 ? `+${dayOffset}` : (dayOffset < 0 ? `${dayOffset}` : '');
+        return `~${hh}:${mm}${suffix}`;
+    }
+
+    function normalizeAdsbAirport(ap) {
+        if (!ap) return null;
+        const iata = String(ap.iata_code || '').toUpperCase();
+        const ref = AIRPORT_REF_DB[iata];
+        const lat = Number(ap.latitude);
+        const lon = Number(ap.longitude);
+        return {
+            iata,
+            icao: ap.icao_code || ref?.icao || '',
+            name: ap.name || ref?.name || '',
+            city: ap.municipality || ref?.city || '',
+            lat: !isNaN(lat) ? lat : ref?.lat,
+            lon: !isNaN(lon) ? lon : ref?.lon,
+            tz: ref ? ref.tz : (!isNaN(lon) ? Math.round(lon / 15) : null)
+        };
+    }
+
+    async function queryAdsbdbForFlight(f, forceRefresh = false) {
+        const callsign = sanitizeCallsign(f.flight_no);
+        const reg = extractRegOrHex(f);
+        if (!callsign && !reg) return null;
+
+        const cacheKey = `${callsign}|${reg}`;
+        const cached = adsbdbMemoryCache[cacheKey];
+        if (!forceRefresh && cached && (Date.now() - cached.ts < ADSBDB_TTL_MS)) {
+            return cached.data;
+        }
+        if (adsbdbInFlight[cacheKey]) return adsbdbInFlight[cacheKey];
+
+        adsbdbInFlight[cacheKey] = (async () => {
+            const result = {
+                matchedRoute: false,
+                airlineName: '',
+                airlineIcao: '',
+                airlineCallsign: '',
+                origin: null,
+                midpoint: null,
+                destination: null,
+                airportsByIata: {},
+                aircraftType: '',
+                aircraftManufacturer: ''
+            };
+
+            try {
+                if (callsign) {
+                    const res = await fetch(`https://api.adsbdb.com/v0/callsign/${encodeURIComponent(callsign)}`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        const fr = json?.response?.flightroute;
+                        if (fr) {
+                            result.matchedRoute = true;
+                            if (fr.airline) {
+                                result.airlineName = fr.airline.name || '';
+                                result.airlineIcao = fr.airline.icao || '';
+                                result.airlineCallsign = fr.airline.callsign || '';
+                            }
+                            result.origin = normalizeAdsbAirport(fr.origin);
+                            result.midpoint = normalizeAdsbAirport(fr.midpoint);
+                            result.destination = normalizeAdsbAirport(fr.destination);
+
+                            [result.origin, result.midpoint, result.destination].forEach(ap => {
+                                if (ap && ap.iata) result.airportsByIata[ap.iata] = ap;
+                            });
+                        }
+                    }
+
+                    if (!result.airlineName) {
+                        const prefixMatch = callsign.match(/^([A-Z]{2,3})[0-9]/);
+                        if (prefixMatch) {
+                            const aRes = await fetch(`https://api.adsbdb.com/v0/airline/${encodeURIComponent(prefixMatch[1])}`);
+                            if (aRes.ok) {
+                                const aJson = await aRes.json();
+                                const al = Array.isArray(aJson?.response) ? aJson.response[0] : aJson?.response;
+                                if (al) {
+                                    result.airlineName = al.name || '';
+                                    result.airlineIcao = al.icao || '';
+                                    result.airlineCallsign = al.callsign || '';
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (reg) {
+                    const acRes = await fetch(`https://api.adsbdb.com/v0/aircraft/${encodeURIComponent(reg)}`);
+                    if (acRes.ok) {
+                        const acJson = await acRes.json();
+                        const ac = acJson?.response?.aircraft;
+                        if (ac) {
+                            result.aircraftType = ac.type || '';
+                            result.aircraftManufacturer = ac.manufacturer || '';
+                        }
+                    }
+                }
+            } catch (err) {
+                // 離線狀態自動靜默降級
+            } finally {
+                delete adsbdbInFlight[cacheKey];
+            }
+
+            adsbdbMemoryCache[cacheKey] = { ts: Date.now(), data: result };
+            saveAdsbdbCache();
+            return result;
+        })();
+
+        return adsbdbInFlight[cacheKey];
+    }
+
+    /* 真實即時時刻表 API 查詢引擎 (支援 AirLabs / AviationStack / AeroDataBox，支援指定 dep_iata / arr_iata 精準過濾第五航權延遠航段) */
+    async function queryLiveScheduleForFlight(f, forceRefresh = false) {
+        const callsign = sanitizeCallsign(f.flight_no);
+        if (!callsign) return null;
+
+        const cfg = getLiveApiConfig();
+        const provider = cfg.provider || 'airlabs';
+        const apiKey = (cfg.apiKey || '').trim();
+        if (!apiKey) return null;
+
+        const routeStr = f.route || '';
+        const iataMatches = routeStr.match(/\b[A-Z]{3}\b/g);
+        const wantDep = (f.dep_code || (iataMatches && iataMatches[0]) || '').toUpperCase();
+        const wantArr = (f.arr_code || (iataMatches && iataMatches[1]) || '').toUpperCase();
+
+        const cacheKey = `${provider}|${callsign}|${wantDep}-${wantArr}|${f.date || ''}`;
+        const cached = liveSchedMemoryCache[cacheKey];
+        if (!forceRefresh && cached && (Date.now() - cached.ts < LIVE_SCHED_TTL_MS)) {
+            return cached.data;
+        }
+        if (liveSchedInFlight[cacheKey]) return liveSchedInFlight[cacheKey];
+
+        liveSchedInFlight[cacheKey] = (async () => {
+            let liveResult = null;
+            try {
+                if (provider === 'airlabs') {
+                    // 使用 schedules 端點並帶入 dep_iata / arr_iata，可精準抓到第五航權指定航段（例如 CX565 KIX->TPE 而非 TPE->HKG）
+                    const schedParams = new URLSearchParams({ flight_iata: callsign, api_key: apiKey });
+                    if (wantDep) schedParams.set('dep_iata', wantDep);
+                    if (wantArr) schedParams.set('arr_iata', wantArr);
+                    const schedRes = await fetch(`https://airlabs.co/api/v9/schedules?${schedParams.toString()}`);
+                    let r = null;
+                    if (schedRes.ok) {
+                        const sJson = await schedRes.json();
+                        const list = Array.isArray(sJson?.response) ? sJson.response : [];
+                        r = list.find(item =>
+                            (!wantDep || String(item.dep_iata || '').toUpperCase() === wantDep) &&
+                            (!wantArr || String(item.arr_iata || '').toUpperCase() === wantArr)
+                        ) || list[0] || null;
+                    }
+                    if (!r) {
+                        const fRes = await fetch(`https://airlabs.co/api/v9/flight?flight_iata=${encodeURIComponent(callsign)}&api_key=${encodeURIComponent(apiKey)}`);
+                        if (fRes.ok) {
+                            const fJson = await fRes.json();
+                            const cand = fJson?.response;
+                            if (cand && (!wantDep || String(cand.dep_iata || '').toUpperCase() === wantDep) && (!wantArr || String(cand.arr_iata || '').toUpperCase() === wantArr)) {
+                                r = cand;
+                            }
+                        }
+                    }
+                    if (r && (r.dep_time || r.arr_time)) {
+                        liveResult = {
+                            provider: 'AirLabs LIVE',
+                            depTime: formatIsoToLocalHHMM(r.dep_actual || r.dep_estimated || r.dep_time),
+                            arrTime: formatIsoToLocalHHMM(r.arr_actual || r.arr_estimated || r.arr_time),
+                            depTerminal: r.dep_terminal || '',
+                            arrTerminal: r.arr_terminal || '',
+                            depGate: r.dep_gate || '',
+                            arrGate: r.arr_gate || '',
+                            status: r.status || '',
+                            durationMins: Number(r.duration) || 0,
+                            aircraftIcao: r.aircraft_icao || '',
+                            regNumber: r.reg_number || ''
+                        };
+                    }
+                } else if (provider === 'aviationstack') {
+                    const params = new URLSearchParams({ access_key: apiKey, flight_iata: callsign, limit: '10' });
+                    if (wantDep) params.set('dep_iata', wantDep);
+                    if (wantArr) params.set('arr_iata', wantArr);
+                    const res = await fetch(`https://api.aviationstack.com/v1/flights?${params.toString()}`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        const list = Array.isArray(json?.data) ? json.data : [];
+                        const r = list.find(item =>
+                            (!wantDep || String(item.departure?.iata || '').toUpperCase() === wantDep) &&
+                            (!wantArr || String(item.arrival?.iata || '').toUpperCase() === wantArr)
+                        ) || list[0] || null;
+                        if (r && (r.departure || r.arrival)) {
+                            liveResult = {
+                                provider: 'AviationStack LIVE',
+                                depTime: formatIsoToLocalHHMM(r.departure?.actual || r.departure?.estimated || r.departure?.scheduled),
+                                arrTime: formatIsoToLocalHHMM(r.arrival?.actual || r.arrival?.estimated || r.arrival?.scheduled),
+                                depTerminal: r.departure?.terminal || '',
+                                arrTerminal: r.arrival?.terminal || '',
+                                depGate: r.departure?.gate || '',
+                                arrGate: r.arrival?.gate || '',
+                                status: r.flight_status || '',
+                                durationMins: 0,
+                                aircraftIcao: r.aircraft?.icao || '',
+                                regNumber: r.aircraft?.registration || ''
+                            };
+                        }
+                    }
+                } else if (provider === 'aerodatabox') {
+                    const dateMatch = String(f.date || '').match(/(\d{4}-\d{2}-\d{2})/);
+                    const targetDate = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
+                    const url = `https://aerodatabox.p.rapidapi.com/flights/number/${encodeURIComponent(callsign)}/${targetDate}`;
+                    const res = await fetch(url, {
+                        headers: {
+                            'X-RapidAPI-Key': apiKey,
+                            'X-RapidAPI-Host': 'aerodatabox.p.rapidapi.com'
+                        }
+                    });
+                    if (res.ok) {
+                        const json = await res.json();
+                        const list = Array.isArray(json) ? json : [];
+                        const r = list.find(item =>
+                            (!wantDep || String(item.departure?.airport?.iata || '').toUpperCase() === wantDep) &&
+                            (!wantArr || String(item.arrival?.airport?.iata || '').toUpperCase() === wantArr)
+                        ) || list[0] || null;
+                        if (r && (r.departure || r.arrival)) {
+                            liveResult = {
+                                provider: 'AeroDataBox LIVE',
+                                depTime: formatIsoToLocalHHMM(r.departure?.revisedTime?.local || r.departure?.scheduledTime?.local),
+                                arrTime: formatIsoToLocalHHMM(r.arrival?.revisedTime?.local || r.arrival?.scheduledTime?.local),
+                                depTerminal: r.departure?.terminal || '',
+                                arrTerminal: r.arrival?.terminal || '',
+                                depGate: r.departure?.gate || '',
+                                arrGate: r.arrival?.gate || '',
+                                status: r.status || '',
+                                durationMins: 0,
+                                aircraftIcao: r.aircraft?.model || '',
+                                regNumber: r.aircraft?.reg || ''
+                            };
+                        }
+                    }
+                }
+            } catch (e) {
+                liveResult = null;
+            } finally {
+                delete liveSchedInFlight[cacheKey];
+            }
+
+            if (liveResult) {
+                liveSchedMemoryCache[cacheKey] = { ts: Date.now(), data: liveResult };
+                saveLiveSchedCache();
+            }
+            return liveResult;
+        })();
+
+        return liveSchedInFlight[cacheKey];
+    }
+
+    function openLiveApiSettings() {
+        const cfg = getLiveApiConfig();
+        const providerInput = prompt(
+            '請選擇即時時刻表 API 來源（支援第五航權延遠航段精準過濾）：\n' +
+            '1 = AirLabs (airlabs.co，免費方案每月 1,000 次)\n' +
+            '2 = AviationStack (aviationstack.com，免費方案)\n' +
+            '3 = AeroDataBox (RapidAPI)\n' +
+            '輸入 1、2 或 3：',
+            cfg.provider === 'aviationstack' ? '2' : (cfg.provider === 'aerodatabox' ? '3' : '1')
+        );
+        if (providerInput === null) return;
+        const map = { '1': 'airlabs', '2': 'aviationstack', '3': 'aerodatabox' };
+        const chosenProvider = map[providerInput.trim()] || 'airlabs';
+
+        const keyInput = prompt(
+            `請貼上您的 ${chosenProvider.toUpperCase()} API Key（留空則清除並改用航段大圓推算）：`,
+            cfg.apiKey || ''
+        );
+        if (keyInput === null) return;
+
+        saveLiveApiConfig({ provider: chosenProvider, apiKey: keyInput.trim() });
+        enrichAllFlightsWithAdsbdb(true);
+    }
+
+    async function enrichAllFlightsWithAdsbdb(forceRefresh = false) {
+        const flights = (globalData?.flights_and_hotels?.flights) || [];
+        if (!flights.length) return;
+        await Promise.all(flights.map(async (f) => {
+            await Promise.all([
+                queryAdsbdbForFlight(f, forceRefresh),
+                queryLiveScheduleForFlight(f, forceRefresh)
+            ]);
+        }));
+        if (globalData?.itinerary?.length > 0) renderDashboard();
+        renderFlights(globalData.flights_and_hotels || { flights: [], hotels: [] });
+    }
+
+    function resolveAirportEndpoint(iataCode, adsb) {
+        const code = String(iataCode || '').toUpperCase();
+        // 僅當 ADSBdb 航點 IATA 與使用者實際航段 IATA 一致時才採用，絕不把延遠段 (如 TPE->HKG) 錯套到 KIX->TPE 上
+        const adsbAp = adsb?.airportsByIata?.[code] || null;
+        const refAp = AIRPORT_REF_DB[code] || null;
+        if (!adsbAp && !refAp) return null;
+        return {
+            iata: code,
+            icao: adsbAp?.icao || refAp?.icao || '',
+            name: adsbAp?.name || refAp?.name || '',
+            city: adsbAp?.city || refAp?.city || '',
+            lat: typeof adsbAp?.lat === 'number' && !isNaN(adsbAp.lat) ? adsbAp.lat : refAp?.lat,
+            lon: typeof adsbAp?.lon === 'number' && !isNaN(adsbAp.lon) ? adsbAp.lon : refAp?.lon,
+            tz: refAp ? refAp.tz : (typeof adsbAp?.tz === 'number' ? adsbAp.tz : null)
+        };
+    }
+
     function parseFlightMeta(f) {
         const routeStr = f.route || '';
         const timeStr = f.time || '';
         const iataMatches = routeStr.match(/\b[A-Z]{3}\b/g);
         const parts = routeStr.split(/➔|->|→|—|-|至/).map(s => s.trim()).filter(Boolean);
 
-        const depCode = f.dep_code || (iataMatches && iataMatches[0]) || (parts[0] ? parts[0].slice(0, 4) : 'DEP');
-        const arrCode = f.arr_code || (iataMatches && iataMatches[1]) || (parts[1] ? parts[1].slice(0, 4) : 'ARR');
+        const callsign = sanitizeCallsign(f.flight_no);
+        const reg = extractRegOrHex(f);
+        const cachedEntry = adsbdbMemoryCache[`${callsign}|${reg}`];
+        const adsb = cachedEntry ? cachedEntry.data : null;
 
-        const depCity = f.dep_city || (parts[0] ? parts[0].replace(depCode, '').replace(/[()]/g, '').trim() : '出發地') || depCode;
-        const arrCity = f.arr_city || (parts[1] ? parts[1].replace(arrCode, '').replace(/[()]/g, '').trim() : '目的地') || arrCode;
+        // 1. 先確定使用者實際搭乘的起降機場 IATA（優先依 JSON 指定的 route / dep_code / arr_code）
+        const depCode = (f.dep_code || (iataMatches && iataMatches[0]) || adsb?.origin?.iata || (parts[0] ? parts[0].slice(0, 4) : 'DEP')).toUpperCase();
+        const arrCode = (f.arr_code || (iataMatches && iataMatches[1]) || adsb?.destination?.iata || (parts[1] ? parts[1].slice(0, 4) : 'ARR')).toUpperCase();
 
-        const timeParts = timeStr.split(/➔|->|→|-|~|～/).map(s => s.trim()).filter(Boolean);
-        const depTime = f.dep_time || timeParts[0] || '--:--';
-        const arrTime = f.arr_time || timeParts[1] || '--:--';
+        const cfg = getLiveApiConfig();
+        const liveEntry = liveSchedMemoryCache[`${cfg.provider || 'airlabs'}|${callsign}|${depCode}-${arrCode}|${f.date || ''}`];
+        const live = liveEntry ? liveEntry.data : null;
+
+        // 2. 嚴格依據 depCode / arrCode 解析各自的機場資料（絕不張冠李戴）
+        const depEndpoint = resolveAirportEndpoint(depCode, adsb);
+        const arrEndpoint = resolveAirportEndpoint(arrCode, adsb);
+
+        const parsedDepCity = f.dep_city || (parts[0] ? parts[0].replace(depCode, '').replace(/[()]/g, '').trim() : '');
+        const parsedArrCity = f.arr_city || (parts[1] ? parts[1].replace(arrCode, '').replace(/[()]/g, '').trim() : '');
+
+        const depCity = parsedDepCity || depEndpoint?.city || depCode;
+        const arrCity = parsedArrCity || arrEndpoint?.city || arrCode;
+
+        // 3. 以「實際搭乘的 depEndpoint -> arrEndpoint」計算大圓距離與航程時間（修正 CX565 KIX->TPE 錯算成 TPE->HKG 806km 的問題）
+        const legStats = (depEndpoint && arrEndpoint)
+            ? calcGreatCircleStats(depEndpoint.lat, depEndpoint.lon, arrEndpoint.lat, arrEndpoint.lon)
+            : null;
+
+        // 4. 智慧解析起降時間
+        const extractedTimes = [
+            ...extractAllTimesFromText(timeStr),
+            ...extractAllTimesFromText(f.note)
+        ];
+        let depTime = live?.depTime || f.dep_time || extractedTimes[0] || '';
+        let arrTime = live?.arrTime || f.arr_time || extractedTimes[1] || '';
+
+        const knownDurMins = parseDurationToMins(f.duration) || live?.durationMins || legStats?.estMins || 0;
+        let arrIsEstimated = false;
+        if (depTime && !arrTime && knownDurMins > 0) {
+            arrTime = estimateArrivalWithTimezone(
+                depTime,
+                knownDurMins,
+                depEndpoint?.tz,
+                arrEndpoint?.tz
+            );
+            arrIsEstimated = Boolean(arrTime);
+        }
+
+        if (!depTime) depTime = '--:--';
+        if (!arrTime) arrTime = '--:--';
+
+        const terminalLabel = f.terminal || [
+            live?.depTerminal ? `T${live.depTerminal}` : '',
+            live?.arrTerminal ? `T${live.arrTerminal}` : ''
+        ].filter(Boolean).join(' ➔ ');
+
+        const gateLabel = [
+            live?.depGate ? `登機門 ${live.depGate}` : '',
+            live?.arrGate ? `抵達門 ${live.arrGate}` : ''
+        ].filter(Boolean).join(' · ');
+
+        // 標記是否為第五航權多段航班（例如 CX565 KIX -> TPE -> HKG）
+        const isFifthFreedomLeg = Boolean(
+            adsb && adsb.matchedRoute &&
+            (adsb.origin?.iata !== depCode || adsb.destination?.iata !== arrCode) &&
+            (adsb.airportsByIata[depCode] || adsb.airportsByIata[arrCode])
+        );
 
         return {
             flightNo: f.flight_no || 'FLIGHT',
+            callsign,
             date: f.date || '',
             depCode,
             arrCode,
             depCity,
             arrCity,
+            depIcao: depEndpoint?.icao || '',
+            arrIcao: arrEndpoint?.icao || '',
+            depFullName: depEndpoint?.name || '',
+            arrFullName: arrEndpoint?.name || '',
             depTime,
             arrTime,
-            duration: f.duration || 'DIRECT',
-            terminal: f.terminal || '',
+            arrIsEstimated,
+            liveSource: live?.provider || '',
+            liveStatus: live?.status || '',
+            duration: f.duration || (live?.durationMins ? `${Math.floor(live.durationMins / 60)}h ${live.durationMins % 60}m` : '') || legStats?.estDuration || 'DIRECT',
+            distanceKm: legStats?.km || null,
+            isFifthFreedomLeg,
+            fullRouteHint: isFifthFreedomLeg && adsb?.origin?.iata && adsb?.destination?.iata
+                ? `全航線 ${adsb.origin.iata}→${adsb.midpoint?.iata ? adsb.midpoint.iata + '→' : ''}${adsb.destination.iata}`
+                : '',
+            airlineName: f.airline || adsb?.airlineName || '',
+            airlineIcao: adsb?.airlineIcao || '',
+            airlineCallsign: adsb?.airlineCallsign || '',
+            aircraftType: f.aircraft || live?.aircraftIcao || (adsb?.aircraftType ? `${adsb.aircraftManufacturer} ${adsb.aircraftType}`.trim() : ''),
+            adsbMatched: Boolean(live || (adsb && (adsb.matchedRoute || adsb.airlineName || adsb.aircraftType))),
+            adsbPending: !adsb && !live && Boolean(callsign),
+            terminal: terminalLabel,
+            gate: gateLabel,
             seat: f.seat || '',
             pnr: f.pnr || '',
-            note: f.note || '',
-            statusText: f.status || 'BOARDING PASS'
+            note: f.note || ''
         };
     }
 
     function buildFlightyCardHtml(f, compact = false) {
         const m = parseFlightMeta(f);
-        const queryStr = encodeURIComponent(`${m.flightNo} ${m.date}`.trim());
+        const liveTrackUrl = m.callsign
+            ? `https://www.flightradar24.com/data/flights/${encodeURIComponent(m.callsign.toLowerCase())}`
+            : `https://www.google.com/search?q=${encodeURIComponent(`${m.flightNo} ${m.date}`.trim())}`;
+
         const metaPills = [
+            m.liveStatus ? `<span class="mini-pill green">● ${m.liveStatus.toUpperCase()}</span>` : '',
+            m.aircraftType ? `<span class="mini-pill sky">🛩️ ${m.aircraftType}</span>` : '',
+            m.distanceKm ? `<span class="mini-pill mono">📏 ${m.distanceKm.toLocaleString()} km</span>` : '',
+            m.fullRouteHint ? `<span class="mini-pill sky">${m.fullRouteHint}</span>` : '',
             m.terminal ? `<span class="mini-pill sky">航廈 ${m.terminal}</span>` : '',
+            m.gate ? `<span class="mini-pill accent">${m.gate}</span>` : '',
             m.seat ? `<span class="mini-pill accent">座位 ${m.seat}</span>` : '',
             m.pnr ? `<span class="mini-pill mono">PNR ${m.pnr}</span>` : '',
             m.note ? `<span class="mini-pill">${m.note}</span>` : ''
         ].filter(Boolean).join('');
+
+        const badgeText = m.liveSource ? `● ${m.liveSource}` : '● ADSBdb VERIFIED';
+        const airlineRowHtml = (m.airlineName || m.adsbMatched || m.adsbPending) ? `
+            <div class="flighty-airline-row">
+                <div class="flighty-airline-name">
+                    <span>${m.airlineName || '正在識別航空公司...'}</span>
+                    ${m.airlineIcao ? `<span style="font-family:'JetBrains Mono',monospace; color:var(--text-muted);">(${m.airlineIcao}${m.airlineCallsign ? ` · ${m.airlineCallsign}` : ''})</span>` : ''}
+                </div>
+                ${m.adsbMatched
+                    ? `<span class="adsb-badge">${badgeText}</span>`
+                    : (m.adsbPending ? `<span class="adsb-badge loading">↻ ADSBdb</span>` : '')}
+            </div>` : '';
 
         return `
             <div class="flighty-card">
@@ -1235,13 +1872,17 @@
                         <span class="flighty-code">${m.flightNo}</span>
                         <span style="font-size: 0.73rem; font-weight: 700; color: var(--text-secondary); white-space: nowrap;" class="tabular-nums">${m.date}</span>
                     </div>
-                    <a href="https://www.google.com/search?q=${queryStr}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="flighty-status" style="text-decoration: none;">🔍 查動態</a>
+                    <a href="${liveTrackUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="flighty-status" style="text-decoration: none;">📡 FR24 動態</a>
                 </div>
+
+                ${airlineRowHtml}
 
                 <div class="flighty-airports">
                     <div class="airport-col">
                         <div class="iata-code">${m.depCode}</div>
                         <div class="airport-city">${m.depCity}</div>
+                        ${(!compact && m.depIcao) ? `<div class="airport-icao">${m.depIcao}</div>` : ''}
+                        ${(!compact && m.depFullName) ? `<div class="airport-fullname" title="${m.depFullName}">${m.depFullName}</div>` : ''}
                     </div>
 
                     <div class="flight-arc-box">
@@ -1256,6 +1897,8 @@
                     <div class="airport-col right">
                         <div class="iata-code">${m.arrCode}</div>
                         <div class="airport-city">${m.arrCity}</div>
+                        ${(!compact && m.arrIcao) ? `<div class="airport-icao">${m.arrIcao}</div>` : ''}
+                        ${(!compact && m.arrFullName) ? `<div class="airport-fullname" title="${m.arrFullName}">${m.arrFullName}</div>` : ''}
                     </div>
                 </div>
 
@@ -1266,7 +1909,7 @@
                     </div>
                     <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 800;">➔</div>
                     <div class="time-block right">
-                        <span class="time-label">ARRIVAL</span>
+                        <span class="time-label">${m.arrIsEstimated ? 'EST. ARRIVAL' : 'ARRIVAL'}</span>
                         <span class="time-val">${m.arrTime}</span>
                     </div>
                 </div>
@@ -1579,6 +2222,7 @@
         document.getElementById('flights').innerHTML = `
             <div class="panel-head" style="padding: 0 2px;">
                 <span class="panel-title">✈️ 航班登機證 (${flights.length} 航段)</span>
+                ${flights.length ? `<div style="display:flex; gap:5px; align-items:center;"><button type="button" class="adsb-sync-btn" onclick="openLiveApiSettings()">🔑 真實時刻 API</button><button type="button" class="adsb-sync-btn" onclick="enrichAllFlightsWithAdsbdb(true)">↻ 同步</button></div>` : ''}
             </div>
             ${ticketsHtml}
             ${data && data.flight_note ? `<div class="callout-box">${data.flight_note}</div>` : ''}
