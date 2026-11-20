@@ -5,61 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0b0d10">
-    <title>環球慢活隨身旅圖</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <script src="secure_data.js"></script>
+    <meta name="apple-mobile-web-app-title" content="隨身旅圖">
+    <meta name="theme-color" content="#0b0d10" id="meta-theme-color">
+    <title>隨身旅圖 — 私人行程導航</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
 
     <style>
         :root,
         :root[data-theme="dark"] {
-            --bg-app: #0b0d10;
-            --bg-elevated: rgba(22, 26, 33, 0.86);
-            --bg-card: #141820;
-            --bg-card-alt: #1b202b;
-            --bg-pill: #1f2532;
+            --bg-app: #090b0e;
+            --bg-elevated: rgba(16, 20, 27, 0.88);
+            --bg-dock: rgba(14, 17, 23, 0.94);
+            --bg-card: #131720;
+            --bg-card-alt: #1a202c;
+            --bg-pill: #222938;
             --border-subtle: rgba(255, 255, 255, 0.08);
             --border-strong: rgba(255, 255, 255, 0.16);
-            --text-primary: #f3f5f8;
+            --text-primary: #f4f6f9;
             --text-secondary: #a4aebd;
-            --text-muted: #6f7988;
+            --text-muted: #6c7787;
             --accent: #f59e0b;
-            --accent-soft: rgba(245, 158, 11, 0.16);
-            --accent-secondary: #38bdf8;
-            --accent-secondary-soft: rgba(56, 189, 248, 0.14);
-            --success: #34d399;
+            --accent-glow: rgba(245, 158, 11, 0.26);
+            --accent-soft: rgba(245, 158, 11, 0.15);
+            --sky: #38bdf8;
+            --sky-soft: rgba(56, 189, 248, 0.14);
+            --emerald: #34d399;
+            --emerald-soft: rgba(52, 211, 153, 0.14);
             --danger: #f87171;
             --danger-soft: rgba(248, 113, 113, 0.14);
-            --cta-bg: #f3f5f8;
-            --cta-text: #0b0d10;
-            --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.35);
-            --shadow-bar: 0 12px 32px rgba(0, 0, 0, 0.55);
+            --cta-bg: #f4f6f9;
+            --cta-text: #090b0e;
+            --hero-grad: linear-gradient(145deg, #1b2230 0%, #11151e 58%, #1d1813 100%);
+            --flight-grad: linear-gradient(155deg, #161d29 0%, #0f131b 100%);
+            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.34);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --dock-height: 58px;
         }
 
         :root[data-theme="paper"] {
-            --bg-app: #fdfbf7;
-            --bg-elevated: rgba(253, 251, 247, 0.92);
+            --bg-app: #f8f5ef;
+            --bg-elevated: rgba(248, 245, 239, 0.9);
+            --bg-dock: rgba(255, 255, 255, 0.95);
             --bg-card: #ffffff;
-            --bg-card-alt: #f5f0e6;
-            --bg-pill: #f1ede4;
-            --border-subtle: #e6dfd3;
-            --border-strong: #d5cbb9;
-            --text-primary: #2c251e;
-            --text-secondary: #5c4d3c;
-            --text-muted: #8c7e6b;
+            --bg-card-alt: #f2ece1;
+            --bg-pill: #eae2d4;
+            --border-subtle: #e5ddd0;
+            --border-strong: #d3c7b4;
+            --text-primary: #262019;
+            --text-secondary: #5a4b3b;
+            --text-muted: #8a7c69;
             --accent: #b15b2c;
-            --accent-soft: rgba(177, 91, 44, 0.13);
-            --accent-secondary: #3f6246;
-            --accent-secondary-soft: rgba(63, 98, 70, 0.14);
-            --success: #2f7a57;
+            --accent-glow: rgba(177, 91, 44, 0.2);
+            --accent-soft: rgba(177, 91, 44, 0.12);
+            --sky: #0284c7;
+            --sky-soft: rgba(2, 132, 199, 0.11);
+            --emerald: #1f7a54;
+            --emerald-soft: rgba(31, 122, 84, 0.12);
             --danger: #b83b2b;
-            --danger-soft: rgba(184, 59, 43, 0.12);
-            --cta-bg: #5c4d3c;
+            --danger-soft: rgba(184, 59, 43, 0.11);
+            --cta-bg: #2e261e;
             --cta-text: #ffffff;
-            --shadow-card: 0 6px 20px rgba(92, 77, 60, 0.06);
-            --shadow-bar: 0 10px 28px rgba(44, 37, 30, 0.12);
+            --hero-grad: linear-gradient(145deg, #ffffff 0%, #f5efe4 100%);
+            --flight-grad: linear-gradient(155deg, #ffffff 0%, #f4efe6 100%);
+            --shadow-card: 0 6px 18px rgba(92, 77, 60, 0.06);
         }
 
         * {
@@ -68,47 +77,50 @@
         }
 
         html, body {
-            height: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            background: var(--bg-app);
-            color: var(--text-primary);
-            font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Inter', sans-serif;
-            line-height: 1.55;
-            user-select: none;
-            -webkit-user-select: none;
-            transition: background-color 0.25s ease, color 0.25s ease;
-        }
-
-        .tabular-nums {
-            font-variant-numeric: tabular-nums;
-        }
-
-        .app-shell {
             width: 100%;
-            max-width: 480px;
-            height: 100dvh;
-            margin: 0 auto;
-            background: var(--bg-app);
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'PingFang TC', 'Inter', sans-serif;
+            line-height: 1.52;
+            overscroll-behavior: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+        .mono { font-family: 'JetBrains Mono', 'Inter', monospace; }
+
+        /* App Shell：鎖定全螢幕高度，解決 iOS PWA 跑版與橡皮筋回彈 */
+        .app-shell {
+            position: fixed;
+            inset: 0;
             display: flex;
             flex-direction: column;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: var(--bg-app);
             overflow: hidden;
-            position: relative;
         }
 
-        /* 頂部精簡導覽列 */
+        /* 頂部導覽列：精準吃進 iOS Safe Area Top */
         .app-topbar {
             flex-shrink: 0;
+            padding-top: calc(var(--safe-top) + 8px);
+            padding-bottom: 10px;
+            padding-left: 16px;
+            padding-right: 16px;
+            background: var(--bg-elevated);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 10px;
-            padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
-            background: var(--bg-elevated);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--border-subtle);
             z-index: 120;
         }
 
@@ -116,13 +128,14 @@
             display: flex;
             flex-direction: column;
             min-width: 0;
+            flex: 1;
         }
 
         .topbar-kicker {
-            font-size: 0.66rem;
+            font-size: 0.62rem;
             font-weight: 800;
             color: var(--accent);
-            letter-spacing: 1.4px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             white-space: nowrap;
             overflow: hidden;
@@ -131,10 +144,10 @@
 
         .topbar-heading {
             font-family: 'Noto Serif TC', serif;
-            font-size: 1.12rem;
+            font-size: 1.06rem;
             font-weight: 900;
             color: var(--text-primary);
-            line-height: 1.25;
+            line-height: 1.28;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -151,7 +164,7 @@
             background: var(--bg-card-alt);
             border: 1px solid var(--border-subtle);
             color: var(--text-primary);
-            font-size: 0.76rem;
+            font-size: 0.72rem;
             font-weight: 700;
             padding: 6px 10px;
             border-radius: 999px;
@@ -159,59 +172,52 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            transition: transform 0.12s ease, border-color 0.15s ease;
+            white-space: nowrap;
+            transition: transform 0.12s ease;
         }
 
-        .icon-pill-btn:active {
-            transform: scale(0.94);
-            border-color: var(--accent);
-        }
+        .icon-pill-btn:active { transform: scale(0.95); }
 
-        /* 主捲動畫布 */
+        /* 中間唯一捲動區：底部預留完整 Dock + Safe Area 高度，絕不被遮擋 */
         .app-canvas {
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
-            overscroll-behavior-y: contain;
-            padding: 14px 16px calc(92px + env(safe-area-inset-bottom));
+            padding: 12px 15px calc(var(--dock-height) + var(--safe-bottom) + 22px);
         }
 
         .app-canvas::-webkit-scrollbar { display: none; }
         .app-canvas { scrollbar-width: none; }
 
-        .view {
-            display: none;
-            animation: viewEnter 0.22s cubic-bezier(0.22, 1, 0.36, 1);
-        }
+        .view { display: none; animation: viewFade 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+        .view.active { display: block; }
 
-        .view.active {
-            display: block;
-        }
-
-        @keyframes viewEnter {
-            from { opacity: 0; transform: translateY(6px); }
+        @keyframes viewFade {
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 懸浮底部導覽列 */
-        .bottom-tabbar {
+        /* iOS 原生滿版底部 Dock（貼齊底部 0px，徹底消除下方內容露出的跑版問題） */
+        .bottom-dock {
             position: fixed;
-            left: 50%;
-            bottom: calc(10px + env(safe-area-inset-bottom));
-            transform: translateX(-50%);
-            width: calc(100% - 24px);
-            max-width: 456px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            height: calc(var(--dock-height) + var(--safe-bottom));
+            padding-bottom: var(--safe-bottom);
+            padding-left: 6px;
+            padding-right: 6px;
+            background: var(--bg-dock);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid var(--border-subtle);
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            background: var(--bg-elevated);
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-            border: 1px solid var(--border-strong);
-            border-radius: 22px;
-            padding: 6px 4px;
-            z-index: 150;
-            box-shadow: var(--shadow-bar);
+            align-items: center;
+            z-index: 200;
         }
 
         .b-tab {
@@ -221,17 +227,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2px;
-            padding: 4px 2px;
+            gap: 3px;
+            padding: 5px 2px;
             color: var(--text-muted);
             cursor: pointer;
-            transition: transform 0.12s ease, color 0.16s ease;
         }
 
-        .b-tab:active { transform: scale(0.92); }
-
         .b-tab-icon {
-            width: 36px;
+            width: 38px;
             height: 24px;
             border-radius: 12px;
             display: flex;
@@ -240,39 +243,21 @@
             transition: background 0.18s ease, color 0.18s ease;
         }
 
-        .b-tab-icon svg {
-            width: 19px;
-            height: 19px;
-            stroke-width: 2;
-        }
+        .b-tab-icon svg { width: 19px; height: 19px; stroke-width: 2; }
+        .b-tab-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2px; }
+        .b-tab.active { color: var(--accent); }
+        .b-tab.active .b-tab-icon { background: var(--accent-soft); color: var(--accent); }
+        .b-tab.active .b-tab-label { font-weight: 900; }
 
-        .b-tab-label {
-            font-size: 0.68rem;
-            font-weight: 700;
-        }
-
-        .b-tab.active {
-            color: var(--accent);
-        }
-
-        .b-tab.active .b-tab-icon {
-            background: var(--accent-soft);
-            color: var(--accent);
-        }
-
-        .b-tab.active .b-tab-label {
-            font-weight: 900;
-        }
-
-        /* 分段控制器 */
+        /* 次級分段控制 */
         .segmented-bar {
             display: flex;
             background: var(--bg-card-alt);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
+            border-radius: 13px;
             padding: 4px;
             gap: 4px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             position: sticky;
             top: 0;
             z-index: 40;
@@ -284,12 +269,11 @@
             border: none;
             background: transparent;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            padding: 8px 6px;
-            border-radius: 10px;
+            padding: 7px 5px;
+            border-radius: 9px;
             cursor: pointer;
-            transition: all 0.16s ease;
             white-space: nowrap;
         }
 
@@ -297,102 +281,281 @@
             background: var(--bg-card);
             color: var(--text-primary);
             font-weight: 900;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
 
-        .sub-pane { display: none; animation: viewEnter 0.18s ease; }
-        .sub-pane.active { display: block; }
+        .sub-pane { display: none; }
+        .sub-pane.active { display: block; animation: viewFade 0.18s ease; }
 
-        /* 看板 Hero 與 Bento 雙卡 */
+        /* Hero & Dashboard */
         .hero-banner {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            background: var(--hero-grad);
+            border: 1px solid var(--border-strong);
             border-radius: 20px;
-            padding: 18px;
-            margin-bottom: 12px;
+            padding: 16px;
+            margin-bottom: 11px;
             box-shadow: var(--shadow-card);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-banner::before {
-            content: '';
-            position: absolute;
-            top: -40px;
-            right: -40px;
-            width: 140px;
-            height: 140px;
-            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
-            pointer-events: none;
         }
 
         .hero-tag {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
+            gap: 5px;
+            font-size: 0.66rem;
             font-weight: 800;
             color: var(--accent);
             background: var(--accent-soft);
-            padding: 4px 10px;
+            padding: 3px 9px;
             border-radius: 999px;
             margin-bottom: 8px;
         }
 
         .hero-title {
             font-family: 'Noto Serif TC', serif;
-            font-size: 1.42rem;
+            font-size: 1.24rem;
             font-weight: 900;
-            line-height: 1.3;
-            margin: 0 0 12px;
+            line-height: 1.32;
+            margin: 0 0 11px;
             color: var(--text-primary);
         }
 
         .countdown-box {
             background: var(--bg-card-alt);
             border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 12px 14px;
+            border-radius: 13px;
+            padding: 10px 13px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 11px;
         }
 
         .countdown-num {
             font-family: 'Inter', sans-serif;
-            font-size: 1.65rem;
+            font-size: 1.48rem;
             font-weight: 900;
             color: var(--accent);
             line-height: 1.1;
         }
 
+        .cta-btn {
+            width: 100%;
+            border: none;
+            border-radius: 13px;
+            padding: 12px 14px;
+            background: var(--cta-bg);
+            color: var(--cta-text);
+            font-size: 0.86rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: transform 0.12s ease;
+        }
+        .cta-btn:active { transform: scale(0.98); }
+
+        /* Flighty 風格：航空動態登機證卡片 */
+        .flighty-card {
+            background: var(--flight-grad);
+            border: 1px solid var(--border-strong);
+            border-radius: 20px;
+            padding: 15px 16px;
+            margin-bottom: 11px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flighty-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--sky), var(--accent));
+        }
+
+        .flighty-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .flighty-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .flighty-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-subtle);
+            padding: 3px 8px;
+            border-radius: 7px;
+        }
+
+        .flighty-status {
+            font-size: 0.66rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: var(--emerald-soft);
+            color: var(--emerald);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .flighty-status.upcoming {
+            background: var(--sky-soft);
+            color: var(--sky);
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulseGlow 1.8s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.8); }
+        }
+
+        .flighty-airports {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .airport-col.right { text-align: right; }
+
+        .iata-code {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.05;
+            color: var(--text-primary);
+        }
+
+        .airport-city {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .flight-arc-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 82px;
+        }
+
+        .flight-track {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--sky);
+        }
+
+        .flight-line {
+            flex: 1;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, var(--border-strong) 0, var(--border-strong) 4px, transparent 4px, transparent 8px);
+        }
+
+        .flight-line.solid {
+            background: linear-gradient(90deg, var(--sky), var(--accent));
+        }
+
+        .flight-duration-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .flighty-times {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 11px;
+            border-radius: 12px;
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-subtle);
+            margin-bottom: 9px;
+        }
+
+        .time-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-block.right { text-align: right; }
+
+        .time-label {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .time-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.94rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .flighty-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+        }
+
+        /* Bento Grid */
         .bento-row {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 9px;
+            margin-bottom: 11px;
         }
 
         .bento-tile {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: 16px;
-            padding: 13px 14px;
+            padding: 12px 13px;
             box-shadow: var(--shadow-card);
             cursor: pointer;
-            transition: transform 0.12s ease, border-color 0.15s ease;
             text-align: left;
         }
 
-        .bento-tile:active {
-            transform: scale(0.97);
-            border-color: var(--accent);
-        }
-
         .bento-label {
-            font-size: 0.72rem;
+            font-size: 0.69rem;
             font-weight: 700;
             color: var(--text-muted);
             margin-bottom: 4px;
@@ -401,236 +564,162 @@
             justify-content: space-between;
         }
 
-        .bento-val {
-            font-size: 1rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            line-height: 1.3;
-        }
-
-        .bento-sub {
-            font-size: 0.74rem;
-            color: var(--text-secondary);
-            margin-top: 2px;
-        }
-
-        .cta-btn {
-            width: 100%;
-            border: none;
-            border-radius: 13px;
-            padding: 12px 16px;
-            background: var(--cta-bg);
-            color: var(--cta-text);
-            font-size: 0.9rem;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: transform 0.12s ease, opacity 0.15s ease;
-        }
-
-        .cta-btn:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
+        .bento-val { font-size: 0.94rem; font-weight: 800; color: var(--text-primary); line-height: 1.3; }
+        .bento-sub { font-size: 0.69rem; color: var(--text-secondary); margin-top: 2px; }
 
         .panel-card {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: 18px;
-            padding: 15px 16px;
-            margin-bottom: 12px;
+            padding: 14px 15px;
+            margin-bottom: 11px;
             box-shadow: var(--shadow-card);
         }
 
-        .panel-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
+        .panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .panel-title { font-size: 0.86rem; font-weight: 800; color: var(--text-primary); }
+        .panel-link { font-size: 0.75rem; font-weight: 700; color: var(--accent); cursor: pointer; }
 
-        .panel-title {
-            font-size: 0.88rem;
-            font-weight: 800;
-            color: var(--text-primary);
-        }
-
-        .panel-link {
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--accent);
-            cursor: pointer;
-        }
-
-        /* 吸頂日曆膠囊 */
-        .day-strip {
+        /* 真正的單日 Tab 分頁導覽列 */
+        .day-tab-strip {
             position: sticky;
             top: 0;
-            z-index: 35;
+            z-index: 45;
             display: flex;
-            gap: 8px;
+            gap: 7px;
             overflow-x: auto;
-            padding: 6px 2px 10px;
+            padding: 2px 1px 10px;
             margin-bottom: 6px;
             background: var(--bg-app);
             scrollbar-width: none;
         }
+        .day-tab-strip::-webkit-scrollbar { display: none; }
 
-        .day-strip::-webkit-scrollbar { display: none; }
-
-        .day-pill {
+        .day-tab-btn {
             flex: 0 0 auto;
             min-width: 64px;
             padding: 7px 11px;
             border-radius: 14px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
             text-align: center;
             cursor: pointer;
             transition: all 0.16s ease;
         }
 
-        .day-pill:active { transform: scale(0.95); }
-
-        .day-pill.active {
+        .day-tab-btn.active {
             background: var(--accent);
             border-color: var(--accent);
             color: #ffffff;
+            box-shadow: 0 6px 16px var(--accent-glow);
         }
 
-        .dp-day {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 900;
-            display: block;
+        .dp-day { font-family: 'Inter', sans-serif; font-size: 0.77rem; font-weight: 900; display: block; line-height: 1.2; }
+        .dp-date { font-size: 0.63rem; opacity: 0.88; display: block; margin-top: 1px; }
+
+        /* 獨立單日分頁內容 */
+        .day-page { display: none; }
+        .day-page.active { display: block; animation: daySlideIn 0.2s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        @keyframes daySlideIn {
+            from { opacity: 0; transform: translateX(6px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .dp-date {
-            font-size: 0.66rem;
-            opacity: 0.85;
-            display: block;
-        }
-
-        /* 每日行程手風琴卡片 */
-        .day-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+        .day-hero-card {
+            background: var(--hero-grad);
+            border: 1px solid var(--border-strong);
             border-radius: 18px;
-            margin-bottom: 14px;
-            overflow: hidden;
+            padding: 15px 16px;
+            margin-bottom: 12px;
             box-shadow: var(--shadow-card);
         }
 
-        .day-card-header {
-            padding: 15px 16px;
+        .day-hero-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .day-card-header:active {
-            background: var(--bg-card-alt);
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
         .day-kicker {
             font-family: 'Inter', sans-serif;
-            font-size: 0.74rem;
-            font-weight: 800;
+            font-size: 0.72rem;
+            font-weight: 900;
             color: var(--accent);
-            display: block;
-            margin-bottom: 3px;
+            letter-spacing: 0.5px;
         }
 
-        .day-card-title {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 1.12rem;
-            font-weight: 800;
-            margin: 0;
-            color: var(--text-primary);
-        }
-
-        .day-card-sub {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-top: 3px;
-        }
-
-        .chevron-badge {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--bg-card-alt);
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.78rem;
-            flex-shrink: 0;
-            transition: transform 0.22s ease;
-        }
-
-        .day-card.open .chevron-badge {
-            transform: rotate(180deg);
-            background: var(--accent-soft);
-            color: var(--accent);
-        }
-
-        .day-card-body {
-            display: none;
-            padding: 0 16px 16px;
-            border-top: 1px solid var(--border-subtle);
-        }
-
-        .day-card.open .day-card-body {
-            display: block;
-            padding-top: 14px;
-            animation: viewEnter 0.2s ease;
-        }
-
-        .callout-box {
-            border-radius: 12px;
-            padding: 11px 13px;
-            font-size: 0.84rem;
-            margin-bottom: 12px;
+        .day-weather-pill {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
             background: var(--bg-card-alt);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
         }
 
-        .callout-alert {
-            background: var(--danger-soft);
-            border-color: rgba(248, 113, 113, 0.28);
+        .day-card-title {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 1.14rem;
+            font-weight: 900;
+            margin: 0;
             color: var(--text-primary);
+            line-height: 1.35;
         }
 
+        .day-card-sub {
+            font-size: 0.79rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .day-stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-subtle);
+        }
+
+        .callout-box {
+            border-radius: 13px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+        }
+        .callout-alert {
+            background: var(--danger-soft);
+            border-color: rgba(248, 113, 113, 0.3);
+            color: var(--text-primary);
+        }
         .callout-story {
             font-family: 'Noto Serif TC', serif;
             border-left: 3px solid var(--accent);
-            line-height: 1.7;
+            line-height: 1.65;
+            background: var(--bg-card);
         }
 
-        /* 時間軸節點 */
-        .timeline-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
+        /* Timeline */
+        .timeline-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 14px 13px;
+            margin-bottom: 11px;
+            box-shadow: var(--shadow-card);
         }
 
+        .timeline-item { display: flex; gap: 10px; margin-bottom: 11px; }
         .timeline-item:last-child { margin-bottom: 0; }
-
-        .timeline-axis {
-            width: 18px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-
+        .timeline-axis { width: 16px; display: flex; flex-direction: column; align-items: center; position: relative; }
         .timeline-node {
             width: 9px;
             height: 9px;
@@ -640,20 +729,9 @@
             box-shadow: 0 0 0 4px var(--accent-soft);
             z-index: 2;
         }
-
-        .timeline-node.kind-food { background: var(--accent); }
-        .timeline-node.kind-move { background: var(--accent-secondary); box-shadow: 0 0 0 4px var(--accent-secondary-soft); }
-        .timeline-node.kind-stay { background: var(--success); }
-
-        .timeline-stem {
-            width: 2px;
-            flex: 1;
-            background: var(--border-subtle);
-            position: absolute;
-            top: 21px;
-            bottom: -12px;
-        }
-
+        .timeline-node.kind-move { background: var(--sky); box-shadow: 0 0 0 4px var(--sky-soft); }
+        .timeline-node.kind-stay { background: var(--emerald); box-shadow: 0 0 0 4px var(--emerald-soft); }
+        .timeline-stem { width: 2px; flex: 1; background: var(--border-subtle); position: absolute; top: 21px; bottom: -11px; }
         .timeline-item:last-child .timeline-stem { display: none; }
 
         .slot-card {
@@ -661,441 +739,189 @@
             background: var(--bg-card-alt);
             border: 1px solid var(--border-subtle);
             border-radius: 14px;
-            padding: 11px 13px;
+            padding: 10px 12px;
         }
+        .slot-card.is-transit { border-left: 3px solid var(--sky); }
+        .slot-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px; }
+        .slot-time { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 800; color: var(--accent); }
+        .slot-title { font-size: 0.93rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; line-height: 1.35; }
+        .slot-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
 
-        .slot-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .slot-time {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.84rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        .slot-title {
-            font-size: 0.96rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-
-        .slot-desc {
-            font-size: 0.84rem;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-
-        .pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 6px;
-        }
-
-        .mini-pill {
-            font-size: 0.72rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 8px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-        }
-
-        .mini-pill.accent {
-            background: var(--accent-soft);
-            color: var(--accent);
-            border-color: transparent;
-        }
-
-        .mini-pill.sky {
-            background: var(--accent-secondary-soft);
-            color: var(--accent-secondary);
-            border-color: transparent;
-        }
+        .pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
+        .mini-pill { font-size: 0.69rem; font-weight: 700; padding: 2px 7px; border-radius: 7px; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-secondary); }
+        .mini-pill.accent { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+        .mini-pill.sky { background: var(--sky-soft); color: var(--sky); border-color: transparent; }
+        .mini-pill.green { background: var(--emerald-soft); color: var(--emerald); border-color: transparent; }
 
         .map-chip {
             text-decoration: none;
-            font-size: 0.72rem;
+            font-size: 0.69rem;
             font-weight: 700;
             color: var(--text-primary);
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            padding: 3px 9px;
+            padding: 3px 8px;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-        }
-
-        .map-chip:active {
-            border-color: var(--accent);
+            gap: 2px;
+            flex-shrink: 0;
         }
 
         .hotel-strip {
-            margin-top: 12px;
-            padding: 11px 13px;
-            border-radius: 13px;
-            background: var(--bg-card-alt);
-            border: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-        }
-
-        /* 登機證與飯店卡片 */
-        .boarding-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 18px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow-card);
-        }
-
-        .boarding-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed var(--border-strong);
-        }
-
-        .flight-code {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 900;
-            padding: 3px 9px;
-            border-radius: 8px;
-            background: var(--accent-soft);
-            color: var(--accent);
-        }
-
-        .boarding-route {
-            font-size: 1.05rem;
-            font-weight: 900;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .boarding-meta {
-            font-size: 0.82rem;
-            color: var(--text-secondary);
-        }
-
-        .hotel-item {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .hotel-item:last-child { border-bottom: none; padding-bottom: 0; }
-
-        /* 探索與工具元件 */
-        .filter-row {
-            display: flex;
-            gap: 7px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 6px;
-            scrollbar-width: none;
-        }
-
-        .filter-row::-webkit-scrollbar { display: none; }
-
-        .filter-chip {
-            border: 1px solid var(--border-subtle);
-            background: var(--bg-card);
-            color: var(--text-secondary);
-            font-size: 0.78rem;
-            font-weight: 700;
-            padding: 6px 12px;
-            border-radius: 999px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .filter-chip.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #ffffff;
-        }
-
-        .poi-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 14px 15px;
             margin-bottom: 11px;
-            box-shadow: var(--shadow-card);
-        }
-
-        .poi-head {
+            padding: 12px 14px;
+            border-radius: 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
-            margin-bottom: 6px;
-        }
-
-        .poi-name {
-            font-size: 1rem;
+            font-size: 0.83rem;
             font-weight: 800;
-            color: var(--text-primary);
+            box-shadow: var(--shadow-card);
         }
 
-        .input-control, .select-control {
-            background: var(--bg-card-alt);
-            color: var(--text-primary);
+        .day-pager {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .pager-btn {
             border: 1px solid var(--border-subtle);
-            border-radius: 11px;
-            padding: 10px 12px;
-            font-size: 0.94rem;
-            font-weight: 700;
-        }
-
-        .input-control:focus, .select-control:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .quick-add-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 10px 0 12px;
-        }
-
-        .step-btn {
-            border: 1px solid var(--border-subtle);
-            background: var(--bg-card-alt);
-            color: var(--text-primary);
-            font-size: 0.76rem;
-            font-weight: 700;
-            padding: 5px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .step-btn:active { border-color: var(--accent); }
-
-        .fx-result-box {
-            background: var(--bg-card-alt);
-            border-left: 4px solid var(--accent);
-            border-radius: 12px;
-            padding: 12px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .fx-amount {
-            font-family: 'Inter', sans-serif;
-            font-size: 1.38rem;
-            font-weight: 900;
-            color: var(--accent);
-        }
-
-        .budget-line {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px dashed var(--border-subtle);
-            font-size: 0.86rem;
-        }
-
-        .budget-line:last-child { border-bottom: none; }
-
-        .progress-track {
-            height: 8px;
-            border-radius: 999px;
-            background: var(--bg-card-alt);
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent);
-            border-radius: 999px;
-            transition: width 0.28s ease;
-        }
-
-        .check-row {
             background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 12px 14px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            color: var(--text-primary);
+            border-radius: 13px;
+            padding: 11px 12px;
+            font-size: 0.78rem;
+            font-weight: 800;
             cursor: pointer;
-        }
-
-        .check-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 6px;
-            border: 2px solid var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
-            font-size: 0.78rem;
-            font-weight: 900;
+            gap: 5px;
+            box-shadow: var(--shadow-card);
+        }
+        .pager-btn:disabled { opacity: 0.35; cursor: default; }
+
+        .overview-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 13px 14px;
+            margin-bottom: 9px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            box-shadow: var(--shadow-card);
         }
 
-        .check-row.checked .check-box {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #ffffff;
-        }
+        .hotel-item { padding: 11px 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+        .hotel-item:last-child { border-bottom: none; padding-bottom: 0; }
 
-        .check-row.checked .check-text {
-            text-decoration: line-through;
-            color: var(--text-muted);
+        /* POI & Filters */
+        .search-input {
+            width: 100%;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            outline: none;
         }
+        .search-input:focus { border-color: var(--accent); }
 
-        /* 密碼鎖 */
-        #lock-screen {
+        .filter-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 7px; margin-bottom: 4px; scrollbar-width: none; }
+        .filter-row::-webkit-scrollbar { display: none; }
+        .filter-chip { border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary); font-size: 0.73rem; font-weight: 700; padding: 5px 11px; border-radius: 999px; cursor: pointer; white-space: nowrap; }
+        .filter-chip.active { background: var(--accent); border-color: var(--accent); color: #ffffff; }
+
+        .poi-card { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 16px; padding: 13px 14px; margin-bottom: 10px; box-shadow: var(--shadow-card); }
+        .poi-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
+        .poi-name { font-size: 0.95rem; font-weight: 800; color: var(--text-primary); }
+
+        /* Tools */
+        .input-control, .select-control { background: var(--bg-card-alt); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 11px; padding: 9px 11px; font-size: 0.9rem; font-weight: 700; }
+        .quick-add-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 9px 0 11px; }
+        .step-btn { border: 1px solid var(--border-subtle); background: var(--bg-card-alt); color: var(--text-primary); font-size: 0.72rem; font-weight: 700; padding: 4px 9px; border-radius: 7px; cursor: pointer; }
+        .fx-result-box { background: var(--bg-card-alt); border-left: 4px solid var(--accent); border-radius: 11px; padding: 11px 13px; display: flex; align-items: center; justify-content: space-between; }
+        .fx-amount { font-family: 'Inter', sans-serif; font-size: 1.24rem; font-weight: 900; color: var(--accent); }
+        .budget-line { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed var(--border-subtle); font-size: 0.82rem; }
+        .budget-line:last-child { border-bottom: none; }
+
+        .progress-track { height: 7px; border-radius: 999px; background: var(--bg-card-alt); overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width 0.25s ease; }
+
+        .check-row { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 13px; padding: 11px 13px; margin-bottom: 7px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .check-box { width: 19px; height: 19px; border-radius: 6px; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.74rem; font-weight: 900; }
+        .check-row.checked .check-box { background: var(--accent); border-color: var(--accent); color: #ffffff; }
+        .check-row.checked .check-text { text-decoration: line-through; color: var(--text-muted); }
+
+        /* 密碼鎖定畫面（相容正式版 index.html） */
+        .lock-overlay {
             position: fixed;
             inset: 0;
+            z-index: 999;
             background: var(--bg-app);
-            z-index: 9999;
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 24px;
+            padding-top: calc(var(--safe-top) + 24px);
+            padding-bottom: calc(var(--safe-bottom) + 24px);
         }
-
-        .pin-dots {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-
-        .pin-dot {
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            border: 2px solid var(--text-muted);
-            transition: all 0.15s ease;
-        }
-
-        .pin-dot.filled {
-            background: var(--accent);
-            border-color: var(--accent);
-            transform: scale(1.1);
-        }
-
-        .pin-dot.error {
-            background: var(--danger);
-            border-color: var(--danger);
-        }
-
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            max-width: 270px;
-        }
-
-        .key-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
+        .lock-overlay.active { display: flex; }
+        .lock-card {
+            width: 100%;
+            max-width: 340px;
             background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            border: 1px solid var(--border-strong);
+            border-radius: 24px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
         }
-
-        .key-btn:active {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: scale(0.93);
-        }
-
-        .key-btn.empty, .key-btn.del {
-            background: transparent;
-            border-color: transparent;
-            color: var(--text-secondary);
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        .shake { animation: shake 0.35s ease; }
     </style>
 </head>
 <body>
 
-<div id="lock-screen">
-    <div style="font-size: 2rem; margin-bottom: 10px;">🔐</div>
-    <div style="font-family: 'Noto Serif TC', serif; font-size: 1.25rem; font-weight: 900; margin-bottom: 4px;">輸入 6 位數通行碼</div>
-    <div id="auth-msg" style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 24px; min-height: 20px;">行程資料已加密保護</div>
-
-    <div class="pin-dots" id="pin-dots">
-        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-        <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
-    </div>
-
-    <div class="keypad">
-        <div class="key-btn" onclick="pressKey('1')">1</div><div class="key-btn" onclick="pressKey('2')">2</div><div class="key-btn" onclick="pressKey('3')">3</div>
-        <div class="key-btn" onclick="pressKey('4')">4</div><div class="key-btn" onclick="pressKey('5')">5</div><div class="key-btn" onclick="pressKey('6')">6</div>
-        <div class="key-btn" onclick="pressKey('7')">7</div><div class="key-btn" onclick="pressKey('8')">8</div><div class="key-btn" onclick="pressKey('9')">9</div>
-        <div class="key-btn empty"></div><div class="key-btn" onclick="pressKey('0')">0</div><div class="key-btn del" onclick="pressKey('del')">⌫</div>
+<div class="lock-overlay" id="lock-overlay">
+    <div class="lock-card">
+        <div style="font-size: 2rem; margin-bottom: 8px;">🔐</div>
+        <div style="font-family: 'Noto Serif TC', serif; font-size: 1.15rem; font-weight: 900; margin-bottom: 4px;">隨身旅圖已鎖定</div>
+        <div style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 16px;">請輸入通行密碼以檢視私人行程</div>
+        <input type="password" id="lock-pwd-input" class="input-control" placeholder="輸入密碼" style="width: 100%; text-align: center; margin-bottom: 10px;" onkeydown="if(event.key==='Enter') unlockApp()">
+        <button type="button" class="cta-btn" onclick="unlockApp()">解鎖進入</button>
+        <div id="lock-err" style="font-size: 0.75rem; color: var(--danger); margin-top: 8px; min-height: 18px;"></div>
     </div>
 </div>
 
 <div class="app-shell">
     <header class="app-topbar">
         <div class="topbar-left">
-            <span id="meta-sub" class="topbar-kicker">TRAVEL COMPANION</span>
+            <span id="meta-sub" class="topbar-kicker">TRAVEL COMPASS</span>
             <span id="topbar-title" class="topbar-heading">旅程看板</span>
         </div>
         <div class="topbar-actions">
-            <button id="theme-toggle-btn" class="icon-pill-btn" onclick="toggleTheme()" title="切換深色/米色主題">🌓 米色</button>
-            <button id="topbar-action-btn" class="icon-pill-btn" onclick="handleTopAction()">🔒 鎖定</button>
+            <button id="theme-toggle-btn" class="icon-pill-btn" onclick="toggleTheme()">☀️ 米色</button>
+            <button id="topbar-action-btn" class="icon-pill-btn" onclick="handleTopAction()">總覽</button>
         </div>
     </header>
 
     <main class="app-canvas" id="app-canvas">
-        <!-- 1. 看板 -->
         <div id="dashboard" class="view active"></div>
-
-        <!-- 2. 行程 -->
         <div id="itinerary" class="view"></div>
-
-        <!-- 3. 票宿 -->
         <div id="flights" class="view"></div>
 
-        <!-- 4. 探索 -->
         <div id="explore" class="view">
             <div class="segmented-bar">
                 <button class="seg-btn active" id="seg-theme" onclick="switchSubPane('explore', 'theme')">✨ 主題絕景</button>
@@ -1103,13 +929,13 @@
             </div>
             <div id="theme" class="sub-pane active"></div>
             <div id="poi" class="sub-pane">
+                <input type="search" id="poi-search-input" class="search-input" placeholder="🔍 搜尋店名、特色或關鍵字..." oninput="renderPOIList()">
                 <div class="filter-row" id="poi-cat-filters"></div>
                 <div class="filter-row" id="poi-area-filters"></div>
                 <div id="poi-list"></div>
             </div>
         </div>
 
-        <!-- 5. 工具 -->
         <div id="tools" class="view">
             <div class="segmented-bar">
                 <button class="seg-btn active" id="seg-money" onclick="switchSubPane('tools', 'money')">💱 匯率</button>
@@ -1122,9 +948,9 @@
                 <div class="panel-card">
                     <div class="panel-head">
                         <span class="panel-title">💱 即時匯率換算</span>
-                        <span id="rate-status" class="tabular-nums" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700;">連線中...</span>
+                        <span id="rate-status" class="tabular-nums" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">參考匯率</span>
                     </div>
-                    <div style="display: flex; gap: 8px;">
+                    <div style="display: flex; gap: 7px;">
                         <select id="currency-selector" class="select-control" style="flex: 1;">
                             <option value="jpy">🇯🇵 JPY</option>
                             <option value="thb">🇹🇭 THB</option>
@@ -1136,7 +962,7 @@
                             <option value="myr">🇲🇾 MYR</option>
                             <option value="sgd">🇸🇬 SGD</option>
                         </select>
-                        <input type="number" inputmode="decimal" id="foreign-amount" class="input-control tabular-nums" placeholder="輸入外幣金額" style="flex: 2;">
+                        <input type="number" inputmode="decimal" id="foreign-amount" class="input-control tabular-nums" placeholder="輸入外幣" style="flex: 2;">
                     </div>
                     <div class="quick-add-row">
                         <button type="button" class="step-btn tabular-nums" onclick="addAmount(100)">+100</button>
@@ -1146,7 +972,7 @@
                         <button type="button" class="step-btn" onclick="clearAmount()" style="color: var(--danger);">清除</button>
                     </div>
                     <div class="fx-result-box">
-                        <span style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary);">約合台幣 TWD</span>
+                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">約合台幣 TWD</span>
                         <span class="fx-amount tabular-nums">NT$ <span id="twd-result">0</span></span>
                     </div>
                 </div>
@@ -1155,9 +981,9 @@
 
             <div id="checklist" class="sub-pane">
                 <div class="panel-card">
-                    <div class="panel-head" style="margin-bottom: 8px;">
+                    <div class="panel-head" style="margin-bottom: 7px;">
                         <span class="panel-title">行前準備進度</span>
-                        <span id="chk-label" class="tabular-nums" style="font-size: 0.86rem; font-weight: 900; color: var(--accent);">0%</span>
+                        <span id="chk-label" class="tabular-nums" style="font-size: 0.82rem; font-weight: 900; color: var(--accent);">0%</span>
                     </div>
                     <div class="progress-track">
                         <div class="progress-bar-fill" id="chk-fill"></div>
@@ -1171,73 +997,59 @@
         </div>
     </main>
 
-    <nav class="bottom-tabbar">
+    <nav class="bottom-dock">
         <button class="b-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
-            <div class="b-tab-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-            </div>
+            <div class="b-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div>
             <span class="b-tab-label">看板</span>
         </button>
         <button class="b-tab" data-tab="itinerary" onclick="switchTab('itinerary')">
-            <div class="b-tab-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
+            <div class="b-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
             <span class="b-tab-label">行程</span>
         </button>
         <button class="b-tab" data-tab="flights" onclick="switchTab('flights')">
-            <div class="b-tab-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-            </div>
+            <div class="b-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>
             <span class="b-tab-label">票宿</span>
         </button>
         <button class="b-tab" data-tab="explore" onclick="switchTab('explore')">
-            <div class="b-tab-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
+            <div class="b-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
             <span class="b-tab-label">探索</span>
         </button>
         <button class="b-tab" data-tab="tools" onclick="switchTab('tools')">
-            <div class="b-tab-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
-            </div>
+            <div class="b-tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg></div>
             <span class="b-tab-label">工具</span>
         </button>
     </nav>
 </div>
 
 <script>
-    /* ================= 主題切換 ================= */
     function applySavedTheme() {
         const saved = localStorage.getItem('trip_ui_theme') || 'dark';
         document.documentElement.setAttribute('data-theme', saved);
-        updateThemeBtnText(saved);
+        const metaTheme = document.getElementById('meta-theme-color');
+        if (metaTheme) metaTheme.setAttribute('content', saved === 'dark' ? '#090b0e' : '#f8f5ef');
+        const btn = document.getElementById('theme-toggle-btn');
+        if (btn) btn.innerText = saved === 'dark' ? '☀️ 米色' : '🌙 暗黑';
     }
 
     function toggleTheme() {
         const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'paper' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('trip_ui_theme', next);
-        updateThemeBtnText(next);
-    }
-
-    function updateThemeBtnText(theme) {
-        const btn = document.getElementById('theme-toggle-btn');
-        if (!btn) return;
-        btn.innerText = theme === 'dark' ? '☀️ 米色' : '🌙 暗黑';
+        applySavedTheme();
     }
 
     applySavedTheme();
 
-    /* ================= 全域狀態 ================= */
     let globalData = null;
     let tripDiffDays = 0;
+    let activeDayNum = null;
+    let itineraryOverviewMode = false;
     let poiAreaFilter = '全部地區';
     let poiCategoryFilter = '全部';
-    const offlineRates = { isk: 0.235, eur: 34.80, gbp: 40.50, jpy: 0.21, usd: 32.50, thb: 0.90, idr: 0.002, myr: 6.80, sgd: 23.80 };
+    const offlineRates = { isk: 0.235, eur: 34.80, gbp: 40.50, jpy: 0.207, usd: 32.50, thb: 0.90, idr: 0.002, myr: 6.80, sgd: 23.80 };
     let currentRate = 0;
     let currentMainTab = 'dashboard';
-    let allDaysExpanded = false;
+    let checkedItems = JSON.parse(localStorage.getItem('tripChecklist_v9')) || [];
 
     const TAB_TITLES = {
         dashboard: '旅程看板',
@@ -1248,157 +1060,95 @@
     };
 
     const SUB_TO_PARENT = {
-        theme: 'explore',
-        poi: 'explore',
-        money: 'tools',
-        checklist: 'tools',
-        logistics: 'tools',
-        emergency: 'tools'
+        theme: 'explore', poi: 'explore',
+        money: 'tools', checklist: 'tools', logistics: 'tools', emergency: 'tools'
     };
 
-    /* ================= PIN 鎖屏 ================= */
-    let currentPin = '';
-    const MAX_ATTEMPTS = 5;
-    const LOCK_MINUTES = 3;
-    let isLockedOut = false;
-    let lockTimer = null;
-
-    function lockApp() {
-        currentPin = '';
-        updateDots();
-        const msg = document.getElementById('auth-msg');
-        msg.style.color = 'var(--text-secondary)';
-        msg.innerText = '已重新鎖定行程';
-        document.getElementById('lock-screen').style.display = 'flex';
-    }
-
-    function checkLockStatus() {
-        const lockUntil = localStorage.getItem('trip_lockout_time');
-        if (lockUntil && Date.now() < parseInt(lockUntil, 10)) {
-            startLockdown(parseInt(lockUntil, 10));
-        } else if (lockUntil) {
-            localStorage.removeItem('trip_lockout_time');
-            localStorage.removeItem('trip_failed_attempts');
+    /* 密碼鎖定邏輯（若 data.json 未設 password 則直接進入） */
+    function checkLockState() {
+        const pwd = globalData && globalData.trip_meta && globalData.trip_meta.password;
+        if (!pwd) return;
+        const unlocked = sessionStorage.getItem('trip_unlocked_' + pwd) === '1';
+        if (!unlocked) {
+            document.getElementById('lock-overlay').classList.add('active');
         }
     }
 
-    function startLockdown(endTime) {
-        isLockedOut = true;
-        currentPin = '';
-        updateDots();
-        const msg = document.getElementById('auth-msg');
-        msg.style.color = 'var(--danger)';
+    function unlockApp() {
+        const pwd = globalData && globalData.trip_meta && globalData.trip_meta.password;
+        const val = (document.getElementById('lock-pwd-input').value || '').trim();
+        if (!pwd || val === String(pwd)) {
+            if (pwd) sessionStorage.setItem('trip_unlocked_' + pwd, '1');
+            document.getElementById('lock-overlay').classList.remove('active');
+            document.getElementById('lock-err').innerText = '';
+        } else {
+            document.getElementById('lock-err').innerText = '密碼不正確，請重新輸入';
+        }
+    }
 
-        lockTimer = setInterval(() => {
-            const remaining = Math.ceil((endTime - Date.now()) / 1000);
-            if (remaining <= 0) {
-                clearInterval(lockTimer);
-                isLockedOut = false;
-                localStorage.removeItem('trip_lockout_time');
-                localStorage.removeItem('trip_failed_attempts');
-                msg.style.color = 'var(--text-secondary)';
-                msg.innerText = '系統已解鎖，請輸入通行碼';
-            } else {
-                const m = Math.floor(remaining / 60);
-                const s = remaining % 60;
-                msg.innerText = `錯誤次數過多，請等待 ${m}分 ${s}秒`;
+    function lockNow() {
+        const pwd = globalData && globalData.trip_meta && globalData.trip_meta.password;
+        if (!pwd) return;
+        sessionStorage.removeItem('trip_unlocked_' + pwd);
+        document.getElementById('lock-pwd-input').value = '';
+        document.getElementById('lock-overlay').classList.add('active');
+    }
+
+    /* 載入資料：優先支援 admin 預覽同步，其次讀取同目錄 data.json */
+    async function initData() {
+        const previewRaw = localStorage.getItem('trip_preview_data');
+        if (previewRaw && window.location.pathname.includes('preview')) {
+            try {
+                globalData = JSON.parse(previewRaw);
+                bootSystem();
+                return;
+            } catch (e) {}
+        }
+        try {
+            const res = await fetch('data.json?t=' + Date.now());
+            if (res.ok) {
+                globalData = await res.json();
+                checkLockState();
+                bootSystem();
+                return;
             }
-        }, 1000);
+        } catch (e) {}
+
+        if (previewRaw) {
+            try {
+                globalData = JSON.parse(previewRaw);
+                bootSystem();
+                return;
+            } catch (e) {}
+        }
+
+        document.getElementById('dashboard').innerHTML = `
+            <div class="panel-card">
+                <div class="panel-title" style="margin-bottom: 6px;">找不到行程資料</div>
+                <div style="font-size: 0.82rem; color: var(--text-secondary);">請確認 <code>data.json</code> 與本檔案位於同一目錄。</div>
+            </div>`;
     }
 
-    function pressKey(val) {
-        if (isLockedOut) {
-            triggerShake();
-            return;
+    window.addEventListener('message', (e) => {
+        if (e.data && typeof e.data === 'object' && (e.data.itinerary || e.data.trip_meta)) {
+            globalData = e.data;
+            bootSystem();
         }
-        if (navigator.vibrate) navigator.vibrate(25);
-        const msg = document.getElementById('auth-msg');
-        msg.style.color = 'var(--text-secondary)';
-        msg.innerText = '行程資料已加密保護';
-
-        if (val === 'del') {
-            currentPin = currentPin.slice(0, -1);
-        } else if (currentPin.length < 6) {
-            currentPin += val;
-        }
-        updateDots();
-        if (currentPin.length === 6) setTimeout(verifyPin, 90);
-    }
-
-    document.addEventListener('keydown', (e) => {
-        const lockEl = document.getElementById('lock-screen');
-        if (!lockEl || lockEl.style.display === 'none') return;
-        if (e.key >= '0' && e.key <= '9') pressKey(e.key);
-        else if (e.key === 'Backspace') pressKey('del');
     });
 
-    function updateDots() {
-        const dots = document.querySelectorAll('.pin-dot');
-        dots.forEach((dot, i) => {
-            dot.classList.remove('filled', 'error');
-            if (i < currentPin.length) dot.classList.add('filled');
-        });
-    }
+    window.addEventListener('DOMContentLoaded', initData);
 
-    function triggerShake() {
-        const dotsContainer = document.getElementById('pin-dots');
-        dotsContainer.classList.remove('shake');
-        void dotsContainer.offsetWidth;
-        dotsContainer.classList.add('shake');
-        document.querySelectorAll('.pin-dot').forEach(d => {
-            if (d.classList.contains('filled')) d.classList.add('error');
-        });
-    }
-
-    function verifyPin() {
-        const msg = document.getElementById('auth-msg');
-        if (typeof encryptedTripData === 'undefined') {
-            triggerShake();
-            currentPin = '';
-            updateDots();
-            msg.style.color = 'var(--danger)';
-            msg.innerText = '找不到 secure_data.js';
-            return;
-        }
-
-        let failedAttempts = parseInt(localStorage.getItem('trip_failed_attempts') || '0', 10);
-        try {
-            const bytes = CryptoJS.AES.decrypt(encryptedTripData, currentPin);
-            globalData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
-            if (!globalData || typeof globalData !== 'object') throw new Error('Invalid JSON');
-
-            localStorage.removeItem('trip_failed_attempts');
-            document.getElementById('lock-screen').style.display = 'none';
-            bootSystem();
-        } catch (e) {
-            triggerShake();
-            failedAttempts++;
-            localStorage.setItem('trip_failed_attempts', failedAttempts);
-
-            if (failedAttempts >= MAX_ATTEMPTS) {
-                const unlockTime = Date.now() + (LOCK_MINUTES * 60 * 1000);
-                localStorage.setItem('trip_lockout_time', unlockTime);
-                startLockdown(unlockTime);
-            } else {
-                currentPin = '';
-                updateDots();
-                msg.style.color = 'var(--danger)';
-                msg.innerText = `密碼錯誤，剩餘 ${MAX_ATTEMPTS - failedAttempts} 次機會`;
-            }
-        }
-    }
-
-    checkLockStatus();
-
-    /* ================= 啟動與導航 ================= */
     function bootSystem() {
-        const sub = (globalData.trip_meta && globalData.trip_meta.subtitle) || 'TRAVEL COMPANION';
+        const sub = (globalData.trip_meta && globalData.trip_meta.subtitle) || 'TRAVEL COMPASS';
         document.getElementById('meta-sub').innerText = sub;
 
-        calculateDiff();
-        fetchWeather();
+        const days = globalData.itinerary || [];
+        if (days.length > 0 && (!activeDayNum || !days.some(d => d.day === activeDayNum))) {
+            activeDayNum = days[0].day;
+        }
 
-        renderItinerary(globalData.itinerary || []);
+        calculateDiff();
+        renderItinerary(days);
         renderFlights(globalData.flights_and_hotels || { flights: [], hotels: [] });
         renderLogistics(globalData.logistics || { items: [], alerts: [] });
         renderBudget(globalData.budget || { regions: [] });
@@ -1407,35 +1157,38 @@
         renderChecklist(globalData.checklist_items || []);
         renderEmergency(globalData.emergency || { guides: [] });
         initCurrencyWidget((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy');
-        updateTopbarContext('dashboard');
+        updateTopbarContext(currentMainTab);
     }
 
     function updateTopbarContext(tabId) {
         const heading = document.getElementById('topbar-title');
         const actionBtn = document.getElementById('topbar-action-btn');
-        if (tabId === 'dashboard') {
-            heading.innerText = (globalData && globalData.trip_meta && globalData.trip_meta.title) || '旅程看板';
-        } else {
-            heading.innerText = TAB_TITLES[tabId] || '隨身旅圖';
-        }
+        const hasPwd = Boolean(globalData && globalData.trip_meta && globalData.trip_meta.password);
+
+        heading.innerText = tabId === 'dashboard'
+            ? ((globalData && globalData.trip_meta && globalData.trip_meta.title) || '旅程看板')
+            : (TAB_TITLES[tabId] || '隨身旅圖');
 
         if (!actionBtn) return;
         if (tabId === 'itinerary') {
-            actionBtn.innerText = allDaysExpanded ? '全部收合' : '全部展開';
-        } else {
+            actionBtn.innerText = itineraryOverviewMode ? '單日分頁' : '全天總覽';
+        } else if (tabId === 'dashboard' && hasPwd) {
             actionBtn.innerText = '🔒 鎖定';
+        } else {
+            actionBtn.innerText = '回看板';
         }
     }
 
     function handleTopAction() {
+        const hasPwd = Boolean(globalData && globalData.trip_meta && globalData.trip_meta.password);
         if (currentMainTab === 'itinerary') {
-            allDaysExpanded = !allDaysExpanded;
-            document.querySelectorAll('#itinerary .day-card').forEach(c => {
-                c.classList.toggle('open', allDaysExpanded);
-            });
+            itineraryOverviewMode = !itineraryOverviewMode;
+            renderItinerary((globalData && globalData.itinerary) || []);
             updateTopbarContext('itinerary');
+        } else if (currentMainTab === 'dashboard' && hasPwd) {
+            lockNow();
         } else {
-            lockApp();
+            switchTab('dashboard');
         }
     }
 
@@ -1446,17 +1199,13 @@
             switchSubPane(parent, id);
             return;
         }
-
         currentMainTab = id;
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.b-tab').forEach(b => b.classList.remove('active'));
-
         const targetView = document.getElementById(id);
         if (targetView) targetView.classList.add('active');
-
         const targetBtn = document.querySelector(`.b-tab[data-tab="${id}"]`);
         if (targetBtn) targetBtn.classList.add('active');
-
         updateTopbarContext(id);
         const canvas = document.getElementById('app-canvas');
         if (canvas) canvas.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1467,36 +1216,54 @@
         if (!parentEl) return;
         parentEl.querySelectorAll('.sub-pane').forEach(p => p.classList.remove('active'));
         parentEl.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
-
         const targetPane = document.getElementById(paneId);
         const targetSeg = document.getElementById(`seg-${paneId}`);
         if (targetPane) targetPane.classList.add('active');
         if (targetSeg) targetSeg.classList.add('active');
     }
 
-    function jumpToDay(dayNum) {
-        document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
-        const activePill = document.getElementById(`pill-day-${dayNum}`);
-        if (activePill) activePill.classList.add('active');
+    /* 真正切換到指定天數的 Tab 分頁 */
+    function selectDayTab(dayNum) {
+        activeDayNum = dayNum;
+        itineraryOverviewMode = false;
+        updateTopbarContext('itinerary');
 
-        const card = document.getElementById(`day-${dayNum}`);
-        if (card) {
-            card.classList.add('open');
-            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelectorAll('.day-tab-btn').forEach(btn => {
+            btn.classList.toggle('active', Number(btn.dataset.day) === Number(dayNum));
+        });
+
+        const activeBtn = document.querySelector(`.day-tab-btn[data-day="${dayNum}"]`);
+        if (activeBtn) {
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+
+        document.querySelectorAll('.day-page').forEach(page => {
+            page.classList.toggle('active', Number(page.dataset.day) === Number(dayNum));
+        });
+
+        const canvas = document.getElementById('app-canvas');
+        if (canvas) canvas.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    /* ================= 看板渲染 ================= */
     function calculateDiff() {
-        if (!globalData.itinerary || globalData.itinerary.length === 0 || !globalData.itinerary[0].date_full) {
-            document.getElementById('dashboard').innerHTML = '<div class="panel-card">尚未設定行程日期。</div>';
+        if (!globalData.itinerary || globalData.itinerary.length === 0) {
+            document.getElementById('dashboard').innerHTML = '<div class="panel-card">尚未建立行程資料。</div>';
             return;
         }
-        const start = new Date(globalData.itinerary[0].date_full);
-        const today = new Date();
-        start.setHours(0, 0, 0, 0);
-        today.setHours(0, 0, 0, 0);
-        tripDiffDays = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
+        const rawDate = globalData.itinerary[0].date_full;
+        if (rawDate) {
+            const start = new Date(rawDate);
+            if (!isNaN(start.getTime())) {
+                const today = new Date();
+                start.setHours(0, 0, 0, 0);
+                today.setHours(0, 0, 0, 0);
+                tripDiffDays = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
+            } else {
+                tripDiffDays = 0;
+            }
+        } else {
+            tripDiffDays = 0;
+        }
         renderDashboard();
     }
 
@@ -1507,99 +1274,193 @@
         return Math.round((validChecked / items.length) * 100) + '%';
     }
 
-    function renderDashboard() {
-        const metaTitle = (globalData.trip_meta && globalData.trip_meta.title) || '環球慢活隨身旅圖';
-        const metaSub = (globalData.trip_meta && globalData.trip_meta.subtitle) || 'TRAVEL COMPANION';
-        const cur = ((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy').toLowerCase();
-        const fallbackRate = offlineRates[cur] || 0.21;
-        const chkPct = getChecklistPct();
+    /* Flighty 風格解析器：自動從 route / time / flight_no 萃取 IATA 代碼與起降時間 */
+    function parseFlightMeta(f) {
+        const routeStr = f.route || '';
+        const timeStr = f.time || '';
+        const iataMatches = routeStr.match(/\b[A-Z]{3}\b/g);
+        const parts = routeStr.split(/➔|->|→|—|-|至/).map(s => s.trim()).filter(Boolean);
 
-        const todayStr = new Date().toISOString().split('T')[0];
-        let focusDay = globalData.itinerary[0];
-        let statusTopHtml = '';
+        const depCode = f.dep_code || (iataMatches && iataMatches[0]) || (parts[0] ? parts[0].slice(0, 4) : 'DEP');
+        const arrCode = f.arr_code || (iataMatches && iataMatches[1]) || (parts[1] ? parts[1].slice(0, 4) : 'ARR');
 
-        if (tripDiffDays > 0) {
-            statusTopHtml = `
-                <div class="countdown-box">
-                    <div>
-                        <div style="font-size: 0.74rem; font-weight: 800; color: var(--text-secondary);">DEPARTURE COUNTDOWN</div>
-                        <div style="font-size: 0.96rem; font-weight: 800; color: var(--text-primary);">距離出發倒數</div>
-                    </div>
-                    <div style="text-align: right;">
-                        <span class="countdown-num tabular-nums">${tripDiffDays}</span>
-                        <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-secondary);"> 天</span>
-                    </div>
-                </div>`;
-        } else {
-            const matched = globalData.itinerary.find(d => d.date_full === todayStr);
-            focusDay = matched || globalData.itinerary[globalData.itinerary.length - 1];
-            statusTopHtml = `
-                <div class="countdown-box">
-                    <div style="min-width: 0;">
-                        <div style="font-size: 0.72rem; font-weight: 800; color: var(--accent);">DAY ${focusDay.day} · ${focusDay.date || ''}</div>
-                        <div style="font-size: 0.98rem; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${focusDay.title}</div>
-                    </div>
-                    <span class="mini-pill accent" style="flex-shrink: 0;">${matched ? '進行中' : '已結束'}</span>
-                </div>`;
-        }
+        const depCity = f.dep_city || (parts[0] ? parts[0].replace(depCode, '').replace(/[()]/g, '').trim() : '出發地') || depCode;
+        const arrCity = f.arr_city || (parts[1] ? parts[1].replace(arrCode, '').replace(/[()]/g, '').trim() : '目的地') || arrCode;
 
-        let focusSlotsHtml = '';
-        if (focusDay && Array.isArray(focusDay.schedule) && focusDay.schedule.length > 0) {
-            focusSlotsHtml = focusDay.schedule.slice(0, 3).map(s => `
-                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 0; border-bottom: 1px solid var(--border-subtle);">
-                    <div style="min-width: 0;">
-                        <span class="slot-time tabular-nums" style="margin-right: 6px;">${s.time || '--:--'}</span>
-                        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-primary);">${s.activity}</span>
+        const timeParts = timeStr.split(/➔|->|→|-|~|～/).map(s => s.trim()).filter(Boolean);
+        const depTime = f.dep_time || timeParts[0] || '--:--';
+        const arrTime = f.arr_time || timeParts[1] || '--:--';
+
+        return {
+            flightNo: f.flight_no || 'FLIGHT',
+            date: f.date || '',
+            depCode,
+            arrCode,
+            depCity,
+            arrCity,
+            depTime,
+            arrTime,
+            duration: f.duration || 'DIRECT',
+            terminal: f.terminal || '',
+            seat: f.seat || '',
+            pnr: f.pnr || '',
+            note: f.note || ''
+        };
+    }
+
+    function buildFlightyCardHtml(f, compact = false) {
+        const m = parseFlightMeta(f);
+        const metaPills = [
+            m.terminal ? `<span class="mini-pill sky">航廈 ${m.terminal}</span>` : '',
+            m.seat ? `<span class="mini-pill accent">座位 ${m.seat}</span>` : '',
+            m.pnr ? `<span class="mini-pill mono">PNR ${m.pnr}</span>` : '',
+            m.note ? `<span class="mini-pill">${m.note}</span>` : ''
+        ].filter(Boolean).join('');
+
+        return `
+            <div class="flighty-card">
+                <div class="flighty-header">
+                    <div class="flighty-badge-group">
+                        <span class="flighty-code">${m.flightNo}</span>
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);" class="tabular-nums">${m.date}</span>
                     </div>
-                    ${s.map_url ? `<a href="${s.map_url}" target="_blank" rel="noopener" class="map-chip" style="flex-shrink: 0;">📍 導航</a>` : ''}
+                    <span class="flighty-status upcoming"><span class="pulse-dot"></span>ON SCHEDULE</span>
                 </div>
-            `).join('');
-        }
 
-        const html = `
+                <div class="flighty-airports">
+                    <div class="airport-col">
+                        <div class="iata-code">${m.depCode}</div>
+                        <div class="airport-city">${m.depCity}</div>
+                    </div>
+
+                    <div class="flight-arc-box">
+                        <div class="flight-track">
+                            <span class="flight-line solid"></span>
+                            <span>✈️</span>
+                            <span class="flight-line"></span>
+                        </div>
+                        <span class="flight-duration-pill">${m.duration}</span>
+                    </div>
+
+                    <div class="airport-col right">
+                        <div class="iata-code">${m.arrCode}</div>
+                        <div class="airport-city">${m.arrCity}</div>
+                    </div>
+                </div>
+
+                <div class="flighty-times">
+                    <div class="time-block">
+                        <span class="time-label">DEPARTURE</span>
+                        <span class="time-val">${m.depTime}</span>
+                    </div>
+                    <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 800;">➔</div>
+                    <div class="time-block right">
+                        <span class="time-label">ARRIVAL</span>
+                        <span class="time-val">${m.arrTime}</span>
+                    </div>
+                </div>
+
+                ${(!compact && metaPills) ? `<div class="flighty-footer">${metaPills}</div>` : ''}
+            </div>`;
+    }
+
+    function renderDashboard() {
+        const metaTitle = (globalData.trip_meta && globalData.trip_meta.title) || '隨身旅圖';
+        const metaSub = (globalData.trip_meta && globalData.trip_meta.subtitle) || 'TRAVEL COMPASS';
+        const cur = ((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy').toLowerCase();
+        const fallbackRate = offlineRates[cur] || 0.207;
+        const chkPct = getChecklistPct();
+        const days = globalData.itinerary;
+        const focusDay = days[0];
+        const flights = (globalData.flights_and_hotels && globalData.flights_and_hotels.flights) || [];
+        const hotels = (globalData.flights_and_hotels && globalData.flights_and_hotels.hotels) || [];
+
+        const statusTopHtml = tripDiffDays > 0 ? `
+            <div class="countdown-box">
+                <div>
+                    <div style="font-size: 0.67rem; font-weight: 800; color: var(--text-secondary); letter-spacing: 0.5px;">DEPARTURE COUNTDOWN</div>
+                    <div style="font-size: 0.9rem; font-weight: 800;">距離出發倒數</div>
+                </div>
+                <div><span class="countdown-num tabular-nums">${tripDiffDays}</span> <span style="font-size: 0.8rem; font-weight: 800; color: var(--text-secondary);">天</span></div>
+            </div>` : `
+            <div class="countdown-box">
+                <div style="min-width: 0;">
+                    <div style="font-size: 0.68rem; font-weight: 800; color: var(--accent);">DAY ${focusDay.day} · ${focusDay.date || ''}</div>
+                    <div style="font-size: 0.92rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${focusDay.title || '未命名行程'}</div>
+                </div>
+                <span class="mini-pill accent">共 ${days.length} 天</span>
+            </div>`;
+
+        /* Flighty 風格首班機登機證摘要卡 */
+        const nextFlightHtml = flights.length > 0 ? `
+            <div style="margin-bottom: 11px;" onclick="switchTab('flights')">
+                <div class="panel-head" style="padding: 0 3px; margin-bottom: 6px;">
+                    <span class="panel-title">✈️ 下一段航程 · FLIGHTY PASS</span>
+                    <span class="panel-link">全部 ${flights.length} 航段 ›</span>
+                </div>
+                ${buildFlightyCardHtml(flights[0], true)}
+            </div>` : '';
+
+        /* 橫向天數直達分頁條 */
+        const quickDaysHtml = days.map(d => `
+            <button type="button" class="day-tab-btn" style="min-width: 72px; padding: 7px 10px;" onclick="switchTab('itinerary'); selectDayTab(${d.day});">
+                <span class="dp-day tabular-nums">Day ${d.day}</span>
+                <span class="dp-date" style="max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${(d.date || '').split(' ')[0] || d.title || ''}</span>
+            </button>
+        `).join('');
+
+        const focusSlotsHtml = (focusDay && Array.isArray(focusDay.schedule))
+            ? focusDay.schedule.slice(0, 3).map(s => `
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 8px 0; border-bottom: 1px solid var(--border-subtle);">
+                    <div style="min-width: 0;">
+                        <span class="slot-time tabular-nums" style="margin-right: 5px;">${s.time || '--:--'}</span>
+                        <span style="font-size: 0.84rem; font-weight: 700;">${s.activity}</span>
+                    </div>
+                    ${s.map_url ? `<a href="${s.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                </div>
+            `).join('') : '';
+
+        document.getElementById('dashboard').innerHTML = `
             <div class="hero-banner">
                 <div class="hero-tag">✦ ${metaSub}</div>
                 <h1 class="hero-title">${metaTitle}</h1>
                 ${statusTopHtml}
-                <button class="cta-btn" onclick="switchTab('itinerary'); setTimeout(() => jumpToDay(${focusDay.day}), 80);">
-                    查看 Day ${focusDay.day} 完整時間軸 (${globalData.itinerary.length}D) ➔
+                <button class="cta-btn" onclick="switchTab('itinerary'); selectDayTab(${focusDay.day});">
+                    進入每日分頁行程 (${days.length} 天) ➔
                 </button>
             </div>
 
+            ${nextFlightHtml}
+
+            <div class="panel-card" style="padding: 11px 13px;">
+                <div class="panel-head" style="margin-bottom: 7px;">
+                    <span class="panel-title">🗓️ 快速切換天數分頁</span>
+                    <span class="panel-link" onclick="switchTab('itinerary')">進入行程 ›</span>
+                </div>
+                <div class="day-tab-strip" style="position: static; padding-bottom: 2px; margin-bottom: 0; background: transparent;">
+                    ${quickDaysHtml}
+                </div>
+            </div>
+
             <div class="bento-row">
-                <div class="bento-tile" onclick="switchTab('itinerary')">
-                    <div class="bento-label">
-                        <span>🌤️ 當日氣候</span>
-                        <span>Day ${focusDay.day}</span>
-                    </div>
-                    <div id="dash-weather" class="bento-val tabular-nums">${focusDay.weather || '查詢中...'}</div>
+                <div class="bento-tile" onclick="switchTab('itinerary'); selectDayTab(${focusDay.day});">
+                    <div class="bento-label"><span>🌤️ 首日氣候</span><span>Day ${focusDay.day}</span></div>
+                    <div class="bento-val tabular-nums">${focusDay.weather || '—'}</div>
                     <div class="bento-sub">${focusDay.date || ''}</div>
                 </div>
-
                 <div class="bento-tile" onclick="switchTab('money')">
-                    <div class="bento-label">
-                        <span>💱 參考匯率</span>
-                        <span>${cur.toUpperCase()}</span>
-                    </div>
-                    <div id="dash-fx-val" class="bento-val tabular-nums">1 ${cur.toUpperCase()} ≈ ${fallbackRate}</div>
+                    <div class="bento-label"><span>💱 參考匯率</span><span>${cur.toUpperCase()}</span></div>
+                    <div class="bento-val tabular-nums">1 ${cur.toUpperCase()} ≈ ${fallbackRate}</div>
                     <div class="bento-sub">點此開啟即時換算</div>
                 </div>
-
                 <div class="bento-tile" onclick="switchTab('checklist')">
-                    <div class="bento-label">
-                        <span>✅ 行前清單</span>
-                        <span>CHECKLIST</span>
-                    </div>
-                    <div id="dash-chk-val" class="bento-val tabular-nums">${chkPct}</div>
+                    <div class="bento-label"><span>✅ 行前清單</span><span>CHECKLIST</span></div>
+                    <div class="bento-val tabular-nums">${chkPct}</div>
                     <div class="bento-sub">裝備與證件進度</div>
                 </div>
-
                 <div class="bento-tile" onclick="switchTab('flights')">
-                    <div class="bento-label">
-                        <span>✈️ 航班住宿</span>
-                        <span>VAULT</span>
-                    </div>
-                    <div class="bento-val tabular-nums">${(globalData.flights_and_hotels && globalData.flights_and_hotels.flights ? globalData.flights_and_hotels.flights.length : 0)} 航段 / ${(globalData.flights_and_hotels && globalData.flights_and_hotels.hotels ? globalData.flights_and_hotels.hotels.length : 0)} 宿</div>
+                    <div class="bento-label"><span>✈️ 航班住宿</span><span>VAULT</span></div>
+                    <div class="bento-val tabular-nums">${flights.length} 航段 / ${hotels.length} 宿</div>
                     <div class="bento-sub">憑證與飯店導航</div>
                 </div>
             </div>
@@ -1608,58 +1469,11 @@
                 <div class="panel-card">
                     <div class="panel-head">
                         <span class="panel-title">📌 Day ${focusDay.day} 重點節點</span>
-                        <span class="panel-link" onclick="switchTab('itinerary'); setTimeout(() => jumpToDay(${focusDay.day}), 80);">全部行程 ›</span>
+                        <span class="panel-link" onclick="switchTab('itinerary'); selectDayTab(${focusDay.day});">查看當日 ›</span>
                     </div>
                     ${focusSlotsHtml}
-                </div>
-            ` : ''}
+                </div>` : ''}
         `;
-        document.getElementById('dashboard').innerHTML = html;
-        if (currentRate > 0) syncDashboardFxText(cur, currentRate);
-    }
-
-    function syncDashboardFxText(cur, rate) {
-        const el = document.getElementById('dash-fx-val');
-        if (el) el.innerText = `1 ${cur.toUpperCase()} ≈ ${Number(rate).toFixed(rate < 1 ? 3 : 2)}`;
-    }
-
-    /* ================= 天氣與交通圖示 ================= */
-    function fetchWeather() {
-        const todayStr = new Date().toISOString().split('T')[0];
-        (globalData.itinerary || []).forEach(d => {
-            if (!d.coords || !d.date_full) return;
-            const parts = d.coords.split(',');
-            if (parts.length < 2) return;
-            const [lat, lon] = parts;
-            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`)
-                .then(r => r.json())
-                .then(data => {
-                    if (!data.daily || !data.daily.time) return;
-                    const idx = data.daily.time.indexOf(d.date_full);
-                    if (idx === -1) return;
-                    const code = data.daily.weathercode[idx];
-                    const tMax = Math.round(data.daily.temperature_2m_max[idx]);
-                    const tMin = Math.round(data.daily.temperature_2m_min[idx]);
-
-                    let emoji = '☁️';
-                    if (code === 0) emoji = '☀️';
-                    else if (code >= 1 && code <= 3) emoji = '⛅';
-                    else if (code >= 45 && code <= 48) emoji = '🌫️';
-                    else if (code >= 51 && code <= 67) emoji = '🌧️';
-                    else if (code >= 71 && code <= 82) emoji = '❄️';
-                    else if (code >= 95) emoji = '⛈️';
-
-                    const tempStr = `${emoji} ${tMin}°~${tMax}°C`;
-                    const dayEl = document.getElementById(`weather-${d.day}`);
-                    if (dayEl) dayEl.innerText = tempStr;
-
-                    const dashEl = document.getElementById('dash-weather');
-                    if (dashEl && (d.date_full === todayStr || tripDiffDays > 0 && d.day === globalData.itinerary[0].day)) {
-                        dashEl.innerText = tempStr;
-                    }
-                })
-                .catch(() => {});
-        });
     }
 
     function getMoveIcon(t) {
@@ -1675,152 +1489,196 @@
 
     function detectSlotKind(s) {
         const text = `${s.activity || ''} ${s.desc || ''} ${s.transport || ''}`.toLowerCase();
-        if (text.includes('餐') || text.includes('食') || text.includes('咖啡') || text.includes('lunch') || text.includes('dinner') || text.includes('cafe')) return 'kind-food';
         if (text.includes('搭') || text.includes('移動') || text.includes('機場') || text.includes('站') || s.transport) return 'kind-move';
         if (text.includes('check-in') || text.includes('飯店') || text.includes('旅館') || text.includes('hotel')) return 'kind-stay';
         return 'kind-spot';
     }
 
-    /* ================= 每日行程 ================= */
+    function formatMinutes(totalMins) {
+        if (!totalMins || totalMins <= 0) return '';
+        const h = Math.floor(totalMins / 60);
+        const m = totalMins % 60;
+        if (h > 0 && m > 0) return `${h}h ${m}m`;
+        if (h > 0) return `${h}h`;
+        return `${m}m`;
+    }
+
     function renderItinerary(days) {
-        if (!days || days.length === 0) {
-            document.getElementById('itinerary').innerHTML = '<div class="panel-card">尚無每日行程資料。</div>';
+        const container = document.getElementById('itinerary');
+        if (!days || !days.length) {
+            container.innerHTML = '<div class="panel-card">尚無每日行程資料。</div>';
             return;
         }
 
-        const stripHtml = '<div class="day-strip">' + days.map((d, idx) => `
-            <div class="day-pill ${idx === 0 ? 'active' : ''}" id="pill-day-${d.day}" onclick="jumpToDay(${d.day})">
+        if (!activeDayNum || !days.some(d => d.day === activeDayNum)) {
+            activeDayNum = days[0].day;
+        }
+
+        if (itineraryOverviewMode) {
+            container.innerHTML = `
+                <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; padding: 0 2px;">
+                    點擊任一天即可進入該日獨立分頁（共 ${days.length} 天）
+                </div>
+                ${days.map(d => `
+                    <div class="overview-card" onclick="selectDayTab(${d.day})">
+                        <div style="min-width: 0; flex: 1;">
+                            <div class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''} ${d.weather || ''}</div>
+                            <div style="font-family: 'Noto Serif TC', serif; font-size: 0.98rem; font-weight: 900; margin-top: 2px;">${d.title || '未命名行程'}</div>
+                            <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 3px;">
+                                ${(d.schedule || []).length} 個節點 ${d.hotel && d.hotel.name ? `· 🏨 ${d.hotel.name}` : ''}
+                            </div>
+                        </div>
+                        <span class="mini-pill accent">進入 ›</span>
+                    </div>
+                `).join('')}
+            `;
+            return;
+        }
+
+        const tabBarHtml = '<div class="day-tab-strip" id="day-tab-strip">' + days.map(d => `
+            <button type="button" class="day-tab-btn ${d.day === activeDayNum ? 'active' : ''}" data-day="${d.day}" onclick="selectDayTab(${d.day})">
                 <span class="dp-day tabular-nums">D${d.day}</span>
                 <span class="dp-date">${(d.date || '').split(' ')[0]}</span>
-            </div>
+            </button>
         `).join('') + '</div>';
 
-        const cardsHtml = days.map((d, index) => {
-            const isOpen = index === 0 ? 'open' : '';
+        const pagesHtml = days.map((d, idx) => {
+            const isActive = d.day === activeDayNum ? 'active' : '';
+            const prevDay = idx > 0 ? days[idx - 1] : null;
+            const nextDay = idx < days.length - 1 ? days[idx + 1] : null;
+
+            const scheduleList = d.schedule || [];
+            const totalStay = scheduleList.reduce((acc, s) => acc + (Number(s.stay) || 0), 0);
+            const totalMove = scheduleList.reduce((acc, s) => acc + (Number(s.move) || 0), 0);
+
+            const statsPills = [
+                `<span class="mini-pill accent tabular-nums">📍 ${scheduleList.length} 個節點</span>`,
+                totalStay > 0 ? `<span class="mini-pill sky tabular-nums">⏳ 停留 ${formatMinutes(totalStay)}</span>` : '',
+                totalMove > 0 ? `<span class="mini-pill tabular-nums">🧭 移動 ${formatMinutes(totalMove)}</span>` : ''
+            ].filter(Boolean).join('');
+
             const storyHtml = d.story_block ? `<div class="callout-box callout-story">${d.story_block}</div>` : '';
             const alertHtml = d.critical_alert ? `<div class="callout-box callout-alert"><strong>⚠️ 關鍵提醒</strong><br>${d.critical_alert}</div>` : '';
             const planBHtml = d.plan_b ? `<div class="callout-box"><strong>💡 備案提示</strong><br>${d.plan_b}</div>` : '';
 
-            const schedHtml = (d.schedule || []).map(s => {
-                const kindClass = detectSlotKind(s);
-                const pills = [];
-                if (s.stay > 0) pills.push(`<span class="mini-pill sky tabular-nums">停留 ${s.stay}m</span>`);
-                if (s.move > 0) pills.push(`<span class="mini-pill accent tabular-nums">移動 ${s.move}m</span>`);
-                if (s.transport) {
-                    const routeLabel = s.from && s.to ? `${s.from} ➔ ${s.to}` : s.transport;
-                    pills.push(`<span class="mini-pill">${getMoveIcon(s.transport)} ${routeLabel}</span>`);
-                }
-
-                return `
-                    <div class="timeline-item">
-                        <div class="timeline-axis">
-                            <div class="timeline-node ${kindClass}"></div>
-                            <div class="timeline-stem"></div>
-                        </div>
-                        <div class="slot-card">
-                            <div class="slot-top">
-                                <span class="slot-time tabular-nums">${s.time || '--:--'}</span>
-                                ${s.map_url ? `<a href="${s.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
-                            </div>
-                            <div class="slot-title">${s.activity}</div>
-                            ${pills.length ? `<div class="pill-row">${pills.join('')}</div>` : ''}
-                            ${s.desc ? `<div class="slot-desc">${s.desc}</div>` : ''}
-                        </div>
-                    </div>`;
-            }).join('');
+            const schedHtml = scheduleList.length ? `
+                <div class="timeline-wrap">
+                    ${scheduleList.map(s => {
+                        const kind = detectSlotKind(s);
+                        const pills = [];
+                        if (s.stay > 0) pills.push(`<span class="mini-pill sky tabular-nums">停留 ${s.stay}m</span>`);
+                        if (s.move > 0) pills.push(`<span class="mini-pill accent tabular-nums">移動 ${s.move}m</span>`);
+                        if (s.transport) {
+                            const routeLabel = s.from && s.to ? `${s.from} ➔ ${s.to}` : s.transport;
+                            pills.push(`<span class="mini-pill">${getMoveIcon(s.transport)} ${routeLabel}</span>`);
+                        }
+                        return `
+                            <div class="timeline-item">
+                                <div class="timeline-axis">
+                                    <div class="timeline-node ${kind}"></div>
+                                    <div class="timeline-stem"></div>
+                                </div>
+                                <div class="slot-card ${kind === 'kind-move' ? 'is-transit' : ''}">
+                                    <div class="slot-top">
+                                        <span class="slot-time tabular-nums">${s.time || '--:--'}</span>
+                                        ${s.map_url ? `<a href="${s.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                                    </div>
+                                    <div class="slot-title">${s.activity}</div>
+                                    ${pills.length ? `<div class="pill-row">${pills.join('')}</div>` : ''}
+                                    ${s.desc ? `<div class="slot-desc">${s.desc}</div>` : ''}
+                                </div>
+                            </div>`;
+                    }).join('')}
+                </div>` : '<div class="panel-card">當日尚未新增時間軸節點。</div>';
 
             const opHtml = (d.operational_modules || []).map(op => {
                 const fields = (op.fields || []).map(f => `
                     <div style="${f.full_width ? 'grid-column: 1 / -1;' : ''}">
-                        <div style="font-size: 0.72rem; color: var(--text-muted);">${f.label}</div>
-                        <div style="font-size: 0.84rem; font-weight: 700; color: var(--text-primary);">${f.value}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted);">${f.label}</div>
+                        <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">${f.value}</div>
                     </div>
                 `).join('');
                 return `
-                    <div class="callout-box" style="margin-top: 12px;">
-                        <div style="font-size: 0.82rem; font-weight: 800; color: var(--accent); margin-bottom: 8px;">${op.title}</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">${fields}</div>
+                    <div class="panel-card" style="padding: 12px 14px;">
+                        <div style="font-size: 0.78rem; font-weight: 800; color: var(--accent); margin-bottom: 7px;">${op.title}</div>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px;">${fields}</div>
                     </div>`;
             }).join('');
 
-            const photoHtml = d.photo_notes ? `<div class="callout-box" style="margin-top: 10px;">📸 ${d.photo_notes.replace(/\n/g, '<br>')}</div>` : '';
+            const photoHtml = d.photo_notes ? `<div class="callout-box"><strong>📸 攝影筆記</strong><br>${d.photo_notes.replace(/\n/g, '<br>')}</div>` : '';
+
             const hotelHtml = d.hotel ? `
                 <div class="hotel-strip">
                     <span>🏨 ${d.hotel.name}</span>
                     ${d.hotel.map_url ? `<a href="${d.hotel.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                 </div>` : '';
 
+            const pagerHtml = days.length > 1 ? `
+                <div class="day-pager">
+                    <button type="button" class="pager-btn" ${prevDay ? `onclick="selectDayTab(${prevDay.day})"` : 'disabled'}>
+                        ◀ ${prevDay ? `Day ${prevDay.day}` : '已是最前一天'}
+                    </button>
+                    <button type="button" class="pager-btn" ${nextDay ? `onclick="selectDayTab(${nextDay.day})"` : 'disabled'}>
+                        ${nextDay ? `Day ${nextDay.day}` : '已是最後一天'} ▶
+                    </button>
+                </div>` : '';
+
             return `
-                <div class="day-card ${isOpen}" id="day-${d.day}">
-                    <div class="day-card-header" onclick="toggleDayCard(${d.day})">
-                        <div style="min-width: 0; flex: 1;">
-                            <span class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''} <span id="weather-${d.day}">${d.weather || ''}</span></span>
-                            <h3 class="day-card-title">${d.title}</h3>
-                            ${d.subtitle ? `<div class="day-card-sub">${d.subtitle}</div>` : ''}
+                <section class="day-page ${isActive}" data-day="${d.day}">
+                    <div class="day-hero-card">
+                        <div class="day-hero-top">
+                            <span class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''}</span>
+                            ${d.weather ? `<span class="day-weather-pill">${d.weather}</span>` : ''}
                         </div>
-                        <div class="chevron-badge">▾</div>
+                        <h2 class="day-card-title">${d.title || '未命名行程'}</h2>
+                        ${d.subtitle ? `<div class="day-card-sub">${d.subtitle}</div>` : ''}
+                        <div class="day-stats-bar">${statsPills}</div>
                     </div>
-                    <div class="day-card-body">
-                        ${alertHtml}${planBHtml}${storyHtml}${schedHtml}${opHtml}${photoHtml}${hotelHtml}
-                    </div>
-                </div>`;
+                    ${alertHtml}
+                    ${planBHtml}
+                    ${storyHtml}
+                    ${schedHtml}
+                    ${opHtml}
+                    ${photoHtml}
+                    ${hotelHtml}
+                    ${pagerHtml}
+                </section>`;
         }).join('');
 
-        document.getElementById('itinerary').innerHTML = stripHtml + cardsHtml;
+        container.innerHTML = tabBarHtml + pagesHtml;
     }
 
-    function toggleDayCard(dayNum) {
-        const card = document.getElementById(`day-${dayNum}`);
-        if (card) card.classList.toggle('open');
-        document.querySelectorAll('.day-pill').forEach(p => p.classList.remove('active'));
-        const pill = document.getElementById(`pill-day-${dayNum}`);
-        if (pill) pill.classList.add('active');
-    }
-
-    /* ================= 票宿分頁（補齊飯店導航） ================= */
     function renderFlights(data) {
         const flights = (data && data.flights) || [];
         const hotels = (data && data.hotels) || [];
 
-        const ticketsHtml = flights.length ? flights.map(f => `
-            <div class="boarding-card">
-                <div class="boarding-top">
-                    <span class="flight-code tabular-nums">✈️ ${f.flight_no || 'FLIGHT'}</span>
-                    <span class="boarding-meta tabular-nums">${f.date || ''}</span>
-                </div>
-                <div class="boarding-route">${f.route || ''}</div>
-                <div class="boarding-meta tabular-nums">🕒 ${f.time || '依電子機票為準'}</div>
-            </div>
-        `).join('') : '<div class="callout-box">尚無航班資訊</div>';
+        const ticketsHtml = flights.length
+            ? flights.map(f => buildFlightyCardHtml(f, false)).join('')
+            : '<div class="callout-box">尚無航班資訊</div>';
 
         const hotelsHtml = hotels.length ? hotels.map(h => `
             <div class="hotel-item">
                 <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 0.74rem; font-weight: 800; color: var(--accent); margin-bottom: 2px;" class="tabular-nums">📅 ${h.date_str || ''}</div>
-                    <div style="font-size: 0.98rem; font-weight: 800; color: var(--text-primary);">${h.name || ''}</div>
-                    ${h.note ? `<div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 3px;">${h.note}</div>` : ''}
+                    <div style="font-size: 0.7rem; font-weight: 800; color: var(--accent);" class="tabular-nums">📅 ${h.date_str || ''}</div>
+                    <div style="font-size: 0.92rem; font-weight: 800;">${h.name || ''}</div>
+                    ${h.note ? `<div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">${h.note}</div>` : ''}
                 </div>
-                ${h.map_url ? `<a href="${h.map_url}" target="_blank" rel="noopener" class="map-chip" style="flex-shrink: 0;">📍 導航</a>` : ''}
+                ${h.map_url ? `<a href="${h.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
             </div>
-        `).join('') : '<div style="font-size: 0.85rem; color: var(--text-muted);">尚無住宿資訊</div>';
+        `).join('') : '<div style="font-size: 0.82rem; color: var(--text-muted);">尚無住宿資訊</div>';
 
         document.getElementById('flights').innerHTML = `
             <div class="panel-head" style="padding: 0 2px;">
-                <span class="panel-title">✈️ 航班憑證</span>
+                <span class="panel-title">✈️ FLIGHTY 航空登機證 (${flights.length} 航段)</span>
             </div>
             ${ticketsHtml}
             ${data && data.flight_note ? `<div class="callout-box">${data.flight_note}</div>` : ''}
-
-            <div class="panel-card" style="margin-top: 14px;">
-                <div class="panel-head">
-                    <span class="panel-title">🏨 住宿清單</span>
-                </div>
+            <div class="panel-card" style="margin-top: 12px;">
+                <div class="panel-head"><span class="panel-title">🏨 住宿清單 (${hotels.length} 晚/間)</span></div>
                 ${hotelsHtml}
-            </div>
-        `;
+            </div>`;
     }
 
-    /* ================= 探索分頁（純前端分類篩選） ================= */
     function renderTheme(guide) {
         if (!guide || !guide.length) {
             document.getElementById('theme').innerHTML = '<div class="panel-card">尚無主題絕景資料。</div>';
@@ -1832,9 +1690,9 @@
                     <span class="poi-name">✨ ${g.name}</span>
                     ${g.map_url ? `<a href="${g.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                 </div>
-                ${g.best ? `<div style="font-size: 0.84rem; font-weight: 700; color: var(--accent); margin-bottom: 5px;">★ ${g.best}</div>` : ''}
-                <div style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 8px;">${g.desc || ''}</div>
-                ${g.tips ? `<div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">📸 ${g.tips}</div>` : ''}
+                ${g.best ? `<div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 4px;">★ ${g.best}</div>` : ''}
+                <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 6px;">${g.desc || ''}</div>
+                ${g.tips ? `<div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 6px;">📸 ${g.tips}</div>` : ''}
                 <div class="pill-row" style="margin-bottom: 0;">
                     ${g.time ? `<span class="mini-pill">${g.time}</span>` : ''}
                     ${g.fee ? `<span class="mini-pill">${g.fee}</span>` : ''}
@@ -1878,105 +1736,78 @@
     }
 
     function renderPOIList() {
+        const keyword = (document.getElementById('poi-search-input')?.value || '').trim().toLowerCase();
         const filtered = (globalData.poi_database || []).filter(item => {
             const matchArea = poiAreaFilter === '全部地區' || item.area === poiAreaFilter;
             const matchCat = poiCategoryFilter === '全部' || classifyPoiTag(item.tag) === poiCategoryFilter;
-            return matchArea && matchCat;
+            const matchKw = !keyword || `${item.name || ''} ${item.signature || ''} ${item.desc || ''} ${item.area || ''} ${item.tag || ''}`.toLowerCase().includes(keyword);
+            return matchArea && matchCat && matchKw;
         });
 
-        if (!filtered.length) {
-            document.getElementById('poi-list').innerHTML = '<div class="panel-card">此篩選條件下沒有符合的地點。</div>';
-            return;
-        }
-
-        document.getElementById('poi-list').innerHTML = filtered.map(f => `
+        document.getElementById('poi-list').innerHTML = filtered.length ? filtered.map(f => `
             <div class="poi-card">
                 <div class="poi-head">
                     <span class="poi-name">${f.name}</span>
                     ${f.map_url ? `<a href="${f.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                 </div>
-                ${f.signature ? `<div style="font-size: 0.84rem; font-weight: 700; color: var(--accent); margin-bottom: 4px;">推薦：${f.signature}</div>` : ''}
-                ${f.desc ? `<div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">${f.desc}</div>` : ''}
-                ${f.tips ? `<div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">💡 ${f.tips}</div>` : ''}
+                ${f.signature ? `<div style="font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 3px;">推薦：${f.signature}</div>` : ''}
+                ${f.desc ? `<div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px;">${f.desc}</div>` : ''}
+                ${f.tips ? `<div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 6px;">💡 ${f.tips}</div>` : ''}
                 <div class="pill-row" style="margin-bottom: 0;">
                     ${f.area ? `<span class="mini-pill accent">${f.area}</span>` : ''}
                     ${f.tag ? `<span class="mini-pill">${f.tag}</span>` : ''}
                     ${f.price ? `<span class="mini-pill sky tabular-nums">${f.price}</span>` : ''}
                 </div>
             </div>
-        `).join('');
+        `).join('') : '<div class="panel-card">無符合條件的地點。</div>';
     }
 
-    /* ================= 工具分頁（匯率 / 行李 / 筆記 / 應變） ================= */
     function renderBudget(data) {
         const regions = (data && data.regions) || [];
         if (!regions.length) {
             document.getElementById('budget-render').innerHTML = '';
             return;
         }
-        const blocks = regions.map(r => {
-            const lines = (r.items || []).map(i => `
-                <div class="budget-line tabular-nums">
-                    <span style="color: var(--text-secondary);">${i.label}</span>
-                    <span style="font-weight: 700;">${i.value}</span>
-                </div>
-            `).join('');
-            return `
-                <div class="callout-box" style="margin-bottom: 10px;">
-                    <div style="font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">${r.name}</div>
-                    ${lines}
-                    ${r.total ? `<div class="budget-line tabular-nums" style="font-weight: 800; color: var(--accent);"><span>預估小計</span><span>${r.total}</span></div>` : ''}
-                </div>`;
-        }).join('');
-
         document.getElementById('budget-render').innerHTML = `
             <div class="panel-card">
                 <div class="panel-head"><span class="panel-title">💳 預算參考</span></div>
-                ${blocks}
-                ${data.note ? `<div class="callout-box" style="margin-bottom: 0;">${data.note}</div>` : ''}
+                ${regions.map(r => `
+                    <div class="callout-box" style="margin-bottom: 8px; background: var(--bg-card-alt);">
+                        <div style="font-size: 0.8rem; font-weight: 800; margin-bottom: 4px; color: var(--text-primary);">${r.name}</div>
+                        ${(r.items || []).map(i => `<div class="budget-line tabular-nums"><span>${i.label}</span><span>${i.value}</span></div>`).join('')}
+                        ${r.total ? `<div class="budget-line tabular-nums" style="font-weight: 800; color: var(--accent);"><span>預估小計</span><span>${r.total}</span></div>` : ''}
+                    </div>`).join('')}
+                ${data.note ? `<div class="callout-box" style="margin-bottom: 0; background: var(--bg-card-alt);">${data.note}</div>` : ''}
             </div>`;
     }
 
     function renderLogistics(data) {
         const items = (data && data.items) || [];
         const alerts = (data && data.alerts) || [];
-        const itemsHtml = items.map(item => `
-            <div style="margin-bottom: 12px;">
-                <div style="font-size: 0.9rem; font-weight: 800; color: var(--text-primary);">${item.icon || '☀️'} ${item.title || ''}</div>
-                <div style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 2px;">${item.desc || ''}</div>
-            </div>
-        `).join('');
-        const alertsHtml = alerts.map(a => `
-            <div class="callout-box" style="margin-bottom: 8px;"><strong>💡 ${a.title || ''}</strong><br>${a.desc || ''}</div>
-        `).join('');
-
         document.getElementById('logistics').innerHTML = `
             <div class="panel-card">
                 <div class="panel-head"><span class="panel-title">☀️ 氣候穿搭與行前筆記</span></div>
-                ${itemsHtml || '<div style="font-size: 0.84rem; color: var(--text-muted);">尚無筆記資料</div>'}
-                ${alertsHtml}
+                ${items.map(item => `
+                    <div style="margin-bottom: 10px;">
+                        <div style="font-size: 0.86rem; font-weight: 800;">${item.icon || '☀️'} ${item.title || ''}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">${item.desc || ''}</div>
+                    </div>`).join('') || '<div style="font-size: 0.8rem; color: var(--text-muted);">尚無筆記資料</div>'}
+                ${alerts.map(a => `<div class="callout-box" style="margin-bottom: 8px; background: var(--bg-card-alt);"><strong>💡 ${a.title || ''}</strong><br>${a.desc || ''}</div>`).join('')}
             </div>`;
     }
 
     function renderEmergency(data) {
         const guides = (data && data.guides) || [];
-        const html = guides.map(g => {
-            const bullets = (g.bullets || []).map(b => `<li style="margin-bottom: 4px;">${b}</li>`).join('');
-            return `
-                <div class="callout-box callout-alert" style="margin-bottom: 10px;">
-                    <div style="font-size: 0.88rem; font-weight: 800; margin-bottom: 6px;">${g.icon || '🛡️'} ${g.title || ''}</div>
-                    <ul style="margin: 0; padding-left: 18px; font-size: 0.84rem;">${bullets}</ul>
-                </div>`;
-        }).join('');
-
         document.getElementById('emergency').innerHTML = `
             <div class="panel-card">
                 <div class="panel-head"><span class="panel-title">🛡️ 緊急應變與聯絡</span></div>
-                ${html || '<div style="font-size: 0.84rem; color: var(--text-muted);">尚無應變資料</div>'}
+                ${guides.map(g => `
+                    <div class="callout-box callout-alert" style="margin-bottom: 8px;">
+                        <div style="font-size: 0.84rem; font-weight: 800; margin-bottom: 4px;">${g.icon || '🛡️'} ${g.title || ''}</div>
+                        <ul style="margin: 0; padding-left: 16px; font-size: 0.8rem;">${(g.bullets || []).map(b => `<li>${b}</li>`).join('')}</ul>
+                    </div>`).join('') || '<div style="font-size: 0.8rem; color: var(--text-muted);">尚無應變資料</div>'}
             </div>`;
     }
-
-    let checkedItems = JSON.parse(localStorage.getItem('tripChecklist_v9')) || [];
 
     function renderChecklist(items) {
         if (!items) return;
@@ -1986,16 +1817,13 @@
             return `
                 <div class="check-row ${isChecked ? 'checked' : ''}" onclick="toggleCheck('${escaped}')">
                     <div class="check-box">${isChecked ? '✓' : ''}</div>
-                    <span class="check-text" style="font-size: 0.9rem; font-weight: 700;">${i}</span>
+                    <span class="check-text" style="font-size: 0.86rem; font-weight: 700;">${i}</span>
                 </div>`;
         }).join('');
-
         const validCount = checkedItems.filter(i => items.includes(i)).length;
         const pct = items.length === 0 ? 0 : Math.round((validCount / items.length) * 100);
         document.getElementById('chk-fill').style.width = pct + '%';
         document.getElementById('chk-label').innerText = `${validCount}/${items.length} (${pct}%)`;
-        const dashChk = document.getElementById('dash-chk-val');
-        if (dashChk) dashChk.innerText = pct + '%';
     }
 
     function toggleCheck(item) {
@@ -2008,11 +1836,14 @@
     function initCurrencyWidget(defaultCur) {
         const sel = document.getElementById('currency-selector');
         const inp = document.getElementById('foreign-amount');
-        if (defaultCur && offlineRates[defaultCur.toLowerCase()]) {
-            sel.value = defaultCur.toLowerCase();
-        }
-        fetchRate(sel.value);
-        sel.addEventListener('change', e => fetchRate(e.target.value));
+        if (defaultCur && offlineRates[defaultCur.toLowerCase()]) sel.value = defaultCur.toLowerCase();
+        currentRate = offlineRates[sel.value] || 0.207;
+        document.getElementById('rate-status').innerText = `1 ${sel.value.toUpperCase()} ≈ ${currentRate} TWD`;
+        sel.addEventListener('change', e => {
+            currentRate = offlineRates[e.target.value] || 0.207;
+            document.getElementById('rate-status').innerText = `1 ${e.target.value.toUpperCase()} ≈ ${currentRate} TWD`;
+            calculateTWD();
+        });
         inp.addEventListener('input', calculateTWD);
     }
 
@@ -2023,28 +1854,8 @@
     }
 
     function clearAmount() {
-        const inp = document.getElementById('foreign-amount');
-        inp.value = '';
+        document.getElementById('foreign-amount').value = '';
         calculateTWD();
-    }
-
-    function fetchRate(cur) {
-        const box = document.getElementById('rate-status');
-        box.innerText = '更新中...';
-        fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${cur}.json`)
-            .then(r => r.json())
-            .then(data => {
-                currentRate = data[cur].twd;
-                box.innerText = `1 ${cur.toUpperCase()} ≈ ${currentRate.toFixed(currentRate < 1 ? 4 : 2)} TWD`;
-                syncDashboardFxText(cur, currentRate);
-                calculateTWD();
-            })
-            .catch(() => {
-                currentRate = offlineRates[cur] || 0.21;
-                box.innerText = `離線 1 ${cur.toUpperCase()} ≈ ${currentRate} TWD`;
-                syncDashboardFxText(cur, currentRate);
-                calculateTWD();
-            });
     }
 
     function calculateTWD() {
