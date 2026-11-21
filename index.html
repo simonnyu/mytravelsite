@@ -952,22 +952,602 @@
         .poi-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
         .poi-name { font-size: 0.93rem; font-weight: 800; color: var(--text-primary); min-width: 0; overflow-wrap: anywhere; }
 
-        /* Tools */
-        .input-control, .select-control { min-width: 0; background: var(--bg-card-alt); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 9px 10px; font-size: 0.88rem; font-weight: 700; }
-        .quick-add-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 9px 0 11px; }
-        .step-btn { border: 1px solid var(--border-subtle); background: var(--bg-card-alt); color: var(--text-primary); font-size: 0.71rem; font-weight: 700; padding: 4px 8px; border-radius: 7px; cursor: pointer; }
-        .fx-result-box { background: var(--bg-card-alt); border-left: 4px solid var(--accent); border-radius: 11px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-        .fx-amount { font-family: 'Inter', sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--accent); }
-        .budget-line { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px dashed var(--border-subtle); font-size: 0.81rem; }
-        .budget-line:last-child { border-bottom: none; }
+        /* ================= 精品級工具箱 / 預算帳本 / 住宿 / 探索 / 應變 視覺系統 ================= */
+        .section-kicker {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 2px 2px 8px;
+            margin-top: 2px;
+        }
+        .section-kicker-title {
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+        }
+        .section-kicker-meta {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
 
-        .progress-track { height: 7px; border-radius: 999px; background: var(--bg-card-alt); overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 999px; transition: width 0.25s ease; }
+        /* 1. 匯率換算器（Revolut 雙槽卡片風格） */
+        .fx-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 14px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-card);
+        }
+        .fx-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 11px;
+        }
+        .fx-rate-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.67rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 3px 8px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .fx-well {
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .fx-well:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+        .fx-cur-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 7px 26px 7px 10px;
+            font-size: 0.84rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            cursor: pointer;
+            background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+            background-position: calc(100% - 13px) 50%, calc(100% - 8px) 50%;
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
+        }
+        .fx-num-input {
+            width: 100%;
+            min-width: 0;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.38rem;
+            font-weight: 800;
+            text-align: right;
+            outline: none;
+            padding: 2px 0;
+        }
+        .fx-num-input::placeholder {
+            color: var(--text-muted);
+            opacity: 0.55;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .quick-add-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .step-btn {
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card-alt);
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.71rem;
+            font-weight: 700;
+            padding: 7px 2px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .step-btn:active { transform: scale(0.95); }
+        .step-btn.clear {
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--danger);
+            background: var(--danger-soft);
+            border-color: transparent;
+        }
+        .fx-output-well {
+            background: var(--hero-grad);
+            border: 1px solid var(--border-strong);
+            border-radius: 14px;
+            padding: 11px 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .fx-twd-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .fx-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.32rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: -0.3px;
+            white-space: nowrap;
+        }
 
-        .check-row { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 10px 12px; margin-bottom: 7px; display: flex; align-items: center; gap: 9px; cursor: pointer; }
-        .check-box { width: 18px; height: 18px; border-radius: 5px; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.72rem; font-weight: 900; }
+        /* 2. 預算參考（無嵌套卡＋智能金額總覽＋帳本列表） */
+        .budget-hero-card {
+            width: 100%;
+            background: var(--hero-grad);
+            border: 1px solid var(--border-strong);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-card);
+        }
+        .budget-hero-kicker {
+            font-size: 0.66rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .budget-hero-total {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.32rem, 5.6vw, 1.62rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        .budget-hero-twd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+        .budget-bar-track {
+            display: flex;
+            width: 100%;
+            height: 8px;
+            border-radius: 999px;
+            overflow: hidden;
+            gap: 2px;
+            background: var(--bg-card-alt);
+            margin: 12px 0 9px;
+        }
+        .budget-bar-seg {
+            height: 100%;
+            border-radius: 999px;
+            min-width: 8px;
+        }
+        .budget-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+        }
+        .budget-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.71rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .budget-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .ledger-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            margin-bottom: 11px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+        .ledger-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 12px 14px 10px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .ledger-head-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+        .ledger-cat-title {
+            font-size: 0.86rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .ledger-count {
+            font-size: 0.67rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: var(--bg-card-alt);
+            padding: 2px 7px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+
+        .ledger-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .ledger-row:last-of-type { border-bottom: none; }
+        .ledger-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .ledger-main {
+            flex: 1;
+            min-width: 0;
+        }
+        .ledger-top-line {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .ledger-item-name {
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.35;
+            min-width: 0;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+        .ledger-price-col {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            flex-shrink: 0;
+            text-align: right;
+        }
+        .ledger-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+            line-height: 1.3;
+        }
+        .ledger-approx-tag {
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.64rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-right: 2px;
+        }
+        .ledger-sub-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 5px 8px;
+            margin-top: 4px;
+        }
+        .ledger-detail {
+            font-size: 0.74rem;
+            color: var(--text-secondary);
+            line-height: 1.42;
+        }
+        .ledger-breakdown {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.69rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--bg-card-alt);
+            padding: 2px 7px;
+            border-radius: 6px;
+        }
+        .ledger-status-chip {
+            font-size: 0.64rem;
+            font-weight: 800;
+            color: var(--emerald);
+            background: var(--emerald-soft);
+            padding: 1px 7px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .ledger-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 11px 14px;
+            background: var(--bg-card-alt);
+            border-top: 1px solid var(--border-subtle);
+        }
+        .ledger-footer-label {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+        }
+        .ledger-footer-val-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+        .ledger-footer-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.94rem;
+            font-weight: 900;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        .ledger-footer-twd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.66rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .budget-insight-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--accent);
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            box-shadow: var(--shadow-card);
+        }
+        .budget-insight-icon {
+            font-size: 1rem;
+            line-height: 1.4;
+            flex-shrink: 0;
+        }
+        .budget-insight-text {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.58;
+        }
+
+        /* 3. 行前清單 / 筆記 / 緊急應變（扁平無雙重套殼） */
+        .progress-track { height: 8px; border-radius: 999px; background: var(--bg-card-alt); overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #fbbf24); border-radius: 999px; transition: width 0.25s ease; }
+        .chk-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 9px; }
+        .chk-filter-btn {
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card-alt);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+        }
+        .chk-filter-btn.active { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+
+        .check-row { background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 11px 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 11px; cursor: pointer; box-shadow: var(--shadow-card); }
+        .check-box { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--border-strong); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.74rem; font-weight: 900; transition: all 0.14s ease; }
+        .check-row.checked { opacity: 0.72; }
         .check-row.checked .check-box { background: var(--accent); border-color: var(--accent); color: #ffffff; }
         .check-row.checked .check-text { text-decoration: line-through; color: var(--text-muted); }
+
+        .info-list-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 18px;
+            margin-bottom: 11px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 13px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .info-row:last-child { border-bottom: none; }
+        .info-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            background: var(--accent-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+        .info-title { font-size: 0.87rem; font-weight: 800; color: var(--text-primary); margin-bottom: 3px; line-height: 1.35; }
+        .info-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.55; overflow-wrap: anywhere; }
+
+        .emg-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-top: 3px solid var(--danger);
+            border-radius: 17px;
+            padding: 13px 14px;
+            margin-bottom: 11px;
+            box-shadow: var(--shadow-card);
+        }
+        .emg-head {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 9px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .emg-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: var(--danger-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .emg-title { font-size: 0.88rem; font-weight: 900; color: var(--text-primary); }
+        .emg-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; }
+        .emg-list li {
+            position: relative;
+            padding-left: 14px;
+            font-size: 0.79rem;
+            color: var(--text-secondary);
+            line-height: 1.52;
+            overflow-wrap: anywhere;
+        }
+        .emg-list li::before {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 8px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--danger);
+        }
+        .tel-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+            font-weight: 800;
+            color: var(--danger);
+            background: var(--danger-soft);
+            padding: 1px 7px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 0 2px;
+        }
+
+        /* 4. 住宿憑證卡 & 探索精裝卡 */
+        .stay-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 17px;
+            padding: 13px 14px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow-card);
+        }
+        .stay-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .stay-date-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--emerald);
+            background: var(--emerald-soft);
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+        .stay-name {
+            font-size: 0.94rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.35;
+            margin-bottom: 4px;
+        }
+        .stay-note {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+            line-height: 1.52;
+        }
+
+        .poi-kicker {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+        .poi-sig-strip {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 6px 9px;
+            border-radius: 9px;
+            margin: 6px 0;
+            line-height: 1.45;
+        }
+        .poi-meta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-subtle);
+        }
 
         /* 6 位數 PIN 鎖屏（讀取 secure_data.js 解密） */
         #lock-screen {
@@ -1081,13 +1661,13 @@
             </div>
 
             <div id="money" class="sub-pane active">
-                <div class="panel-card">
-                    <div class="panel-head">
+                <div class="fx-card">
+                    <div class="fx-card-head">
                         <span class="panel-title">💱 即時匯率換算</span>
-                        <span id="rate-status" class="tabular-nums" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">連線中...</span>
+                        <span id="rate-status" class="fx-rate-pill tabular-nums">連線中...</span>
                     </div>
-                    <div style="display: flex; gap: 7px;">
-                        <select id="currency-selector" class="select-control" style="flex: 1;">
+                    <div class="fx-well">
+                        <select id="currency-selector" class="fx-cur-select">
                             <option value="jpy">🇯🇵 JPY</option>
                             <option value="thb">🇹🇭 THB</option>
                             <option value="eur">🇪🇺 EUR</option>
@@ -1098,17 +1678,17 @@
                             <option value="myr">🇲🇾 MYR</option>
                             <option value="sgd">🇸🇬 SGD</option>
                         </select>
-                        <input type="number" inputmode="decimal" id="foreign-amount" class="input-control tabular-nums" placeholder="輸入外幣" style="flex: 2;">
+                        <input type="number" inputmode="decimal" id="foreign-amount" class="fx-num-input tabular-nums" placeholder="0">
                     </div>
-                    <div class="quick-add-row">
+                    <div class="quick-add-grid">
                         <button type="button" class="step-btn tabular-nums" onclick="addAmount(100)">+100</button>
                         <button type="button" class="step-btn tabular-nums" onclick="addAmount(500)">+500</button>
-                        <button type="button" class="step-btn tabular-nums" onclick="addAmount(1000)">+1,000</button>
-                        <button type="button" class="step-btn tabular-nums" onclick="addAmount(5000)">+5,000</button>
-                        <button type="button" class="step-btn" onclick="clearAmount()" style="color: var(--danger);">清除</button>
+                        <button type="button" class="step-btn tabular-nums" onclick="addAmount(1000)">+1K</button>
+                        <button type="button" class="step-btn tabular-nums" onclick="addAmount(5000)">+5K</button>
+                        <button type="button" class="step-btn clear" onclick="clearAmount()">歸零</button>
                     </div>
-                    <div class="fx-result-box">
-                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">約合台幣 TWD</span>
+                    <div class="fx-output-well">
+                        <span class="fx-twd-badge">🇹🇼 約合台幣 TWD</span>
                         <span class="fx-amount tabular-nums">NT$ <span id="twd-result">0</span></span>
                     </div>
                 </div>
@@ -1117,12 +1697,16 @@
 
             <div id="checklist" class="sub-pane">
                 <div class="panel-card">
-                    <div class="panel-head" style="margin-bottom: 7px;">
-                        <span class="panel-title">行前準備進度</span>
-                        <span id="chk-label" class="tabular-nums" style="font-size: 0.82rem; font-weight: 900; color: var(--accent);">0%</span>
+                    <div class="panel-head" style="margin-bottom: 8px;">
+                        <span class="panel-title">✅ 行前打包進度</span>
+                        <span id="chk-label" class="tabular-nums" style="font-size: 0.84rem; font-weight: 900; color: var(--accent);">0%</span>
                     </div>
                     <div class="progress-track">
                         <div class="progress-bar-fill" id="chk-fill"></div>
+                    </div>
+                    <div class="chk-toolbar">
+                        <button type="button" id="chk-pending-btn" class="chk-filter-btn" onclick="toggleChecklistPendingOnly()">只看未打勾</button>
+                        <button type="button" class="chk-filter-btn" onclick="resetAllChecklist()">全部重設</button>
                     </div>
                 </div>
                 <div id="chk-list"></div>
@@ -2329,15 +2913,15 @@
             : '<div class="callout-box">尚無航班資訊</div>';
 
         const hotelsHtml = hotels.length ? hotels.map(h => `
-            <div class="hotel-item">
-                <div style="min-width: 0; flex: 1;">
-                    <div style="font-size: 0.69rem; font-weight: 800; color: var(--accent);" class="tabular-nums">📅 ${h.date_str || ''}</div>
-                    <div style="font-size: 0.9rem; font-weight: 800; overflow-wrap: anywhere;">${h.name || ''}</div>
-                    ${h.note ? `<div style="font-size: 0.77rem; color: var(--text-secondary); margin-top: 2px; overflow-wrap: anywhere;">${h.note}</div>` : ''}
+            <div class="stay-card">
+                <div class="stay-top">
+                    <span class="stay-date-pill tabular-nums">📅 ${h.date_str || '入住日期未填'}</span>
+                    ${h.map_url ? `<a href="${h.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                 </div>
-                ${h.map_url ? `<a href="${h.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                <div class="stay-name">🏨 ${h.name || ''}</div>
+                ${h.note ? `<div class="stay-note">${h.note}</div>` : ''}
             </div>
-        `).join('') : '<div style="font-size: 0.8rem; color: var(--text-muted);">尚無住宿資訊</div>';
+        `).join('') : '<div class="callout-box">尚無住宿資訊</div>';
 
         document.getElementById('flights').innerHTML = `
             <div class="panel-head" style="padding: 0 2px;">
@@ -2345,11 +2929,12 @@
                 ${flights.length ? `<div style="display:flex; gap:5px; align-items:center;"><button type="button" class="adsb-sync-btn" onclick="openLiveApiSettings()">🔑 真實時刻 API</button><button type="button" class="adsb-sync-btn" onclick="enrichAllFlightsWithAdsbdb(true)">↻ 同步</button></div>` : ''}
             </div>
             ${ticketsHtml}
-            ${data && data.flight_note ? `<div class="callout-box">${data.flight_note}</div>` : ''}
-            <div class="panel-card" style="margin-top: 11px;">
-                <div class="panel-head"><span class="panel-title">🏨 住宿清單 (${hotels.length} 晚/間)</span></div>
-                ${hotelsHtml}
-            </div>`;
+            ${data && data.flight_note ? `<div class="budget-insight-card"><span class="budget-insight-icon">💡</span><div class="budget-insight-text">${data.flight_note}</div></div>` : ''}
+            <div class="section-kicker" style="margin-top: 14px;">
+                <span class="section-kicker-title">🏨 住宿憑證與導航</span>
+                <span class="section-kicker-meta">${hotels.length} 間住宿</span>
+            </div>
+            ${hotelsHtml}`;
     }
 
     function renderTheme(guide) {
@@ -2359,18 +2944,19 @@
         }
         document.getElementById('theme').innerHTML = guide.map(g => `
             <div class="poi-card">
-                <div class="poi-head">
-                    <span class="poi-name">✨ ${g.name}</span>
+                <div class="poi-kicker">
+                    <span class="mini-pill accent">${g.tag || '主題絕景'}</span>
                     ${g.map_url ? `<a href="${g.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                 </div>
-                ${g.best ? `<div style="font-size: 0.79rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; overflow-wrap: anywhere;">★ ${g.best}</div>` : ''}
-                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 6px; overflow-wrap: anywhere;">${g.desc || ''}</div>
-                ${g.tips ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; overflow-wrap: anywhere;">📸 ${g.tips}</div>` : ''}
-                <div class="pill-row" style="margin-bottom: 0;">
-                    ${g.time ? `<span class="mini-pill">${g.time}</span>` : ''}
-                    ${g.fee ? `<span class="mini-pill">${g.fee}</span>` : ''}
-                    ${g.tag ? `<span class="mini-pill accent">${g.tag}</span>` : ''}
-                </div>
+                <div class="poi-name" style="margin-bottom: 2px;">✨ ${g.name}</div>
+                ${g.best ? `<div class="poi-sig-strip">★ 最佳時機：${g.best}</div>` : ''}
+                ${g.desc ? `<div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; overflow-wrap: anywhere;">${g.desc}</div>` : ''}
+                ${g.tips ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.5; overflow-wrap: anywhere;">📸 ${g.tips}</div>` : ''}
+                ${(g.time || g.fee) ? `
+                    <div class="poi-meta-bar">
+                        ${g.time ? `<span class="mini-pill">🕒 ${g.time}</span>` : ''}
+                        ${g.fee ? `<span class="mini-pill sky tabular-nums">🎟️ ${g.fee}</span>` : ''}
+                    </div>` : ''}
             </div>
         `).join('');
     }
@@ -2419,72 +3005,357 @@
 
         document.getElementById('poi-list').innerHTML = filtered.length ? filtered.map(f => `
             <div class="poi-card">
-                <div class="poi-head">
-                    <span class="poi-name">${f.name}</span>
+                <div class="poi-kicker">
+                    <div style="display:flex; gap:5px; align-items:center; min-width:0; flex-wrap:wrap;">
+                        ${f.area ? `<span class="mini-pill accent">${f.area}</span>` : ''}
+                        ${f.tag ? `<span class="mini-pill">${f.tag}</span>` : ''}
+                    </div>
                     ${f.map_url ? `<a href="${f.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                 </div>
-                ${f.signature ? `<div style="font-size: 0.79rem; font-weight: 700; color: var(--accent); margin-bottom: 3px; overflow-wrap: anywhere;">推薦：${f.signature}</div>` : ''}
-                ${f.desc ? `<div style="font-size: 0.79rem; color: var(--text-secondary); margin-bottom: 6px; overflow-wrap: anywhere;">${f.desc}</div>` : ''}
-                ${f.tips ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 6px; overflow-wrap: anywhere;">💡 ${f.tips}</div>` : ''}
-                <div class="pill-row" style="margin-bottom: 0;">
-                    ${f.area ? `<span class="mini-pill accent">${f.area}</span>` : ''}
-                    ${f.tag ? `<span class="mini-pill">${f.tag}</span>` : ''}
-                    ${f.price ? `<span class="mini-pill sky tabular-nums">${f.price}</span>` : ''}
-                </div>
+                <div class="poi-name" style="margin-bottom: 2px;">${f.name}</div>
+                ${f.signature ? `<div class="poi-sig-strip">★ 必點推薦：${f.signature}</div>` : ''}
+                ${f.desc ? `<div style="font-size: 0.79rem; color: var(--text-secondary); line-height: 1.55; overflow-wrap: anywhere;">${f.desc}</div>` : ''}
+                ${f.tips ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.48; overflow-wrap: anywhere;">💡 ${f.tips}</div>` : ''}
+                ${f.price ? `<div class="poi-meta-bar"><span class="mini-pill sky tabular-nums">💳 ${f.price}</span></div>` : ''}
             </div>
         `).join('') : '<div class="panel-card">無符合條件的地點。</div>';
     }
 
+    /* ================= 智能預算解析與帳本渲染引擎 ================= */
+    const BUDGET_PALETTE = ['#f59e0b', '#38bdf8', '#34d399', '#a78bfa', '#fb7185'];
+
+    function guessBudgetIcon(text) {
+        const s = String(text || '');
+        if (/宿|飯|旅|酒店|hotel|inn|野乃|hyatt|hilton|marriott|intercontinental/i.test(s)) return '🏨';
+        if (/鐵|車票|周遊|jr|haruka|新幹線|地鐵|交通|巴士|pass/i.test(s)) return '🚄';
+        if (/單車|自行車|越野車|腳踏車|bike|cycle/i.test(s)) return '🚲';
+        if (/機|航|flight|貴賓室|lounge/i.test(s)) return '✈️';
+        if (/咖|餐|食|牛|拉麵|酒|茶|coffee|cafe|food/i.test(s)) return '☕';
+        if (/門票|票|寺|城|館|神社|ticket/i.test(s)) return '🎟️';
+        if (/sim|esim|網|保險|wifi/i.test(s)) return '📶';
+        return '🧾';
+    }
+
+    function parseLeadingEmoji(str) {
+        const s = String(str || '').trim();
+        const m = s.match(/^([\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2300}-\u{23FF}][\uFE0F\u200D\u{1F300}-\u{1FAFF}]*)\s*(.*)$/u);
+        if (m) return { icon: m[1], rest: m[2].trim() };
+        return { icon: '', rest: s };
+    }
+
+    function splitParentheticalNotes(str) {
+        const notes = [];
+        const cleaned = String(str || '').replace(/\s*[（(]([^（）()]+)[）)]/g, (_, inner) => {
+            if (inner.trim()) notes.push(inner.trim());
+            return '';
+        }).replace(/\s{2,}/g, ' ').trim();
+        return { main: cleaned || String(str || '').trim(), notes };
+    }
+
+    function detectCurrencyFromSymbol(str) {
+        const s = String(str || '');
+        if (/NT\$|TWD/i.test(s)) return { sym: 'NT$', code: 'twd' };
+        if (/¥|￥|JPY/i.test(s)) return { sym: '¥', code: 'jpy' };
+        if (/€|EUR/i.test(s)) return { sym: '€', code: 'eur' };
+        if (/£|GBP/i.test(s)) return { sym: '£', code: 'gbp' };
+        if (/฿|THB/i.test(s)) return { sym: '฿', code: 'thb' };
+        if (/SGD|S\$/i.test(s)) return { sym: 'S$', code: 'sgd' };
+        if (/MYR|RM\s*\d/i.test(s)) return { sym: 'RM', code: 'myr' };
+        if (/USD|\$/i.test(s)) return { sym: '$', code: 'usd' };
+        return { sym: '', code: '' };
+    }
+
+    function parseMoneyRange(str) {
+        const { main } = splitParentheticalNotes(str);
+        const curInfo = detectCurrencyFromSymbol(main);
+        const nums = (main.match(/\d[\d,]*(?:\.\d+)?/g) || []).map(n => parseFloat(n.replace(/,/g, ''))).filter(n => !isNaN(n));
+        if (!nums.length) return null;
+        const isRange = /[-–—~～至]/.test(main) && nums.length >= 2;
+        return {
+            min: nums[0],
+            max: isRange ? nums[1] : nums[0],
+            sym: curInfo.sym,
+            code: curInfo.code
+        };
+    }
+
+    function getRateToTwd(code) {
+        if (!code) return 0;
+        if (code === 'twd') return 1;
+        const sel = document.getElementById('currency-selector');
+        if (sel && sel.value === code && currentRate > 0) return currentRate;
+        return offlineRates[code] || 0;
+    }
+
+    function formatRangeTwd(rangeObj) {
+        if (!rangeObj || !rangeObj.code || rangeObj.code === 'twd') return '';
+        const rate = getRateToTwd(rangeObj.code);
+        if (!rate) return '';
+        const minTwd = Math.round(rangeObj.min * rate);
+        const maxTwd = Math.round(rangeObj.max * rate);
+        if (minTwd === maxTwd) return `≈ NT$ ${minTwd.toLocaleString()}`;
+        return `≈ NT$ ${minTwd.toLocaleString()}–${maxTwd.toLocaleString()}`;
+    }
+
+    function parseBudgetRow(item) {
+        const { icon: rawIcon, rest: labelNoIcon } = parseLeadingEmoji(item.label || '');
+        const labelParts = splitParentheticalNotes(labelNoIcon);
+        const valParts = splitParentheticalNotes(item.value || '');
+
+        let rawAmount = valParts.main;
+        let isApprox = false;
+        if (/^約\s*/.test(rawAmount)) {
+            isApprox = true;
+            rawAmount = rawAmount.replace(/^約\s*/, '').trim();
+        }
+        // 壓縮區間重複幣別符號，避免手機窄螢幕斷行（例如 "¥8,000 - ¥15,000" -> "¥8,000–15,000"）
+        const curInfo = detectCurrencyFromSymbol(rawAmount);
+        let compactAmount = rawAmount;
+        if (curInfo.sym) {
+            const escSym = curInfo.sym.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            compactAmount = rawAmount.replace(
+                new RegExp(`(${escSym}\\s*[\\d,]+(?:\\.\\d+)?)\\s*[-–—~～]\\s*${escSym}?\\s*([\\d,]+(?:\\.\\d+)?)`),
+                '$1–$2'
+            ).replace(/\s+–\s+/g, '–');
+        }
+
+        const statusTags = [];
+        const breakdowns = [];
+        valParts.notes.forEach(n => {
+            if (/已確認|已付|已預訂|已結清|免費|包含|confirmed|paid|free/i.test(n) && n.length <= 10) {
+                statusTags.push(n);
+            } else {
+                breakdowns.push(n);
+            }
+        });
+
+        return {
+            icon: rawIcon || guessBudgetIcon(labelNoIcon),
+            title: labelParts.main,
+            details: labelParts.notes,
+            amount: compactAmount,
+            isApprox,
+            statusTags,
+            breakdowns
+        };
+    }
+
     function renderBudget(data) {
+        const container = document.getElementById('budget-render');
+        if (!container) return;
         const regions = (data && data.regions) || [];
         if (!regions.length) {
-            document.getElementById('budget-render').innerHTML = '';
+            container.innerHTML = '';
             return;
         }
-        document.getElementById('budget-render').innerHTML = `
-            <div class="panel-card">
-                <div class="panel-head"><span class="panel-title">💳 預算參考</span></div>
-                ${regions.map(r => `
-                    <div class="callout-box" style="margin-bottom: 8px; background: var(--bg-card-alt);">
-                        <div style="font-size: 0.79rem; font-weight: 800; margin-bottom: 4px; color: var(--text-primary);">${r.name}</div>
-                        ${(r.items || []).map(i => `<div class="budget-line tabular-nums"><span>${i.label}</span><span>${i.value}</span></div>`).join('')}
-                        ${r.total ? `<div class="budget-line tabular-nums" style="font-weight: 800; color: var(--accent);"><span>預估小計</span><span>${r.total}</span></div>` : ''}
-                    </div>`).join('')}
-                ${data.note ? `<div class="callout-box" style="margin-bottom: 0; background: var(--bg-card-alt);">${data.note}</div>` : ''}
-            </div>`;
+
+        // 計算各分組數值範圍與幣別
+        const regionStats = regions.map((r, idx) => {
+            let range = r.total ? parseMoneyRange(r.total) : null;
+            if (!range && Array.isArray(r.items)) {
+                const parsedItems = r.items.map(i => parseMoneyRange(i.value)).filter(Boolean);
+                const codes = [...new Set(parsedItems.map(p => p.code).filter(Boolean))];
+                if (parsedItems.length && codes.length <= 1) {
+                    range = {
+                        min: parsedItems.reduce((s, p) => s + p.min, 0),
+                        max: parsedItems.reduce((s, p) => s + p.max, 0),
+                        sym: parsedItems[0].sym,
+                        code: parsedItems[0].code
+                    };
+                }
+            }
+            return {
+                name: r.name || `分類 ${idx + 1}`,
+                color: BUDGET_PALETTE[idx % BUDGET_PALETTE.length],
+                range,
+                mid: range ? (range.min + range.max) / 2 : 0
+            };
+        });
+
+        const validRanges = regionStats.filter(s => s.range && s.range.code);
+        const uniqueCodes = [...new Set(validRanges.map(s => s.range.code))];
+        let summaryHtml = '';
+
+        if (validRanges.length === regions.length && uniqueCodes.length === 1) {
+            const sym = validRanges[0].range.sym;
+            const code = uniqueCodes[0];
+            const grandMin = validRanges.reduce((a, s) => a + s.range.min, 0);
+            const grandMax = validRanges.reduce((a, s) => a + s.range.max, 0);
+            const totalMid = validRanges.reduce((a, s) => a + s.mid, 0);
+            const grandStr = grandMin === grandMax
+                ? `${sym}${Math.round(grandMin).toLocaleString()}`
+                : `${sym}${Math.round(grandMin).toLocaleString()}–${Math.round(grandMax).toLocaleString()}`;
+            const grandTwd = formatRangeTwd({ min: grandMin, max: grandMax, code });
+
+            const barSegs = regionStats.map(s => {
+                const pct = totalMid > 0 ? Math.max(6, Math.round((s.mid / totalMid) * 100)) : Math.round(100 / regionStats.length);
+                return `<div class="budget-bar-seg" style="width:${pct}%; background:${s.color};"></div>`;
+            }).join('');
+
+            const legendItems = regionStats.map(s => {
+                const pct = totalMid > 0 ? Math.round((s.mid / totalMid) * 100) : 0;
+                const shortName = s.name.length > 12 ? s.name.slice(0, 12) + '…' : s.name;
+                return `<span class="budget-legend-item"><span class="budget-dot" style="background:${s.color};"></span><span>${shortName}</span><span class="mono" style="color:var(--text-primary);">${pct}%</span></span>`;
+            }).join('');
+
+            summaryHtml = `
+                <div class="budget-hero-card">
+                    <div class="budget-hero-kicker">ESTIMATED TRIP BUDGET · 總預算概覽</div>
+                    <div class="budget-hero-total tabular-nums">${grandStr}</div>
+                    ${grandTwd ? `<div class="budget-hero-twd tabular-nums">${grandTwd}</div>` : ''}
+                    <div class="budget-bar-track">${barSegs}</div>
+                    <div class="budget-legend">${legendItems}</div>
+                </div>`;
+        }
+
+        const ledgerCardsHtml = regions.map((r, idx) => {
+            const color = BUDGET_PALETTE[idx % BUDGET_PALETTE.length];
+            const items = r.items || [];
+            const rowsHtml = items.map(rawItem => {
+                const p = parseBudgetRow(rawItem);
+                const subMetaParts = [
+                    ...p.details.map(d => `<span class="ledger-detail">${d}</span>`),
+                    ...p.breakdowns.map(b => `<span class="ledger-breakdown">${b}</span>`),
+                    ...p.statusTags.map(st => `<span class="ledger-status-chip">✓ ${st}</span>`)
+                ].join('');
+
+                return `
+                    <div class="ledger-row">
+                        <div class="ledger-icon">${p.icon}</div>
+                        <div class="ledger-main">
+                            <div class="ledger-top-line">
+                                <div class="ledger-item-name">${p.title}</div>
+                                <div class="ledger-price-col">
+                                    <span class="ledger-amount tabular-nums">${p.isApprox ? '<span class="ledger-approx-tag">約</span>' : ''}${p.amount}</span>
+                                </div>
+                            </div>
+                            ${subMetaParts ? `<div class="ledger-sub-meta">${subMetaParts}</div>` : ''}
+                        </div>
+                    </div>`;
+            }).join('');
+
+            const totalParts = r.total ? parseBudgetRow({ label: '', value: r.total }) : null;
+            const totalRange = regionStats[idx].range;
+            const totalTwd = formatRangeTwd(totalRange);
+
+            return `
+                <div class="ledger-card">
+                    <div class="ledger-head">
+                        <div class="ledger-head-left">
+                            <span class="budget-dot" style="background:${color}; width:9px; height:9px;"></span>
+                            <span class="ledger-cat-title">${r.name || '預算明細'}</span>
+                        </div>
+                        <span class="ledger-count tabular-nums">${items.length} 項</span>
+                    </div>
+                    ${rowsHtml}
+                    ${totalParts ? `
+                        <div class="ledger-footer">
+                            <span class="ledger-footer-label">預估小計</span>
+                            <div class="ledger-footer-val-wrap">
+                                <span class="ledger-footer-val tabular-nums">${totalParts.isApprox ? '<span class="ledger-approx-tag" style="color:var(--accent); opacity:0.8;">約</span>' : ''}${totalParts.amount}</span>
+                                ${totalTwd ? `<span class="ledger-footer-twd tabular-nums">${totalTwd}</span>` : ''}
+                            </div>
+                        </div>` : ''}
+                </div>`;
+        }).join('');
+
+        const noteText = data.note ? parseLeadingEmoji(data.note) : null;
+        const noteHtml = noteText ? `
+            <div class="budget-insight-card">
+                <span class="budget-insight-icon">${noteText.icon || '💡'}</span>
+                <div class="budget-insight-text">${noteText.rest}</div>
+            </div>` : '';
+
+        container.innerHTML = `
+            <div class="section-kicker">
+                <span class="section-kicker-title">💳 旅途預算帳本</span>
+                <span class="section-kicker-meta">${regions.length} 大類</span>
+            </div>
+            ${summaryHtml}
+            ${ledgerCardsHtml}
+            ${noteHtml}`;
     }
 
     function renderLogistics(data) {
         const items = (data && data.items) || [];
         const alerts = (data && data.alerts) || [];
-        document.getElementById('logistics').innerHTML = `
-            <div class="panel-card">
-                <div class="panel-head"><span class="panel-title">☀️ 氣候穿搭與行前筆記</span></div>
+
+        const itemsCardHtml = items.length ? `
+            <div class="info-list-card">
                 ${items.map(item => `
-                    <div style="margin-bottom: 10px;">
-                        <div style="font-size: 0.85rem; font-weight: 800; overflow-wrap: anywhere;">${item.icon || '☀️'} ${item.title || ''}</div>
-                        <div style="font-size: 0.79rem; color: var(--text-secondary); overflow-wrap: anywhere;">${item.desc || ''}</div>
-                    </div>`).join('') || '<div style="font-size: 0.79rem; color: var(--text-muted);">尚無筆記資料</div>'}
-                ${alerts.map(a => `<div class="callout-box" style="margin-bottom: 8px; background: var(--bg-card-alt);"><strong>💡 ${a.title || ''}</strong><br>${a.desc || ''}</div>`).join('')}
-            </div>`;
+                    <div class="info-row">
+                        <div class="info-icon-box">${item.icon || '☀️'}</div>
+                        <div style="flex:1; min-width:0;">
+                            <div class="info-title">${item.title || ''}</div>
+                            <div class="info-desc">${item.desc || ''}</div>
+                        </div>
+                    </div>`).join('')}
+            </div>` : '<div class="panel-card" style="font-size:0.8rem; color:var(--text-muted);">尚無行前筆記資料</div>';
+
+        const alertsHtml = alerts.map(a => `
+            <div class="budget-insight-card">
+                <span class="budget-insight-icon">💡</span>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:0.83rem; font-weight:800; color:var(--text-primary); margin-bottom:3px;">${a.title || ''}</div>
+                    <div class="budget-insight-text">${a.desc || ''}</div>
+                </div>
+            </div>`).join('');
+
+        document.getElementById('logistics').innerHTML = `
+            <div class="section-kicker">
+                <span class="section-kicker-title">☀️ 氣候穿搭與行前筆記</span>
+                <span class="section-kicker-meta">${items.length} 則要點</span>
+            </div>
+            ${itemsCardHtml}
+            ${alertsHtml}`;
+    }
+
+    function linkifyPhoneNumbers(text) {
+        return String(text || '').replace(/(\+?\d{2,4}[-\s]?\d{2,4}[-\s]?\d{3,4}|\b110\b|\b119\b|\b112\b|\b911\b|\b999\b)/g, (m) => {
+            const clean = m.replace(/[^\d+]/g, '');
+            return `<a href="tel:${clean}" class="tel-chip">📞 ${m}</a>`;
+        });
     }
 
     function renderEmergency(data) {
         const guides = (data && data.guides) || [];
         document.getElementById('emergency').innerHTML = `
-            <div class="panel-card">
-                <div class="panel-head"><span class="panel-title">🛡️ 緊急應變與聯絡</span></div>
-                ${guides.map(g => `
-                    <div class="callout-box callout-alert" style="margin-bottom: 8px;">
-                        <div style="font-size: 0.83rem; font-weight: 800; margin-bottom: 4px;">${g.icon || '🛡️'} ${g.title || ''}</div>
-                        <ul style="margin: 0; padding-left: 16px; font-size: 0.79rem;">${(g.bullets || []).map(b => `<li style="overflow-wrap: anywhere;">${b}</li>`).join('')}</ul>
-                    </div>`).join('') || '<div style="font-size: 0.79rem; color: var(--text-muted);">尚無應變資料</div>'}
-            </div>`;
+            <div class="section-kicker">
+                <span class="section-kicker-title">🛡️ 緊急應變與聯絡</span>
+                <span class="section-kicker-meta">點擊電話可直接撥號</span>
+            </div>
+            ${guides.length ? guides.map(g => `
+                <div class="emg-card">
+                    <div class="emg-head">
+                        <div class="emg-icon">${g.icon || '🛡️'}</div>
+                        <div class="emg-title">${g.title || ''}</div>
+                    </div>
+                    <ul class="emg-list">
+                        ${(g.bullets || []).map(b => `<li>${linkifyPhoneNumbers(b)}</li>`).join('')}
+                    </ul>
+                </div>`).join('') : '<div class="panel-card" style="font-size:0.8rem; color:var(--text-muted);">尚無應變資料</div>'}`;
+    }
+
+    let checklistPendingOnly = false;
+
+    function toggleChecklistPendingOnly() {
+        checklistPendingOnly = !checklistPendingOnly;
+        const btn = document.getElementById('chk-pending-btn');
+        if (btn) btn.classList.toggle('active', checklistPendingOnly);
+        renderChecklist((globalData && globalData.checklist_items) || []);
+    }
+
+    function resetAllChecklist() {
+        if (!confirm('確定要清除所有行李打勾紀錄嗎？')) return;
+        checkedItems = [];
+        localStorage.setItem('tripChecklist_v9', JSON.stringify(checkedItems));
+        renderChecklist((globalData && globalData.checklist_items) || []);
     }
 
     function renderChecklist(items) {
         if (!items) return;
-        document.getElementById('chk-list').innerHTML = items.map(i => {
+        const visibleItems = checklistPendingOnly ? items.filter(i => !checkedItems.includes(i)) : items;
+        document.getElementById('chk-list').innerHTML = visibleItems.length ? visibleItems.map(i => {
             const isChecked = checkedItems.includes(i);
             const escaped = String(i).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
             return `
@@ -2492,7 +3363,7 @@
                     <div class="check-box">${isChecked ? '✓' : ''}</div>
                     <span class="check-text" style="font-size: 0.85rem; font-weight: 700; overflow-wrap: anywhere;">${i}</span>
                 </div>`;
-        }).join('');
+        }).join('') : '<div class="panel-card" style="text-align:center; font-size:0.82rem; color:var(--emerald); font-weight:800;">🎉 所有項目都已完成打包！</div>';
         const validCount = checkedItems.filter(i => items.includes(i)).length;
         const pct = items.length === 0 ? 0 : Math.round((validCount / items.length) * 100);
         document.getElementById('chk-fill').style.width = pct + '%';
@@ -2529,12 +3400,14 @@
                 if (box) box.innerText = `1 ${cur.toUpperCase()} ≈ ${currentRate.toFixed(currentRate < 1 ? 4 : 2)} TWD`;
                 syncDashboardFxText(cur, currentRate);
                 calculateTWD();
+                if (globalData && globalData.budget) renderBudget(globalData.budget);
             })
             .catch(() => {
                 currentRate = offlineRates[cur] || 0.207;
                 if (box) box.innerText = `離線 1 ${cur.toUpperCase()} ≈ ${currentRate} TWD`;
                 syncDashboardFxText(cur, currentRate);
                 calculateTWD();
+                if (globalData && globalData.budget) renderBudget(globalData.budget);
             });
     }
 
