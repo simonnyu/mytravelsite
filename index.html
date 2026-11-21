@@ -16,7 +16,7 @@
         :root,
         :root[data-theme="dark"] {
             --bg-app: #090b0e;
-            --bg-elevated: rgba(15, 19, 26, 0.94);
+            --bg-elevated: rgba(15, 19, 26, 0.96);
             --bg-dock: #0e1219;
             --bg-card: #131720;
             --bg-card-alt: #1a202c;
@@ -40,11 +40,16 @@
             --hero-grad: linear-gradient(145deg, #1b2230 0%, #11151e 58%, #1d1813 100%);
             --flight-grad: linear-gradient(155deg, #161d29 0%, #0f131b 100%);
             --shadow-card: 0 8px 22px rgba(0, 0, 0, 0.32);
+            /* 固定常數：絕不透過 JS 覆寫累加，徹底根除點擊增肥 bug */
+            --topbar-inner: 56px;
+            --dock-inner: 56px;
+            --topbar-total: calc(var(--topbar-inner) + env(safe-area-inset-top, 0px));
+            --dock-total: calc(var(--dock-inner) + env(safe-area-inset-bottom, 0px));
         }
 
         :root[data-theme="paper"] {
             --bg-app: #f8f5ef;
-            --bg-elevated: rgba(248, 245, 239, 0.96);
+            --bg-elevated: rgba(248, 245, 239, 0.97);
             --bg-dock: #ffffff;
             --bg-card: #ffffff;
             --bg-card-alt: #f2ece1;
@@ -75,11 +80,15 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        button, a, .b-tab, .key-btn, .day-tab-btn, .seg-btn, .filter-chip, .check-row {
+            touch-action: manipulation;
+        }
+
         html {
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
+            min-height: 100%;
             background-color: var(--bg-app);
         }
 
@@ -100,7 +109,6 @@
         .tabular-nums { font-variant-numeric: tabular-nums; }
         .mono { font-family: 'JetBrains Mono', 'Inter', monospace; }
 
-        /* 固定頂部 + 固定底部導覽列 + 原生文件捲動（避免 iOS 100dvh 與 fixed/sticky 疊層裁切） */
         .app-shell {
             width: 100%;
             max-width: 480px;
@@ -111,6 +119,7 @@
             position: relative;
         }
 
+        /* 固定頂部列：純 CSS Safe Area，固定總高度，絕不裁切標題 */
         .app-topbar {
             position: fixed;
             top: 0;
@@ -118,7 +127,7 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 480px;
-            height: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px));
+            height: var(--topbar-total);
             padding: env(safe-area-inset-top, 0px) 14px 0;
             background: var(--bg-elevated);
             backdrop-filter: blur(20px);
@@ -134,6 +143,7 @@
         .topbar-left {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             min-width: 0;
             flex: 1;
         }
@@ -144,6 +154,7 @@
             color: var(--accent);
             letter-spacing: 1.1px;
             text-transform: uppercase;
+            line-height: 1.2;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -173,7 +184,7 @@
             color: var(--text-primary);
             font-size: 0.72rem;
             font-weight: 700;
-            padding: 5px 9px;
+            padding: 5px 10px;
             border-radius: 999px;
             cursor: pointer;
             display: inline-flex;
@@ -183,30 +194,37 @@
         }
         .icon-pill-btn:active { transform: scale(0.95); }
 
+        /* 畫布頂部緊貼 Topbar（0px 縫隙），底部預留完整 Dock 高度 */
         .app-canvas {
             width: 100%;
             min-height: 100vh;
             min-height: 100dvh;
-            padding-top: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px) + 10px);
+            padding-top: var(--topbar-total);
             padding-left: 14px;
             padding-right: 14px;
-            padding-bottom: calc(var(--dock-h, 54px) + env(safe-area-inset-bottom, 0px) + 18px);
+            padding-bottom: calc(var(--dock-total) + 18px);
         }
 
         .view {
             display: none;
             width: 100%;
             max-width: 100%;
-            animation: viewFade 0.18s ease;
+            animation: viewFade 0.16s ease;
         }
         .view.active { display: block; }
 
+        /* 沒有內建吸頂列的分頁，自己加 12px 頂距 */
+        #dashboard.view,
+        #flights.view {
+            padding-top: 12px;
+        }
+
         @keyframes viewFade {
-            from { opacity: 0; transform: translateY(4px); }
+            from { opacity: 0; transform: translateY(3px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 底部滿版導覽列：緊貼螢幕最底與 Home Indicator Safe Area */
+        /* 底部滿版導覽列：貼齊最底與 Home Indicator，固定高度絕不增肥 */
         .bottom-dock {
             position: fixed;
             bottom: 0;
@@ -214,8 +232,8 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 480px;
-            height: calc(var(--dock-h, 54px) + env(safe-area-inset-bottom, 0px));
-            padding: 5px 4px env(safe-area-inset-bottom, 0px);
+            height: var(--dock-total);
+            padding: 6px 4px env(safe-area-inset-bottom, 0px);
             background: var(--bg-dock);
             border-top: 1px solid var(--border-subtle);
             display: grid;
@@ -254,7 +272,17 @@
         .b-tab.active .b-tab-icon { background: var(--accent-soft); color: var(--accent); }
         .b-tab.active .b-tab-label { font-weight: 900; }
 
-        /* 次級分段控制 */
+        /* 滿版不透明吸頂包裝器：讓分段列與日期列無縫焊死在 Topbar 下方，背後內容絕不透出 */
+        .sticky-subbar-wrap {
+            position: sticky;
+            top: calc(var(--topbar-total) - 1px);
+            z-index: 100;
+            margin: 0 -14px 10px;
+            padding: 8px 14px 9px;
+            background: var(--bg-app);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
         .segmented-bar {
             display: flex;
             width: 100%;
@@ -263,10 +291,6 @@
             border-radius: 12px;
             padding: 3px;
             gap: 3px;
-            margin-bottom: 12px;
-            position: sticky;
-            top: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px));
-            z-index: 90;
         }
 
         .seg-btn {
@@ -370,7 +394,7 @@
         }
         .cta-btn:active { transform: scale(0.98); }
 
-        /* Flighty 風格航空卡片（防窄螢幕擠壓版） */
+        /* Flighty 風格航空卡片 */
         .flighty-card {
             width: 100%;
             background: var(--flight-grad);
@@ -526,7 +550,6 @@
             color: var(--text-secondary);
         }
 
-
         .flighty-airline-row {
             display: flex;
             align-items: center;
@@ -665,22 +688,24 @@
         .panel-title { font-size: 0.85rem; font-weight: 800; color: var(--text-primary); min-width: 0; }
         .panel-link { font-size: 0.74rem; font-weight: 700; color: var(--accent); cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 
-        /* 單日分頁導覽條：緊貼固定 Topbar 下方 */
+        /* 單日分頁導覽條（滿版不透明背景，緊貼 Topbar，絕不漏出背後卡片） */
         .day-tab-strip {
-            position: sticky;
-            top: calc(var(--topbar-h, 54px) + env(safe-area-inset-top, 0px));
-            z-index: 95;
             display: flex;
             gap: 7px;
             overflow-x: auto;
-            padding: 6px 2px 8px;
-            margin-top: -2px;
-            margin-bottom: 6px;
-            background: var(--bg-app);
-            border-bottom: 1px solid var(--border-subtle);
             scrollbar-width: none;
         }
         .day-tab-strip::-webkit-scrollbar { display: none; }
+
+        .day-tab-strip.is-sticky {
+            position: sticky;
+            top: calc(var(--topbar-total) - 1px);
+            z-index: 100;
+            margin: 0 -14px 10px;
+            padding: 8px 14px 9px;
+            background: var(--bg-app);
+            border-bottom: 1px solid var(--border-subtle);
+        }
 
         .day-tab-btn {
             flex: 0 0 auto;
@@ -705,7 +730,7 @@
         .dp-date { font-size: 0.62rem; opacity: 0.88; display: block; margin-top: 1px; }
 
         .day-page { display: none; width: 100%; }
-        .day-page.active { display: block; animation: viewFade 0.18s ease; }
+        .day-page.active { display: block; animation: viewFade 0.16s ease; }
 
         .day-hero-card {
             width: 100%;
@@ -977,6 +1002,8 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
         }
         .key-btn:active { border-color: var(--accent); color: var(--accent); transform: scale(0.93); }
         .key-btn.empty, .key-btn.del { background: transparent; border-color: transparent; color: var(--text-secondary); }
@@ -989,7 +1016,7 @@
         .shake { animation: shake 0.35s ease; }
     </style>
 </head>
-<body>
+<body style="overflow: hidden;">
 
 <div id="lock-screen">
     <div style="font-size: 2rem; margin-bottom: 10px;">🔐</div>
@@ -1028,9 +1055,11 @@
         <div id="flights" class="view"></div>
 
         <div id="explore" class="view">
-            <div class="segmented-bar">
-                <button class="seg-btn active" id="seg-theme" onclick="switchSubPane('explore', 'theme')">✨ 主題絕景</button>
-                <button class="seg-btn" id="seg-poi" onclick="switchSubPane('explore', 'poi')">☕ 美食與咖啡</button>
+            <div class="sticky-subbar-wrap">
+                <div class="segmented-bar">
+                    <button class="seg-btn active" id="seg-theme" onclick="switchSubPane('explore', 'theme')">✨ 主題絕景</button>
+                    <button class="seg-btn" id="seg-poi" onclick="switchSubPane('explore', 'poi')">☕ 美食與咖啡</button>
+                </div>
             </div>
             <div id="theme" class="sub-pane active"></div>
             <div id="poi" class="sub-pane">
@@ -1042,18 +1071,20 @@
         </div>
 
         <div id="tools" class="view">
-            <div class="segmented-bar">
-                <button class="seg-btn active" id="seg-money" onclick="switchSubPane('tools', 'money')">💱 匯率</button>
-                <button class="seg-btn" id="seg-checklist" onclick="switchSubPane('tools', 'checklist')">✅ 行李</button>
-                <button class="seg-btn" id="seg-logistics" onclick="switchSubPane('tools', 'logistics')">☀️ 筆記</button>
-                <button class="seg-btn" id="seg-emergency" onclick="switchSubPane('tools', 'emergency')">🛡️ 應變</button>
+            <div class="sticky-subbar-wrap">
+                <div class="segmented-bar">
+                    <button class="seg-btn active" id="seg-money" onclick="switchSubPane('tools', 'money')">💱 匯率</button>
+                    <button class="seg-btn" id="seg-checklist" onclick="switchSubPane('tools', 'checklist')">✅ 行李</button>
+                    <button class="seg-btn" id="seg-logistics" onclick="switchSubPane('tools', 'logistics')">☀️ 筆記</button>
+                    <button class="seg-btn" id="seg-emergency" onclick="switchSubPane('tools', 'emergency')">🛡️ 應變</button>
+                </div>
             </div>
 
             <div id="money" class="sub-pane active">
                 <div class="panel-card">
                     <div class="panel-head">
                         <span class="panel-title">💱 即時匯率換算</span>
-                        <span id="rate-status" class="tabular-nums" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">參考匯率</span>
+                        <span id="rate-status" class="tabular-nums" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">連線中...</span>
                     </div>
                     <div style="display: flex; gap: 7px;">
                         <select id="currency-selector" class="select-control" style="flex: 1;">
@@ -1128,22 +1159,6 @@
 </div>
 
 <script>
-    function syncChromeHeights() {
-        const topbar = document.getElementById('app-topbar');
-        const dock = document.getElementById('bottom-dock');
-        if (topbar) {
-            const h = Math.round(topbar.getBoundingClientRect().height);
-            if (h > 0) document.documentElement.style.setProperty('--topbar-h', `${h}px`);
-        }
-        if (dock) {
-            const h = Math.round(dock.getBoundingClientRect().height);
-            if (h > 0) document.documentElement.style.setProperty('--dock-h', `${h}px`);
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', syncChromeHeights);
-    window.addEventListener('resize', syncChromeHeights);
-    window.addEventListener('orientationchange', () => setTimeout(syncChromeHeights, 150));
 
     function applySavedTheme() {
         const saved = localStorage.getItem('trip_ui_theme') || 'dark';
@@ -1173,6 +1188,7 @@
     let currentRate = 0;
     let currentMainTab = 'dashboard';
     let checkedItems = JSON.parse(localStorage.getItem('tripChecklist_v9')) || [];
+    let liveWeatherCache = {};
 
     const TAB_TITLES = {
         dashboard: '旅程看板',
@@ -1187,6 +1203,23 @@
         money: 'tools', checklist: 'tools', logistics: 'tools', emergency: 'tools'
     };
 
+    function getLocalTodayIso() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${y}-${m}-${day}`;
+    }
+
+    function scrollAppToTop() {
+        const canvas = document.getElementById('app-canvas');
+        if (canvas && getComputedStyle(canvas).overflowY === 'auto') {
+            canvas.scrollTo({ top: 0, behavior: 'auto' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'auto' });
+        }
+    }
+
     function bootSystem() {
         const sub = (globalData.trip_meta && globalData.trip_meta.subtitle) || 'TRAVEL COMPASS';
         document.getElementById('meta-sub').innerText = sub;
@@ -1200,6 +1233,7 @@
         renderItinerary(days);
         renderFlights(globalData.flights_and_hotels || { flights: [], hotels: [] });
         enrichAllFlightsWithAdsbdb(false);
+        fetchWeather();
         renderLogistics(globalData.logistics || { items: [], alerts: [] });
         renderBudget(globalData.budget || { regions: [] });
         renderTheme(globalData.theme_guide || []);
@@ -1208,7 +1242,6 @@
         renderEmergency(globalData.emergency || { guides: [] });
         initCurrencyWidget((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy');
         updateTopbarContext(currentMainTab);
-        syncChromeHeights();
     }
 
     function switchTab(id) {
@@ -1226,8 +1259,7 @@
         const targetBtn = document.querySelector(`.b-tab[data-tab="${id}"]`);
         if (targetBtn) targetBtn.classList.add('active');
         updateTopbarContext(id);
-        syncChromeHeights();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollAppToTop();
     }
 
     function switchSubPane(parentId, paneId) {
@@ -1239,27 +1271,30 @@
         const targetSeg = document.getElementById(`seg-${paneId}`);
         if (targetPane) targetPane.classList.add('active');
         if (targetSeg) targetSeg.classList.add('active');
+        scrollAppToTop();
     }
 
     function selectDayTab(dayNum) {
         activeDayNum = dayNum;
+        const needRerender = itineraryOverviewMode || !document.querySelector('#itinerary .day-page');
         itineraryOverviewMode = false;
+        if (needRerender) {
+            renderItinerary((globalData && globalData.itinerary) || []);
+        } else {
+            document.querySelectorAll('#itinerary .day-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', Number(btn.dataset.day) === Number(dayNum));
+            });
+            document.querySelectorAll('#itinerary .day-page').forEach(page => {
+                page.classList.toggle('active', Number(page.dataset.day) === Number(dayNum));
+            });
+        }
         updateTopbarContext('itinerary');
 
-        document.querySelectorAll('.day-tab-btn').forEach(btn => {
-            btn.classList.toggle('active', Number(btn.dataset.day) === Number(dayNum));
-        });
-
-        const activeBtn = document.querySelector(`.day-tab-btn[data-day="${dayNum}"]`);
+        const activeBtn = document.querySelector(`#itinerary .day-tab-btn[data-day="${dayNum}"]`);
         if (activeBtn) {
             activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
-
-        document.querySelectorAll('.day-page').forEach(page => {
-            page.classList.toggle('active', Number(page.dataset.day) === Number(dayNum));
-        });
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        scrollAppToTop();
     }
 
     function calculateDiff() {
@@ -1269,10 +1304,10 @@
         }
         const rawDate = globalData.itinerary[0].date_full;
         if (rawDate) {
-            const start = new Date(rawDate);
-            if (!isNaN(start.getTime())) {
+            const parts = String(rawDate).split('-').map(Number);
+            if (parts.length === 3 && !parts.some(isNaN)) {
+                const start = new Date(parts[0], parts[1] - 1, parts[2]);
                 const today = new Date();
-                start.setHours(0, 0, 0, 0);
                 today.setHours(0, 0, 0, 0);
                 tripDiffDays = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
             } else {
@@ -1284,6 +1319,14 @@
         renderDashboard();
     }
 
+    function getFocusDay() {
+        const days = (globalData && globalData.itinerary) || [];
+        if (!days.length) return null;
+        if (tripDiffDays > 0) return days[0];
+        const todayStr = getLocalTodayIso();
+        return days.find(d => d.date_full === todayStr) || days[days.length - 1];
+    }
+
     function getChecklistPct() {
         const items = (globalData && globalData.checklist_items) || [];
         if (items.length === 0) return '0%';
@@ -1291,7 +1334,50 @@
         return Math.round((validChecked / items.length) * 100) + '%';
     }
 
-    /* ================= 雙引擎即時航班時刻與航線系統 (Aviation Edge / AirLabs / AviationStack + ADSBdb) ================= */
+    /* ================= Open-Meteo 即時天氣 ================= */
+    function fetchWeather() {
+        const days = (globalData && globalData.itinerary) || [];
+        const focusDay = getFocusDay();
+        days.forEach(d => {
+            if (!d.coords || !d.date_full) return;
+            const parts = String(d.coords).split(',');
+            if (parts.length < 2) return;
+            const lat = parts[0].trim();
+            const lon = parts[1].trim();
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`)
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.daily || !data.daily.time) return;
+                    const idx = data.daily.time.indexOf(d.date_full);
+                    if (idx === -1) return;
+                    const code = data.daily.weathercode[idx];
+                    const tMax = Math.round(data.daily.temperature_2m_max[idx]);
+                    const tMin = Math.round(data.daily.temperature_2m_min[idx]);
+
+                    let emoji = '☁️';
+                    if (code === 0) emoji = '☀️';
+                    else if (code >= 1 && code <= 3) emoji = '⛅';
+                    else if (code >= 45 && code <= 48) emoji = '🌫️';
+                    else if (code >= 51 && code <= 67) emoji = '🌧️';
+                    else if (code >= 71 && code <= 82) emoji = '❄️';
+                    else if (code >= 95) emoji = '⛈️';
+
+                    const tempStr = `${emoji} ${tMin}°~${tMax}°C`;
+                    liveWeatherCache[d.day] = tempStr;
+
+                    const dayPill = document.getElementById(`weather-day-${d.day}`);
+                    if (dayPill) dayPill.innerText = tempStr;
+
+                    if (focusDay && d.day === focusDay.day) {
+                        const dashEl = document.getElementById('dash-weather');
+                        if (dashEl) dashEl.innerText = tempStr;
+                    }
+                })
+                .catch(() => {});
+        });
+    }
+
+    /* ================= 雙引擎即時航班時刻與航線系統 (AirLabs / AviationStack / AeroDataBox + ADSBdb) ================= */
     const ADSBDB_CACHE_KEY = 'adsbdb_flight_cache_v2';
     const LIVE_SCHED_CACHE_KEY = 'live_flight_schedule_cache_v1';
     const LIVE_API_CONFIG_KEY = 'flight_live_api_config_v1';
@@ -1320,9 +1406,7 @@
     }
 
     function saveLiveApiConfig(cfg) {
-        try {
-            localStorage.setItem(LIVE_API_CONFIG_KEY, JSON.stringify(cfg));
-        } catch (e) {}
+        try { localStorage.setItem(LIVE_API_CONFIG_KEY, JSON.stringify(cfg)); } catch (e) {}
     }
 
     function saveAdsbdbCache() {
@@ -1543,7 +1627,7 @@
                     }
                 }
             } catch (err) {
-                // 離線狀態自動靜默降級
+                // 離線狀態靜默降級
             } finally {
                 delete adsbdbInFlight[cacheKey];
             }
@@ -1649,7 +1733,7 @@
                     }
                 } else if (provider === 'aerodatabox') {
                     const dateMatch = String(f.date || '').match(/(\d{4}-\d{2}-\d{2})/);
-                    const targetDate = dateMatch ? dateMatch[1] : new Date().toISOString().slice(0, 10);
+                    const targetDate = dateMatch ? dateMatch[1] : getLocalTodayIso();
                     const url = `https://aerodatabox.p.rapidapi.com/flights/number/${encodeURIComponent(callsign)}/${targetDate}`;
                     const res = await fetch(url, {
                         headers: {
@@ -1939,16 +2023,25 @@
             </div>`;
     }
 
+    function syncDashboardFxText(cur, rate) {
+        const el = document.getElementById('dash-fx-val');
+        if (el && rate > 0) {
+            el.innerText = `1 ${cur.toUpperCase()} ≈ ${Number(rate).toFixed(rate < 1 ? 3 : 2)}`;
+        }
+    }
+
     function renderDashboard() {
         const metaTitle = (globalData.trip_meta && globalData.trip_meta.title) || '隨身旅圖';
         const metaSub = (globalData.trip_meta && globalData.trip_meta.subtitle) || 'TRAVEL COMPASS';
         const cur = ((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy').toLowerCase();
-        const fallbackRate = offlineRates[cur] || 0.207;
+        const displayRate = currentRate > 0 ? Number(currentRate).toFixed(currentRate < 1 ? 3 : 2) : (offlineRates[cur] || 0.207);
         const chkPct = getChecklistPct();
         const days = globalData.itinerary;
-        const focusDay = days[0];
+        const focusDay = getFocusDay() || days[0];
         const flights = (globalData.flights_and_hotels && globalData.flights_and_hotels.flights) || [];
         const hotels = (globalData.flights_and_hotels && globalData.flights_and_hotels.hotels) || [];
+        const todayStr = getLocalTodayIso();
+        const isTodayMatched = focusDay && focusDay.date_full === todayStr;
 
         const statusTopHtml = tripDiffDays > 0 ? `
             <div class="countdown-box">
@@ -1963,11 +2056,11 @@
                     <div style="font-size: 0.66rem; font-weight: 800; color: var(--accent);">DAY ${focusDay.day} · ${focusDay.date || ''}</div>
                     <div style="font-size: 0.9rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${focusDay.title || '未命名行程'}</div>
                 </div>
-                <span class="mini-pill accent" style="flex-shrink: 0;">共 ${days.length} 天</span>
+                <span class="mini-pill accent" style="flex-shrink: 0;">${isTodayMatched ? '進行中' : `共 ${days.length} 天`}</span>
             </div>`;
 
         const nextFlightHtml = flights.length > 0 ? `
-            <div style="margin-bottom: 11px;" onclick="switchTab('flights')">
+            <div style="margin-bottom: 11px; cursor: pointer;" onclick="switchTab('flights')">
                 <div class="panel-head" style="padding: 0 2px; margin-bottom: 6px;">
                     <span class="panel-title">✈️ 下一段航程 · FLIGHTY PASS</span>
                     <span class="panel-link">全部 ${flights.length} 航段 ›</span>
@@ -1993,13 +2086,15 @@
                 </div>
             `).join('') : '';
 
+        const focusWeather = liveWeatherCache[focusDay.day] || focusDay.weather || '—';
+
         document.getElementById('dashboard').innerHTML = `
             <div class="hero-banner">
                 <div class="hero-tag">✦ ${metaSub}</div>
                 <h1 class="hero-title">${metaTitle}</h1>
                 ${statusTopHtml}
                 <button class="cta-btn" onclick="switchTab('itinerary'); selectDayTab(${focusDay.day});">
-                    進入每日分頁行程 (${days.length} 天) ➔
+                    進入 Day ${focusDay.day} 完整行程 (${days.length} 天) ➔
                 </button>
             </div>
 
@@ -2010,25 +2105,25 @@
                     <span class="panel-title">🗓️ 快速切換天數分頁</span>
                     <span class="panel-link" onclick="switchTab('itinerary')">進入行程 ›</span>
                 </div>
-                <div class="day-tab-strip" style="position: static; padding-bottom: 2px; margin-bottom: 0; background: transparent; border-bottom: none;">
+                <div class="day-tab-strip">
                     ${quickDaysHtml}
                 </div>
             </div>
 
             <div class="bento-row">
                 <div class="bento-tile" onclick="switchTab('itinerary'); selectDayTab(${focusDay.day});">
-                    <div class="bento-label"><span>🌤️ 首日氣候</span><span>Day ${focusDay.day}</span></div>
-                    <div class="bento-val tabular-nums">${focusDay.weather || '—'}</div>
+                    <div class="bento-label"><span>🌤️ 當日氣候</span><span>Day ${focusDay.day}</span></div>
+                    <div id="dash-weather" class="bento-val tabular-nums">${focusWeather}</div>
                     <div class="bento-sub">${focusDay.date || ''}</div>
                 </div>
                 <div class="bento-tile" onclick="switchTab('money')">
-                    <div class="bento-label"><span>💱 參考匯率</span><span>${cur.toUpperCase()}</span></div>
-                    <div class="bento-val tabular-nums">1 ${cur.toUpperCase()} ≈ ${fallbackRate}</div>
+                    <div class="bento-label"><span>💱 即時匯率</span><span>${cur.toUpperCase()}</span></div>
+                    <div id="dash-fx-val" class="bento-val tabular-nums">1 ${cur.toUpperCase()} ≈ ${displayRate}</div>
                     <div class="bento-sub">點此開啟即時換算</div>
                 </div>
                 <div class="bento-tile" onclick="switchTab('checklist')">
                     <div class="bento-label"><span>✅ 行前清單</span><span>CHECKLIST</span></div>
-                    <div class="bento-val tabular-nums">${chkPct}</div>
+                    <div id="dash-chk-val" class="bento-val tabular-nums">${chkPct}</div>
                     <div class="bento-sub">裝備與證件進度</div>
                 </div>
                 <div class="bento-tile" onclick="switchTab('flights')">
@@ -2079,7 +2174,7 @@
     function renderItinerary(days) {
         const container = document.getElementById('itinerary');
         if (!days || !days.length) {
-            container.innerHTML = '<div class="panel-card">尚無每日行程資料。</div>';
+            container.innerHTML = '<div class="panel-card" style="margin-top: 12px;">尚無每日行程資料。</div>';
             return;
         }
 
@@ -2089,26 +2184,28 @@
 
         if (itineraryOverviewMode) {
             container.innerHTML = `
-                <div style="font-size: 0.74rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; padding: 0 2px;">
-                    點擊任一天即可進入該日獨立分頁（共 ${days.length} 天）
-                </div>
-                ${days.map(d => `
-                    <div class="overview-card" onclick="selectDayTab(${d.day})">
-                        <div style="min-width: 0; flex: 1;">
-                            <div class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''} ${d.weather || ''}</div>
-                            <div style="font-family: 'Noto Serif TC', serif; font-size: 0.96rem; font-weight: 900; margin-top: 2px; overflow-wrap: anywhere;">${d.title || '未命名行程'}</div>
-                            <div style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 3px;">
-                                ${(d.schedule || []).length} 個節點 ${d.hotel && d.hotel.name ? `· 🏨 ${d.hotel.name}` : ''}
-                            </div>
-                        </div>
-                        <span class="mini-pill accent" style="flex-shrink: 0;">進入 ›</span>
+                <div style="padding-top: 12px;">
+                    <div style="font-size: 0.74rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; padding: 0 2px;">
+                        點擊任一天即可進入該日獨立分頁（共 ${days.length} 天）
                     </div>
-                `).join('')}
+                    ${days.map(d => `
+                        <div class="overview-card" onclick="selectDayTab(${d.day})">
+                            <div style="min-width: 0; flex: 1;">
+                                <div class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''} ${liveWeatherCache[d.day] || d.weather || ''}</div>
+                                <div style="font-family: 'Noto Serif TC', serif; font-size: 0.96rem; font-weight: 900; margin-top: 2px; overflow-wrap: anywhere;">${d.title || '未命名行程'}</div>
+                                <div style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 3px;">
+                                    ${(d.schedule || []).length} 個節點 ${d.hotel && d.hotel.name ? `· 🏨 ${d.hotel.name}` : ''}
+                                </div>
+                            </div>
+                            <span class="mini-pill accent" style="flex-shrink: 0;">進入 ›</span>
+                        </div>
+                    `).join('')}
+                </div>
             `;
             return;
         }
 
-        const tabBarHtml = '<div class="day-tab-strip" id="day-tab-strip">' + days.map(d => `
+        const tabBarHtml = '<div class="day-tab-strip is-sticky" id="day-tab-strip">' + days.map(d => `
             <button type="button" class="day-tab-btn ${d.day === activeDayNum ? 'active' : ''}" data-day="${d.day}" onclick="selectDayTab(${d.day})">
                 <span class="dp-day tabular-nums">D${d.day}</span>
                 <span class="dp-date">${(d.date || '').split(' ')[0]}</span>
@@ -2196,12 +2293,14 @@
                     </button>
                 </div>` : '';
 
+            const dayWeather = liveWeatherCache[d.day] || d.weather || '';
+
             return `
                 <section class="day-page ${isActive}" data-day="${d.day}">
                     <div class="day-hero-card">
                         <div class="day-hero-top">
                             <span class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''}</span>
-                            ${d.weather ? `<span class="day-weather-pill">${d.weather}</span>` : ''}
+                            ${dayWeather ? `<span class="day-weather-pill" id="weather-day-${d.day}">${dayWeather}</span>` : `<span class="day-weather-pill" id="weather-day-${d.day}" style="display:none;"></span>`}
                         </div>
                         <h2 class="day-card-title">${d.title || '未命名行程'}</h2>
                         ${d.subtitle ? `<div class="day-card-sub">${d.subtitle}</div>` : ''}
@@ -2398,6 +2497,8 @@
         const pct = items.length === 0 ? 0 : Math.round((validCount / items.length) * 100);
         document.getElementById('chk-fill').style.width = pct + '%';
         document.getElementById('chk-label').innerText = `${validCount}/${items.length} (${pct}%)`;
+        const dashChk = document.getElementById('dash-chk-val');
+        if (dashChk) dashChk.innerText = pct + '%';
     }
 
     function toggleCheck(item) {
@@ -2410,15 +2511,31 @@
     function initCurrencyWidget(defaultCur) {
         const sel = document.getElementById('currency-selector');
         const inp = document.getElementById('foreign-amount');
+        if (!sel || !inp) return;
         if (defaultCur && offlineRates[defaultCur.toLowerCase()]) sel.value = defaultCur.toLowerCase();
-        currentRate = offlineRates[sel.value] || 0.207;
-        document.getElementById('rate-status').innerText = `1 ${sel.value.toUpperCase()} ≈ ${currentRate} TWD`;
-        sel.addEventListener('change', e => {
-            currentRate = offlineRates[e.target.value] || 0.207;
-            document.getElementById('rate-status').innerText = `1 ${e.target.value.toUpperCase()} ≈ ${currentRate} TWD`;
-            calculateTWD();
-        });
-        inp.addEventListener('input', calculateTWD);
+        fetchRate(sel.value);
+        sel.onchange = e => fetchRate(e.target.value);
+        inp.oninput = calculateTWD;
+    }
+
+    function fetchRate(cur) {
+        const box = document.getElementById('rate-status');
+        if (box) box.innerText = '更新中...';
+        fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${encodeURIComponent(cur)}.json`)
+            .then(r => r.json())
+            .then(data => {
+                if (!data || !data[cur] || typeof data[cur].twd !== 'number') throw new Error('bad fx');
+                currentRate = data[cur].twd;
+                if (box) box.innerText = `1 ${cur.toUpperCase()} ≈ ${currentRate.toFixed(currentRate < 1 ? 4 : 2)} TWD`;
+                syncDashboardFxText(cur, currentRate);
+                calculateTWD();
+            })
+            .catch(() => {
+                currentRate = offlineRates[cur] || 0.207;
+                if (box) box.innerText = `離線 1 ${cur.toUpperCase()} ≈ ${currentRate} TWD`;
+                syncDashboardFxText(cur, currentRate);
+                calculateTWD();
+            });
     }
 
     function addAmount(delta) {
@@ -2451,6 +2568,7 @@
         const msg = document.getElementById('auth-msg');
         msg.style.color = 'var(--text-secondary)';
         msg.innerText = '已重新鎖定行程';
+        document.body.style.overflow = 'hidden';
         document.getElementById('lock-screen').style.display = 'flex';
     }
 
@@ -2550,6 +2668,7 @@
 
             localStorage.removeItem('trip_failed_attempts');
             document.getElementById('lock-screen').style.display = 'none';
+            document.body.style.overflow = '';
             bootSystem();
         } catch (e) {
             triggerShake();
@@ -2591,6 +2710,7 @@
             itineraryOverviewMode = !itineraryOverviewMode;
             renderItinerary((globalData && globalData.itinerary) || []);
             updateTopbarContext('itinerary');
+            scrollAppToTop();
         } else if (currentMainTab === 'dashboard') {
             lockApp();
         } else {
