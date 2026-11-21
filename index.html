@@ -809,54 +809,247 @@
         .callout-alert { background: var(--danger-soft); border-color: rgba(248, 113, 113, 0.3); color: var(--text-primary); }
         .callout-story { font-family: 'Noto Serif TC', serif; border-left: 3px solid var(--accent); line-height: 1.65; }
 
-        /* Timeline */
-        .timeline-wrap {
+        /* ================= 行程時間軸（滿寬零浪費、無套殼高可讀設計） ================= */
+        .day-jump-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 9px;
+            padding-top: 9px;
+            border-top: 1px dashed var(--border-subtle);
+            align-items: center;
+            justify-content: space-between;
+        }
+        .day-stats-inline {
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+        .day-jump-link {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent);
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .day-alert-strip {
+            width: 100%;
+            background: var(--danger-soft);
+            border-left: 3px solid var(--danger);
+            border-radius: 10px;
+            padding: 10px 13px;
+            margin-bottom: 12px;
+            font-size: 0.82rem;
+            color: var(--text-primary);
+            line-height: 1.62;
+            overflow-wrap: anywhere;
+        }
+        .day-alert-label {
+            font-size: 0.7rem;
+            font-weight: 900;
+            color: var(--danger);
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .mode-switch-btn {
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 999px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .mode-switch-btn.active {
+            background: var(--accent-soft);
+            border-color: transparent;
+            color: var(--accent);
+        }
+
+        /* 滿寬行程卡片：100% 寬度，無左側浪費欄位 */
+        .sched-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .sched-card {
             width: 100%;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 17px;
-            padding: 13px 12px;
-            margin-bottom: 11px;
+            border-left: 3px solid var(--accent);
+            border-radius: 14px;
+            padding: 13px 14px;
             box-shadow: var(--shadow-card);
         }
-
-        .timeline-item { display: flex; gap: 9px; margin-bottom: 10px; width: 100%; }
-        .timeline-item:last-child { margin-bottom: 0; }
-        .timeline-axis { width: 14px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; position: relative; }
-        .timeline-node { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 12px; box-shadow: 0 0 0 3px var(--accent-soft); z-index: 2; }
-        .timeline-node.kind-move { background: var(--sky); box-shadow: 0 0 0 3px var(--sky-soft); }
-        .timeline-node.kind-stay { background: var(--emerald); box-shadow: 0 0 0 3px var(--emerald-soft); }
-        .timeline-stem { width: 2px; flex: 1; background: var(--border-subtle); position: absolute; top: 20px; bottom: -10px; }
-        .timeline-item:last-child .timeline-stem { display: none; }
-
-        .slot-card {
-            flex: 1;
-            min-width: 0;
+        .sched-card.kind-move {
             background: var(--bg-card-alt);
-            border: 1px solid var(--border-subtle);
-            border-radius: 13px;
-            padding: 10px 11px;
+            border-left-color: var(--sky);
         }
-        .slot-card.is-transit { border-left: 3px solid var(--sky); }
-        .slot-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px; }
-        .slot-time { font-family: 'JetBrains Mono', monospace; font-size: 0.77rem; font-weight: 800; color: var(--accent); }
-        .slot-title { font-size: 0.91rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; line-height: 1.35; overflow-wrap: anywhere; }
-        .slot-desc { font-size: 0.79rem; color: var(--text-secondary); line-height: 1.5; overflow-wrap: anywhere; }
+        .sched-card.kind-stay {
+            border-left-color: var(--emerald);
+        }
 
+        .sched-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .sched-time-meta {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+            min-width: 0;
+            flex: 1;
+        }
+        .sched-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        .sched-card.kind-move .sched-time { color: var(--sky); }
+        .sched-card.kind-stay .sched-time { color: var(--emerald); }
+
+        .sched-submeta {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            overflow-wrap: anywhere;
+        }
+
+        .sched-kicker {
+            font-size: 0.71rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+        .sched-title {
+            font-size: 0.98rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.38;
+            letter-spacing: 0.01em;
+            overflow-wrap: anywhere;
+        }
+        .sched-desc {
+            margin-top: 7px;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.68;
+            letter-spacing: 0.01em;
+            overflow-wrap: anywhere;
+        }
+        .sched-desc p {
+            margin: 0 0 6px;
+        }
+        .sched-desc p:last-child { margin-bottom: 0; }
+
+        /* 精簡時間表模式（一屏掃完整天節奏） */
+        .sched-list.is-compact {
+            gap: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+        }
+        .sched-compact-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 11px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--accent);
+        }
+        .sched-compact-row:last-child { border-bottom: none; }
+        .sched-compact-row.kind-move { border-left-color: var(--sky); background: var(--bg-card-alt); }
+        .sched-compact-row.kind-stay { border-left-color: var(--emerald); }
+        .sched-compact-left {
+            min-width: 0;
+            flex: 1;
+        }
+        .sched-compact-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .sched-compact-title {
+            font-size: 0.88rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        /* 當日備忘區塊（置於時間軸下方，扁平單層分隔線，絕不套殼） */
+        .day-notes-card {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+        .day-note-section {
+            padding: 13px 15px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .day-note-section:last-child { border-bottom: none; }
+        .day-note-label {
+            font-size: 0.74rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 5px;
+            letter-spacing: 0.3px;
+        }
+        .day-note-body {
+            font-size: 0.83rem;
+            color: var(--text-secondary);
+            line-height: 1.68;
+            overflow-wrap: anywhere;
+        }
+        .day-note-body.is-serif {
+            font-family: 'Noto Serif TC', serif;
+        }
+        .day-note-kv {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px 12px;
+            margin-top: 4px;
+        }
+
+        .slot-time { font-family: 'JetBrains Mono', monospace; font-size: 0.77rem; font-weight: 800; color: var(--accent); }
         .pill-row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; }
-        .mini-pill { font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-secondary); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mini-pill { font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: var(--bg-card-alt); border: 1px solid var(--border-subtle); color: var(--text-secondary); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .mini-pill.accent { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
         .mini-pill.sky { background: var(--sky-soft); color: var(--sky); border-color: transparent; }
         .mini-pill.green { background: var(--emerald-soft); color: var(--emerald); border-color: transparent; }
 
         .map-chip {
             text-decoration: none;
-            font-size: 0.68rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: var(--text-primary);
-            background: var(--bg-card);
+            background: var(--bg-card-alt);
             border: 1px solid var(--border-subtle);
-            padding: 3px 8px;
+            padding: 4px 9px;
             border-radius: 999px;
             display: inline-flex;
             align-items: center;
@@ -864,31 +1057,14 @@
             flex-shrink: 0;
             white-space: nowrap;
         }
-
-        .hotel-strip {
-            width: 100%;
-            margin-bottom: 11px;
-            padding: 11px 13px;
-            border-radius: 14px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-size: 0.81rem;
-            font-weight: 800;
-            box-shadow: var(--shadow-card);
-        }
-        .hotel-strip span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .map-chip:active { transform: scale(0.95); }
 
         .day-pager {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 8px;
-            margin-top: 4px;
+            margin-top: 6px;
         }
-
         .pager-btn {
             min-width: 0;
             border: 1px solid var(--border-subtle);
@@ -925,32 +1101,107 @@
             box-shadow: var(--shadow-card);
         }
 
-        .hotel-item { padding: 10px 0; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-        .hotel-item:last-child { border-bottom: none; padding-bottom: 0; }
-
-        /* POI & Filters */
+        /* ================= 探索指南（扁平單層雜誌列表，零嵌套、滿寬閱讀） ================= */
         .search-input {
             width: 100%;
             background: var(--bg-card);
             color: var(--text-primary);
             border: 1px solid var(--border-subtle);
-            border-radius: 11px;
-            padding: 9px 11px;
-            font-size: 0.81rem;
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-size: 0.82rem;
             font-weight: 600;
             margin-bottom: 8px;
             outline: none;
         }
-        .search-input:focus { border-color: var(--accent); }
+        .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
-        .filter-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 7px; margin-bottom: 4px; scrollbar-width: none; }
+        .filter-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 7px; margin-bottom: 2px; scrollbar-width: none; }
         .filter-row::-webkit-scrollbar { display: none; }
         .filter-chip { border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-secondary); font-size: 0.72rem; font-weight: 700; padding: 5px 10px; border-radius: 999px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
         .filter-chip.active { background: var(--accent); border-color: var(--accent); color: #ffffff; }
 
-        .poi-card { width: 100%; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 15px; padding: 12px 13px; margin-bottom: 9px; box-shadow: var(--shadow-card); }
-        .poi-head { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 5px; }
-        .poi-name { font-size: 0.93rem; font-weight: 800; color: var(--text-primary); min-width: 0; overflow-wrap: anywhere; }
+        .guide-group {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+        .guide-group-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: var(--bg-card-alt);
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: var(--text-secondary);
+            letter-spacing: 0.4px;
+        }
+        .guide-item {
+            padding: 14px 15px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .guide-item:last-child { border-bottom: none; }
+
+        .guide-head-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .guide-title-wrap {
+            min-width: 0;
+            flex: 1;
+        }
+        .guide-idx {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-right: 6px;
+        }
+        .guide-name {
+            font-size: 0.97rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+        .guide-meta-line {
+            margin-top: 3px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+        .guide-highlight {
+            margin-top: 8px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1.48;
+            overflow-wrap: anywhere;
+        }
+        .guide-desc {
+            margin-top: 6px;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.68;
+            letter-spacing: 0.01em;
+            overflow-wrap: anywhere;
+        }
+        .guide-tip {
+            margin-top: 7px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.58;
+            overflow-wrap: anywhere;
+        }
 
         /* ================= 精品級工具箱 / 預算帳本 / 住宿 / 探索 / 應變 視覺系統 ================= */
         .section-kicker {
@@ -2741,6 +2992,37 @@
         `;
     }
 
+    /* ================= 行程渲染（滿寬單層卡片 + 精簡時間表切換） ================= */
+    let itineraryCompactMode = false;
+
+    function parseActivityTitle(rawTitle) {
+        const str = String(rawTitle || '').trim();
+        if (!str) return { kicker: '', title: '未命名節點' };
+        const colonMatch = str.match(/^([^：:]{2,26})[：:]\s*(.+)$/);
+        if (colonMatch) {
+            const k = colonMatch[1].replace(/[（(]/g, ' · ').replace(/[）)]/g, '').replace(/\s*·\s*$/, '').trim();
+            return { kicker: k, title: colonMatch[2].trim() };
+        }
+        return { kicker: '', title: str };
+    }
+
+    function formatCleanParagraphs(text) {
+        const lines = String(text || '').trim().split(/\n+/).map(s => s.trim()).filter(Boolean);
+        if (!lines.length) return '';
+        if (lines.length === 1) return lines[0];
+        return lines.map(l => `<p>${l}</p>`).join('');
+    }
+
+    function toggleItineraryCompactMode() {
+        itineraryCompactMode = !itineraryCompactMode;
+        renderItinerary((globalData && globalData.itinerary) || []);
+    }
+
+    function scrollToDayNotes(dayNum) {
+        const el = document.getElementById(`day-notes-${dayNum}`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function getMoveIcon(t) {
         if (!t) return '🚗';
         const txt = t.toLowerCase();
@@ -2782,15 +3064,16 @@
         if (itineraryOverviewMode) {
             container.innerHTML = `
                 <div style="padding-top: 12px;">
-                    <div style="font-size: 0.74rem; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; padding: 0 2px;">
-                        點擊任一天即可進入該日獨立分頁（共 ${days.length} 天）
+                    <div class="section-kicker">
+                        <span class="section-kicker-title">🗓️ 全行程總覽</span>
+                        <span class="section-kicker-meta">共 ${days.length} 天 · 點擊進入單日</span>
                     </div>
                     ${days.map(d => `
                         <div class="overview-card" onclick="selectDayTab(${d.day})">
                             <div style="min-width: 0; flex: 1;">
                                 <div class="day-kicker tabular-nums">DAY ${d.day} · ${d.date || ''} ${liveWeatherCache[d.day] || d.weather || ''}</div>
                                 <div style="font-family: 'Noto Serif TC', serif; font-size: 0.96rem; font-weight: 900; margin-top: 2px; overflow-wrap: anywhere;">${d.title || '未命名行程'}</div>
-                                <div style="font-size: 0.73rem; color: var(--text-secondary); margin-top: 3px;">
+                                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 3px;">
                                     ${(d.schedule || []).length} 個節點 ${d.hotel && d.hotel.name ? `· 🏨 ${d.hotel.name}` : ''}
                                 </div>
                             </div>
@@ -2818,66 +3101,134 @@
             const totalStay = scheduleList.reduce((acc, s) => acc + (Number(s.stay) || 0), 0);
             const totalMove = scheduleList.reduce((acc, s) => acc + (Number(s.move) || 0), 0);
 
-            const statsPills = [
-                `<span class="mini-pill accent tabular-nums">📍 ${scheduleList.length} 個節點</span>`,
-                totalStay > 0 ? `<span class="mini-pill sky tabular-nums">⏳ 停留 ${formatMinutes(totalStay)}</span>` : '',
-                totalMove > 0 ? `<span class="mini-pill tabular-nums">🧭 移動 ${formatMinutes(totalMove)}</span>` : ''
-            ].filter(Boolean).join('');
+            const statsSummary = [
+                `${scheduleList.length} 節點`,
+                totalStay > 0 ? `停留 ${formatMinutes(totalStay)}` : '',
+                totalMove > 0 ? `移動 ${formatMinutes(totalMove)}` : ''
+            ].filter(Boolean).join(' · ');
 
-            const storyHtml = d.story_block ? `<div class="callout-box callout-story">${d.story_block}</div>` : '';
-            const alertHtml = d.critical_alert ? `<div class="callout-box callout-alert"><strong>⚠️ 關鍵提醒</strong><br>${d.critical_alert}</div>` : '';
-            const planBHtml = d.plan_b ? `<div class="callout-box"><strong>💡 備案提示</strong><br>${d.plan_b}</div>` : '';
+            // 備案 / 導讀 / 攝影筆記 / 營運資訊集中為單層扁平備忘卡，置於時間軸下方（上方提供快速跳轉）
+            const noteSections = [];
+            if (d.plan_b) {
+                noteSections.push(`
+                    <div class="day-note-section">
+                        <div class="day-note-label">💡 備案提示</div>
+                        <div class="day-note-body">${formatCleanParagraphs(d.plan_b)}</div>
+                    </div>`);
+            }
+            if (d.story_block) {
+                noteSections.push(`
+                    <div class="day-note-section">
+                        <div class="day-note-label">📖 今日導讀</div>
+                        <div class="day-note-body is-serif">${formatCleanParagraphs(d.story_block)}</div>
+                    </div>`);
+            }
+            if (d.photo_notes) {
+                noteSections.push(`
+                    <div class="day-note-section">
+                        <div class="day-note-label">📸 攝影筆記</div>
+                        <div class="day-note-body">${formatCleanParagraphs(d.photo_notes)}</div>
+                    </div>`);
+            }
+            if (Array.isArray(d.operational_modules) && d.operational_modules.length) {
+                d.operational_modules.forEach(op => {
+                    noteSections.push(`
+                        <div class="day-note-section">
+                            <div class="day-note-label">📋 ${op.title}</div>
+                            <div class="day-note-kv">
+                                ${(op.fields || []).map(f => `
+                                    <div style="min-width: 0; ${f.full_width ? 'grid-column: 1 / -1;' : ''}">
+                                        <div style="font-size: 0.7rem; color: var(--text-muted);">${f.label}</div>
+                                        <div style="font-size: 0.81rem; font-weight: 700; color: var(--text-primary); overflow-wrap: anywhere;">${f.value}</div>
+                                    </div>`).join('')}
+                            </div>
+                        </div>`);
+                });
+            }
 
-            const schedHtml = scheduleList.length ? `
-                <div class="timeline-wrap">
-                    ${scheduleList.map(s => {
-                        const kind = detectSlotKind(s);
-                        const pills = [];
-                        if (s.stay > 0) pills.push(`<span class="mini-pill sky tabular-nums">停留 ${s.stay}m</span>`);
-                        if (s.move > 0) pills.push(`<span class="mini-pill accent tabular-nums">移動 ${s.move}m</span>`);
-                        if (s.transport) {
-                            const routeLabel = s.from && s.to ? `${s.from} ➔ ${s.to}` : s.transport;
-                            pills.push(`<span class="mini-pill">${getMoveIcon(s.transport)} ${routeLabel}</span>`);
-                        }
-                        return `
-                            <div class="timeline-item">
-                                <div class="timeline-axis">
-                                    <div class="timeline-node ${kind}"></div>
-                                    <div class="timeline-stem"></div>
-                                </div>
-                                <div class="slot-card ${kind === 'kind-move' ? 'is-transit' : ''}">
-                                    <div class="slot-top">
-                                        <span class="slot-time tabular-nums">${s.time || '--:--'}</span>
+            const notesJumpHtml = noteSections.length
+                ? `<button type="button" class="day-jump-link" onclick="scrollToDayNotes(${d.day})">備案與筆記 ↓</button>`
+                : '';
+
+            const alertHtml = d.critical_alert ? `
+                <div class="day-alert-strip">
+                    <div class="day-alert-label">⚠️ 關鍵提醒</div>
+                    <div>${formatCleanParagraphs(d.critical_alert)}</div>
+                </div>` : '';
+
+            // 時間軸：100% 滿寬卡片（詳細閱讀 vs 精簡時間表）
+            let schedBodyHtml = '<div class="panel-card">當日尚未新增時間軸節點。</div>';
+            if (scheduleList.length) {
+                if (itineraryCompactMode) {
+                    schedBodyHtml = `
+                        <div class="sched-list is-compact">
+                            ${scheduleList.map(s => {
+                                const kind = detectSlotKind(s);
+                                const parsed = parseActivityTitle(s.activity);
+                                const subParts = [];
+                                if (s.transport) subParts.push(`${getMoveIcon(s.transport)} ${s.from && s.to ? `${s.from} → ${s.to}` : s.transport}`);
+                                if (s.stay > 0) subParts.push(`停留 ${s.stay}m`);
+                                if (s.move > 0) subParts.push(`移動 ${s.move}m`);
+                                return `
+                                    <div class="sched-compact-row ${kind}">
+                                        <div class="sched-compact-left">
+                                            <div class="sched-compact-time tabular-nums">${s.time || '--:--'}${subParts.length ? ` · ${subParts.join(' · ')}` : ''}</div>
+                                            <div class="sched-compact-title">${parsed.title}</div>
+                                        </div>
                                         ${s.map_url ? `<a href="${s.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
-                                    </div>
-                                    <div class="slot-title">${s.activity}</div>
-                                    ${pills.length ? `<div class="pill-row">${pills.join('')}</div>` : ''}
-                                    ${s.desc ? `<div class="slot-desc">${s.desc}</div>` : ''}
-                                </div>
-                            </div>`;
-                    }).join('')}
-                </div>` : '<div class="panel-card">當日尚未新增時間軸節點。</div>';
+                                    </div>`;
+                            }).join('')}
+                        </div>`;
+                } else {
+                    schedBodyHtml = `
+                        <div class="sched-list">
+                            ${scheduleList.map(s => {
+                                const kind = detectSlotKind(s);
+                                const parsed = parseActivityTitle(s.activity);
+                                const subParts = [];
+                                if (s.transport) subParts.push(`${getMoveIcon(s.transport)} ${s.from && s.to ? `${s.from} → ${s.to}` : s.transport}`);
+                                if (s.stay > 0) subParts.push(`停留 ${s.stay}m`);
+                                if (s.move > 0) subParts.push(`移動 ${s.move}m`);
+                                return `
+                                    <div class="sched-card ${kind}">
+                                        <div class="sched-meta-row">
+                                            <div class="sched-time-meta tabular-nums">
+                                                <span class="sched-time">${s.time || '--:--'}</span>
+                                                ${subParts.length ? `<span class="sched-submeta">${subParts.join(' · ')}</span>` : ''}
+                                            </div>
+                                            ${s.map_url ? `<a href="${s.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                                        </div>
+                                        ${parsed.kicker ? `<div class="sched-kicker">${parsed.kicker}</div>` : ''}
+                                        <div class="sched-title">${parsed.title}</div>
+                                        ${s.desc ? `<div class="sched-desc">${formatCleanParagraphs(s.desc)}</div>` : ''}
+                                    </div>`;
+                            }).join('')}
+                        </div>`;
+                }
+            }
 
-            const opHtml = (d.operational_modules || []).map(op => {
-                const fields = (op.fields || []).map(f => `
-                    <div style="min-width: 0; ${f.full_width ? 'grid-column: 1 / -1;' : ''}">
-                        <div style="font-size: 0.69rem; color: var(--text-muted);">${f.label}</div>
-                        <div style="font-size: 0.79rem; font-weight: 700; color: var(--text-primary); overflow-wrap: anywhere;">${f.value}</div>
-                    </div>
-                `).join('');
-                return `
-                    <div class="panel-card" style="padding: 12px 13px;">
-                        <div style="font-size: 0.77rem; font-weight: 800; color: var(--accent); margin-bottom: 6px;">${op.title}</div>
-                        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px;">${fields}</div>
-                    </div>`;
-            }).join('');
+            const schedSectionHtml = `
+                <div class="section-kicker" style="padding-top: 2px;">
+                    <span class="section-kicker-title">行程動線</span>
+                    <button type="button" class="mode-switch-btn ${itineraryCompactMode ? 'active' : ''}" onclick="toggleItineraryCompactMode()">
+                        ${itineraryCompactMode ? '切換詳細閱讀' : '切換精簡時間表'}
+                    </button>
+                </div>
+                ${schedBodyHtml}`;
 
-            const photoHtml = d.photo_notes ? `<div class="callout-box"><strong>📸 攝影筆記</strong><br>${d.photo_notes.replace(/\n/g, '<br>')}</div>` : '';
+            const dayNotesHtml = noteSections.length ? `
+                <div id="day-notes-${d.day}" class="section-kicker">
+                    <span class="section-kicker-title">當日備案與筆記</span>
+                </div>
+                <div class="day-notes-card">${noteSections.join('')}</div>` : '';
 
             const hotelHtml = d.hotel ? `
-                <div class="hotel-strip">
-                    <span>🏨 ${d.hotel.name}</span>
-                    ${d.hotel.map_url ? `<a href="${d.hotel.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                <div class="stay-card">
+                    <div class="stay-top">
+                        <span class="stay-date-pill">🏨 今晚下榻</span>
+                        ${d.hotel.map_url ? `<a href="${d.hotel.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                    </div>
+                    <div class="stay-name" style="margin-bottom: 0;">${d.hotel.name}</div>
                 </div>` : '';
 
             const pagerHtml = days.length > 1 ? `
@@ -2901,14 +3252,14 @@
                         </div>
                         <h2 class="day-card-title">${d.title || '未命名行程'}</h2>
                         ${d.subtitle ? `<div class="day-card-sub">${d.subtitle}</div>` : ''}
-                        <div class="day-stats-bar">${statsPills}</div>
+                        <div class="day-jump-bar">
+                            <span class="day-stats-inline tabular-nums">${statsSummary}</span>
+                            ${notesJumpHtml}
+                        </div>
                     </div>
                     ${alertHtml}
-                    ${planBHtml}
-                    ${storyHtml}
-                    ${schedHtml}
-                    ${opHtml}
-                    ${photoHtml}
+                    ${schedSectionHtml}
+                    ${dayNotesHtml}
                     ${hotelHtml}
                     ${pagerHtml}
                 </section>`;
@@ -2951,27 +3302,42 @@
     }
 
     function renderTheme(guide) {
+        const container = document.getElementById('theme');
         if (!guide || !guide.length) {
-            document.getElementById('theme').innerHTML = '<div class="panel-card">尚無主題絕景資料。</div>';
+            container.innerHTML = '<div class="panel-card">尚無主題絕景資料。</div>';
             return;
         }
-        document.getElementById('theme').innerHTML = guide.map(g => `
-            <div class="poi-card">
-                <div class="poi-kicker">
-                    <span class="mini-pill accent">${g.tag || '主題絕景'}</span>
-                    ${g.map_url ? `<a href="${g.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+        const itemsHtml = guide.map((g, idx) => {
+            const num = String(idx + 1).padStart(2, '0');
+            const metaLine = [
+                g.tag || '',
+                g.time ? `🕒 ${g.time}` : '',
+                g.fee ? `🎟️ ${g.fee}` : ''
+            ].filter(Boolean).join(' · ');
+
+            return `
+                <div class="guide-item">
+                    <div class="guide-head-row">
+                        <div class="guide-title-wrap">
+                            <div class="guide-name"><span class="guide-idx">${num}</span>${g.name}</div>
+                            ${metaLine ? `<div class="guide-meta-line tabular-nums">${metaLine}</div>` : ''}
+                        </div>
+                        ${g.map_url ? `<a href="${g.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                    </div>
+                    ${g.best ? `<div class="guide-highlight">★ 最佳時機｜${g.best}</div>` : ''}
+                    ${g.desc ? `<div class="guide-desc">${formatCleanParagraphs(g.desc)}</div>` : ''}
+                    ${g.tips ? `<div class="guide-tip">📸 ${g.tips}</div>` : ''}
+                </div>`;
+        }).join('');
+
+        container.innerHTML = `
+            <div class="guide-group">
+                <div class="guide-group-head">
+                    <span>✨ 主題絕景指南</span>
+                    <span class="tabular-nums">${guide.length} 處</span>
                 </div>
-                <div class="poi-name" style="margin-bottom: 2px;">✨ ${g.name}</div>
-                ${g.best ? `<div class="poi-sig-strip">★ 最佳時機：${g.best}</div>` : ''}
-                ${g.desc ? `<div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.55; overflow-wrap: anywhere;">${g.desc}</div>` : ''}
-                ${g.tips ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.5; overflow-wrap: anywhere;">📸 ${g.tips}</div>` : ''}
-                ${(g.time || g.fee) ? `
-                    <div class="poi-meta-bar">
-                        ${g.time ? `<span class="mini-pill">🕒 ${g.time}</span>` : ''}
-                        ${g.fee ? `<span class="mini-pill sky tabular-nums">🎟️ ${g.fee}</span>` : ''}
-                    </div>` : ''}
-            </div>
-        `).join('');
+                ${itemsHtml}
+            </div>`;
     }
 
     function classifyPoiTag(tagStr) {
@@ -3007,6 +3373,28 @@
         initPOI(globalData.poi_database || []);
     }
 
+    function buildPoiItemHtml(f) {
+        const metaLine = [
+            f.area || '',
+            f.tag || '',
+            f.price || ''
+        ].filter(Boolean).join(' · ');
+
+        return `
+            <div class="guide-item">
+                <div class="guide-head-row">
+                    <div class="guide-title-wrap">
+                        <div class="guide-name">${f.name}</div>
+                        ${metaLine ? `<div class="guide-meta-line tabular-nums">${metaLine}</div>` : ''}
+                    </div>
+                    ${f.map_url ? `<a href="${f.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                </div>
+                ${f.signature ? `<div class="guide-highlight">★ 推薦｜${f.signature}</div>` : ''}
+                ${f.desc ? `<div class="guide-desc">${formatCleanParagraphs(f.desc)}</div>` : ''}
+                ${f.tips ? `<div class="guide-tip">💡 ${f.tips}</div>` : ''}
+            </div>`;
+    }
+
     function renderPOIList() {
         const keyword = (document.getElementById('poi-search-input')?.value || '').trim().toLowerCase();
         const filtered = (globalData.poi_database || []).filter(item => {
@@ -3016,22 +3404,33 @@
             return matchArea && matchCat && matchKw;
         });
 
-        document.getElementById('poi-list').innerHTML = filtered.length ? filtered.map(f => `
-            <div class="poi-card">
-                <div class="poi-kicker">
-                    <div style="display:flex; gap:5px; align-items:center; min-width:0; flex-wrap:wrap;">
-                        ${f.area ? `<span class="mini-pill accent">${f.area}</span>` : ''}
-                        ${f.tag ? `<span class="mini-pill">${f.tag}</span>` : ''}
-                    </div>
-                    ${f.map_url ? `<a href="${f.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+        const container = document.getElementById('poi-list');
+        if (!filtered.length) {
+            container.innerHTML = '<div class="panel-card">無符合條件的地點。</div>';
+            return;
+        }
+
+        // 依地區分組（減少零散長列表的視覺疲勞，直接照地理位置掃讀）
+        const groups = [];
+        const groupMap = {};
+        filtered.forEach(item => {
+            const areaKey = item.area || '精選地點';
+            if (!groupMap[areaKey]) {
+                groupMap[areaKey] = { area: areaKey, items: [] };
+                groups.push(groupMap[areaKey]);
+            }
+            groupMap[areaKey].items.push(item);
+        });
+
+        container.innerHTML = groups.map(g => `
+            <div class="guide-group">
+                <div class="guide-group-head">
+                    <span>📍 ${g.area}</span>
+                    <span class="tabular-nums">${g.items.length} 間</span>
                 </div>
-                <div class="poi-name" style="margin-bottom: 2px;">${f.name}</div>
-                ${f.signature ? `<div class="poi-sig-strip">★ 必點推薦：${f.signature}</div>` : ''}
-                ${f.desc ? `<div style="font-size: 0.79rem; color: var(--text-secondary); line-height: 1.55; overflow-wrap: anywhere;">${f.desc}</div>` : ''}
-                ${f.tips ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.48; overflow-wrap: anywhere;">💡 ${f.tips}</div>` : ''}
-                ${f.price ? `<div class="poi-meta-bar"><span class="mini-pill sky tabular-nums">💳 ${f.price}</span></div>` : ''}
+                ${g.items.map(buildPoiItemHtml).join('')}
             </div>
-        `).join('') : '<div class="panel-card">無符合條件的地點。</div>';
+        `).join('');
     }
 
     /* ================= 智能預算解析與帳本渲染引擎 ================= */
