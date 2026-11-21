@@ -1962,7 +1962,7 @@
     }
 
     /* ================= 雙引擎即時航班時刻與航線系統 (AirLabs / AviationStack / AeroDataBox + ADSBdb) ================= */
-    const ADSBDB_CACHE_KEY = 'adsbdb_flight_cache_v2';
+    const ADSBDB_CACHE_KEY = 'adsbdb_flight_cache_v3';
     const LIVE_SCHED_CACHE_KEY = 'live_flight_schedule_cache_v1';
     const LIVE_API_CONFIG_KEY = 'flight_live_api_config_v1';
     const ADSBDB_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -2404,7 +2404,9 @@
 
     function resolveAirportEndpoint(iataCode, adsb) {
         const code = String(iataCode || '').toUpperCase();
-        const adsbAp = adsb?.airportsByIata?.[code] || null;
+        const adsbAp = adsb?.airportsByIata?.[code]
+            || [adsb?.origin, adsb?.midpoint, adsb?.destination].find(ap => ap && String(ap.iata || '').toUpperCase() === code)
+            || null;
         const refAp = AIRPORT_REF_DB[code] || null;
         if (!adsbAp && !refAp) return null;
         return {
@@ -2481,10 +2483,17 @@
             live?.arrGate ? `抵達門 ${live.arrGate}` : ''
         ].filter(Boolean).join(' · ');
 
+        const adsbMap = adsb?.airportsByIata || {};
+        const adsbHasLegPoint = Boolean(
+            adsbMap[depCode] || adsbMap[arrCode] ||
+            adsb?.origin?.iata === depCode || adsb?.origin?.iata === arrCode ||
+            adsb?.midpoint?.iata === depCode || adsb?.midpoint?.iata === arrCode ||
+            adsb?.destination?.iata === depCode || adsb?.destination?.iata === arrCode
+        );
         const isFifthFreedomLeg = Boolean(
             adsb && adsb.matchedRoute &&
             (adsb.origin?.iata !== depCode || adsb.destination?.iata !== arrCode) &&
-            (adsb.airportsByIata[depCode] || adsb.airportsByIata[arrCode])
+            adsbHasLegPoint
         );
 
         return {
@@ -2620,7 +2629,11 @@
         const cur = ((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy').toLowerCase();
         const displayRate = currentRate > 0 ? Number(currentRate).toFixed(currentRate < 1 ? 3 : 2) : (offlineRates[cur] || 0.207);
         const chkPct = getChecklistPct();
-        const days = globalData.itinerary;
+        const days = (globalData && globalData.itinerary) || [];
+        if (!days.length) {
+            document.getElementById('dashboard').innerHTML = '<div class="panel-card">尚未建立行程資料。</div>';
+            return;
+        }
         const focusDay = getFocusDay() || days[0];
         const flights = (globalData.flights_and_hotels && globalData.flights_and_hotels.flights) || [];
         const hotels = (globalData.flights_and_hotels && globalData.flights_and_hotels.hotels) || [];
