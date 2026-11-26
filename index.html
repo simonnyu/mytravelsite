@@ -1101,7 +1101,7 @@
             box-shadow: var(--shadow-card);
         }
 
-        /* ================= 探索指南（扁平單層雜誌列表，零嵌套、滿寬閱讀） ================= */
+        /* ================= 探索指南（扁平單層雜誌列表＋豐富資訊欄位，零嵌套、滿寬閱讀） ================= */
         .search-input {
             width: 100%;
             background: var(--bg-card);
@@ -1152,12 +1152,40 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            gap: 10px;
+            gap: 8px;
         }
         .guide-title-wrap {
             min-width: 0;
             flex: 1;
         }
+        .guide-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .fav-btn {
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card-alt);
+            color: var(--text-muted);
+            width: 28px;
+            height: 26px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.14s ease;
+        }
+        .fav-btn.active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .fav-btn:active { transform: scale(0.92); }
+
         .guide-idx {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.76rem;
@@ -1166,7 +1194,7 @@
             margin-right: 6px;
         }
         .guide-name {
-            font-size: 0.97rem;
+            font-size: 0.98rem;
             font-weight: 900;
             color: var(--text-primary);
             line-height: 1.35;
@@ -1175,16 +1203,49 @@
         .guide-meta-line {
             margin-top: 3px;
             font-size: 0.74rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-muted);
             line-height: 1.4;
         }
+
+        /* 扁平 2 欄實戰資訊列（無框套框，滿寬高資訊密度） */
+        .guide-facts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 6px 12px;
+            margin-top: 9px;
+            padding: 8px 0;
+            border-top: 1px dashed var(--border-subtle);
+            border-bottom: 1px dashed var(--border-subtle);
+        }
+        .guide-fact {
+            min-width: 0;
+            font-size: 0.75rem;
+            line-height: 1.42;
+            color: var(--text-secondary);
+            overflow-wrap: anywhere;
+        }
+        .guide-fact.full {
+            grid-column: 1 / -1;
+        }
+        .guide-fact-k {
+            font-size: 0.67rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 1px;
+        }
+        .guide-fact-v {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
         .guide-highlight {
-            margin-top: 8px;
-            font-size: 0.82rem;
+            margin-top: 9px;
+            font-size: 0.83rem;
             font-weight: 800;
             color: var(--accent);
-            line-height: 1.48;
+            line-height: 1.5;
             overflow-wrap: anywhere;
         }
         .guide-desc {
@@ -1195,12 +1256,43 @@
             letter-spacing: 0.01em;
             overflow-wrap: anywhere;
         }
-        .guide-tip {
-            margin-top: 7px;
+        .guide-notes {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .guide-note-line {
             font-size: 0.78rem;
-            color: var(--text-muted);
-            line-height: 1.58;
+            color: var(--text-secondary);
+            line-height: 1.56;
+            padding-left: 9px;
+            border-left: 2px solid var(--border-strong);
             overflow-wrap: anywhere;
+        }
+        .guide-note-line.photo { border-left-color: var(--sky); }
+        .guide-note-line.goshuin { border-left-color: var(--emerald); }
+        .guide-note-line.tip { border-left-color: var(--accent); }
+        .guide-note-tag {
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-right: 4px;
+        }
+
+        .guide-tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 9px;
+        }
+        .guide-tag-pill {
+            font-size: 0.67rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: var(--bg-card-alt);
+            color: var(--text-secondary);
+            white-space: nowrap;
         }
 
         /* ================= 精品級工具箱 / 預算帳本 / 住宿 / 探索 / 應變 視覺系統 ================= */
@@ -1845,6 +1937,235 @@
             75% { transform: translateX(8px); }
         }
         .shake { animation: shake 0.35s ease; }
+
+        /* ================= iOS 原生 App 質感升級（毛玻璃 Dock・觸覺按壓・滑動翻日・Bottom Sheet・Toast） ================= */
+        :root,
+        :root[data-theme="dark"] {
+            --bg-dock-glass: rgba(14, 18, 25, 0.86);
+            --sheet-bg: #151a24;
+            --sheet-backdrop: rgba(0, 0, 0, 0.62);
+        }
+        :root[data-theme="paper"] {
+            --bg-dock-glass: rgba(255, 255, 255, 0.88);
+            --sheet-bg: #fcfaf6;
+            --sheet-backdrop: rgba(38, 32, 25, 0.42);
+        }
+
+        html, body {
+            overscroll-behavior-y: contain;
+        }
+
+        /* 系統導覽元件禁止長按反白選字，保留內文可複製 */
+        .app-topbar, .bottom-dock, .day-tab-strip, .sticky-subbar-wrap,
+        .b-tab, .seg-btn, .filter-chip, .pager-btn, .cta-btn, .icon-pill-btn,
+        .mode-switch-btn, .fav-btn, .map-chip, .step-btn, .chk-filter-btn {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .bottom-dock {
+            background: var(--bg-dock-glass);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+        }
+
+        /* 原生 Spring 觸覺按壓微縮 */
+        .sched-card, .sched-compact-row, .guide-item, .bento-tile,
+        .overview-card, .stay-card, .flighty-card {
+            transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.16s ease;
+        }
+        .sched-card:active, .sched-compact-row:active, .guide-item:active,
+        .bento-tile:active, .overview-card:active, .flighty-card:active {
+            transform: scale(0.986);
+        }
+        .sched-card, .sched-compact-row, .guide-item {
+            cursor: pointer;
+        }
+
+        /* 單日滑動切換方向動畫 */
+        @keyframes slideFromRight {
+            from { opacity: 0.35; transform: translateX(22px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideFromLeft {
+            from { opacity: 0.35; transform: translateX(-22px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .day-page.slide-next { animation: slideFromRight 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
+        .day-page.slide-prev { animation: slideFromLeft 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
+
+        /* 看板「下一站」快捷條 */
+        .upnext-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--emerald);
+            border-radius: 11px;
+            padding: 8px 10px;
+            margin-bottom: 10px;
+        }
+        .upnext-info {
+            min-width: 0;
+            flex: 1;
+        }
+        .upnext-kicker {
+            font-size: 0.63rem;
+            font-weight: 800;
+            color: var(--emerald);
+            letter-spacing: 0.4px;
+        }
+        .upnext-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* iOS 動態島風格懸浮 Toast */
+        .ios-toast {
+            position: fixed;
+            top: calc(var(--topbar-total) + 10px);
+            left: 50%;
+            transform: translate(-50%, -18px) scale(0.94);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9500;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-strong);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.42);
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            max-width: calc(100vw - 32px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: opacity 0.2s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .ios-toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0) scale(1);
+        }
+
+        /* iOS 原生 Bottom Sheet 底部抽屜 */
+        .sheet-backdrop {
+            position: fixed;
+            inset: 0;
+            background: var(--sheet-backdrop);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 9000;
+            transition: opacity 0.22s ease;
+        }
+        .sheet-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .native-sheet {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%, 104%);
+            width: 100%;
+            max-width: 480px;
+            max-height: 82vh;
+            background: var(--sheet-bg);
+            border-top: 1px solid var(--border-strong);
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -16px 44px rgba(0, 0, 0, 0.5);
+            z-index: 9100;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+            padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        }
+        .native-sheet.open {
+            transform: translate(-50%, 0);
+        }
+        .sheet-grabber-zone {
+            padding: 10px 0 6px;
+            display: flex;
+            justify-content: center;
+            cursor: grab;
+            flex-shrink: 0;
+        }
+        .sheet-grabber {
+            width: 38px;
+            height: 5px;
+            border-radius: 999px;
+            background: var(--border-strong);
+        }
+        .sheet-scroll-body {
+            padding: 4px 18px 12px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .sheet-kicker {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .sheet-title {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 1.12rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.35;
+            margin: 0 0 8px;
+        }
+        .sheet-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.68;
+            margin-bottom: 12px;
+            overflow-wrap: anywhere;
+        }
+        .sheet-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .sheet-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 11px 10px;
+            border-radius: 13px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card-alt);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .sheet-action-btn.primary {
+            grid-column: 1 / -1;
+            background: var(--cta-bg);
+            color: var(--cta-text);
+            border-color: transparent;
+            font-size: 0.86rem;
+        }
+        .sheet-action-btn:active {
+            transform: scale(0.97);
+        }
+
     </style>
 </head>
 <body style="overflow: hidden;">
@@ -1892,9 +2213,13 @@
                     <button class="seg-btn" id="seg-poi" onclick="switchSubPane('explore', 'poi')">☕ 美食與咖啡</button>
                 </div>
             </div>
-            <div id="theme" class="sub-pane active"></div>
+            <div id="theme" class="sub-pane active">
+                <input type="search" id="theme-search-input" class="search-input" placeholder="🔍 搜尋絕景、攝影點、建築或御朱印..." oninput="renderThemeList()">
+                <div class="filter-row" id="theme-area-filters"></div>
+                <div id="theme-list"></div>
+            </div>
             <div id="poi" class="sub-pane">
-                <input type="search" id="poi-search-input" class="search-input" placeholder="🔍 搜尋店名、特色或關鍵字..." oninput="renderPOIList()">
+                <input type="search" id="poi-search-input" class="search-input" placeholder="🔍 搜尋店名、必點、咖啡豆或地區..." oninput="renderPOIList()">
                 <div class="filter-row" id="poi-cat-filters"></div>
                 <div class="filter-row" id="poi-area-filters"></div>
                 <div id="poi-list"></div>
@@ -1993,6 +2318,14 @@
 
 </div>
 
+
+<div id="ios-toast" class="ios-toast" role="status" aria-live="polite"></div>
+<div id="sheet-backdrop" class="sheet-backdrop" onclick="closeNativeSheet()"></div>
+<div id="native-sheet" class="native-sheet" role="dialog" aria-modal="true">
+    <div class="sheet-grabber-zone" id="sheet-grabber-zone"><div class="sheet-grabber"></div></div>
+    <div class="sheet-scroll-body" id="native-sheet-body"></div>
+</div>
+
 <script>
 
     function applySavedTheme() {
@@ -2046,13 +2379,8 @@
         return `${y}-${m}-${day}`;
     }
 
-    function scrollAppToTop() {
-        const canvas = document.getElementById('app-canvas');
-        if (canvas && getComputedStyle(canvas).overflowY === 'auto') {
-            canvas.scrollTo({ top: 0, behavior: 'auto' });
-        } else {
-            window.scrollTo({ top: 0, behavior: 'auto' });
-        }
+    function scrollAppToTop(smooth = false) {
+        setAppScrollTop(0, smooth);
     }
 
     function bootSystem() {
@@ -2086,6 +2414,12 @@
             switchSubPane(parent, id);
             return;
         }
+        hapticTick(6);
+        if (currentMainTab === id) {
+            scrollAppToTop(true);
+            return;
+        }
+        tabScrollMemory[currentMainTab] = getAppScrollTop();
         currentMainTab = id;
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.b-tab').forEach(b => b.classList.remove('active'));
@@ -2094,7 +2428,7 @@
         const targetBtn = document.querySelector(`.b-tab[data-tab="${id}"]`);
         if (targetBtn) targetBtn.classList.add('active');
         updateTopbarContext(id);
-        scrollAppToTop();
+        setAppScrollTop(tabScrollMemory[id] || 0, false);
     }
 
     function switchSubPane(parentId, paneId) {
@@ -2109,8 +2443,11 @@
         scrollAppToTop();
     }
 
-    function selectDayTab(dayNum) {
+    function selectDayTab(dayNum, slideDir = '') {
+        const prevNum = Number(activeDayNum);
+        const dir = slideDir || (Number(dayNum) > prevNum ? 'next' : (Number(dayNum) < prevNum ? 'prev' : ''));
         activeDayNum = dayNum;
+        hapticTick(8);
         const needRerender = itineraryOverviewMode || !document.querySelector('#itinerary .day-page');
         itineraryOverviewMode = false;
         if (needRerender) {
@@ -2120,7 +2457,13 @@
                 btn.classList.toggle('active', Number(btn.dataset.day) === Number(dayNum));
             });
             document.querySelectorAll('#itinerary .day-page').forEach(page => {
-                page.classList.toggle('active', Number(page.dataset.day) === Number(dayNum));
+                const isTarget = Number(page.dataset.day) === Number(dayNum);
+                page.classList.remove('slide-next', 'slide-prev');
+                page.classList.toggle('active', isTarget);
+                if (isTarget && dir) {
+                    void page.offsetWidth;
+                    page.classList.add(dir === 'next' ? 'slide-next' : 'slide-prev');
+                }
             });
         }
         updateTopbarContext('itinerary');
@@ -2129,6 +2472,7 @@
         if (activeBtn) {
             activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+        tabScrollMemory.itinerary = 0;
         scrollAppToTop();
     }
 
@@ -2936,11 +3280,22 @@
 
         const focusWeather = liveWeatherCache[focusDay.day] || focusDay.weather || '—';
 
+        const firstSlot = (focusDay && Array.isArray(focusDay.schedule) && focusDay.schedule[0]) || null;
+        const upNextHtml = firstSlot ? `
+            <div class="upnext-strip" onclick="openSchedCardSheet(${focusDay.day}, 0, event)" style="cursor:pointer;">
+                <div class="upnext-info">
+                    <div class="upnext-kicker tabular-nums">⏱️ DAY ${focusDay.day} 首站 · ${firstSlot.time || '--:--'}</div>
+                    <div class="upnext-title">${parseActivityTitle(firstSlot.activity).title}</div>
+                </div>
+                ${firstSlot.map_url ? `<a href="${firstSlot.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+            </div>` : '';
+
         document.getElementById('dashboard').innerHTML = `
             <div class="hero-banner">
                 <div class="hero-tag">✦ ${metaSub}</div>
                 <h1 class="hero-title">${metaTitle}</h1>
                 ${statusTopHtml}
+                ${upNextHtml}
                 <button class="cta-btn" onclick="switchTab('itinerary'); selectDayTab(${focusDay.day});">
                     進入 Day ${focusDay.day} 完整行程 (${days.length} 天) ➔
                 </button>
@@ -3162,7 +3517,7 @@
                 if (itineraryCompactMode) {
                     schedBodyHtml = `
                         <div class="sched-list is-compact">
-                            ${scheduleList.map(s => {
+                            ${scheduleList.map((s, sIdx) => {
                                 const kind = detectSlotKind(s);
                                 const parsed = parseActivityTitle(s.activity);
                                 const subParts = [];
@@ -3170,7 +3525,7 @@
                                 if (s.stay > 0) subParts.push(`停留 ${s.stay}m`);
                                 if (s.move > 0) subParts.push(`移動 ${s.move}m`);
                                 return `
-                                    <div class="sched-compact-row ${kind}">
+                                    <div class="sched-compact-row ${kind}" onclick="openSchedCardSheet(${d.day}, ${sIdx}, event)">
                                         <div class="sched-compact-left">
                                             <div class="sched-compact-time tabular-nums">${s.time || '--:--'}${subParts.length ? ` · ${subParts.join(' · ')}` : ''}</div>
                                             <div class="sched-compact-title">${parsed.title}</div>
@@ -3182,7 +3537,7 @@
                 } else {
                     schedBodyHtml = `
                         <div class="sched-list">
-                            ${scheduleList.map(s => {
+                            ${scheduleList.map((s, sIdx) => {
                                 const kind = detectSlotKind(s);
                                 const parsed = parseActivityTitle(s.activity);
                                 const subParts = [];
@@ -3190,7 +3545,7 @@
                                 if (s.stay > 0) subParts.push(`停留 ${s.stay}m`);
                                 if (s.move > 0) subParts.push(`移動 ${s.move}m`);
                                 return `
-                                    <div class="sched-card ${kind}">
+                                    <div class="sched-card ${kind}" onclick="openSchedCardSheet(${d.day}, ${sIdx}, event)">
                                         <div class="sched-meta-row">
                                             <div class="sched-time-meta tabular-nums">
                                                 <span class="sched-time">${s.time || '--:--'}</span>
@@ -3301,50 +3656,168 @@
             ${hotelsHtml}`;
     }
 
+    let themeAreaFilter = '全部地區';
+    let exploreFavs = [];
+    try {
+        exploreFavs = JSON.parse(localStorage.getItem('tripExploreFavs_v1') || '[]') || [];
+    } catch (e) { exploreFavs = []; }
+
+    function isFavItem(key) {
+        return exploreFavs.includes(key);
+    }
+
+    function toggleFavItem(key, scope) {
+        if (exploreFavs.includes(key)) {
+            exploreFavs = exploreFavs.filter(k => k !== key);
+        } else {
+            exploreFavs.push(key);
+        }
+        try { localStorage.setItem('tripExploreFavs_v1', JSON.stringify(exploreFavs)); } catch (e) {}
+        if (scope === 'theme') renderTheme(globalData.theme_guide || []);
+        if (scope === 'poi') initPOI(globalData.poi_database || []);
+    }
+
+    function escapeJsQuote(str) {
+        return String(str || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
     function renderTheme(guide) {
-        const container = document.getElementById('theme');
+        const areaBox = document.getElementById('theme-area-filters');
+        const listBox = document.getElementById('theme-list');
+        if (!listBox) return;
         if (!guide || !guide.length) {
-            container.innerHTML = '<div class="panel-card">尚無主題絕景資料。</div>';
+            if (areaBox) areaBox.innerHTML = '';
+            listBox.innerHTML = '<div class="panel-card">尚無主題絕景資料。</div>';
             return;
         }
-        const itemsHtml = guide.map((g, idx) => {
-            const num = String(idx + 1).padStart(2, '0');
-            const metaLine = [
-                g.tag || '',
-                g.time ? `🕒 ${g.time}` : '',
-                g.fee ? `🎟️ ${g.fee}` : ''
-            ].filter(Boolean).join(' · ');
+        const areas = ['全部地區', '★ 已收藏', ...new Set(guide.map(g => g.area).filter(Boolean))];
+        if (areaBox) {
+            areaBox.innerHTML = areas.map(a => `
+                <button type="button" class="filter-chip ${a === themeAreaFilter ? 'active' : ''}" onclick="setThemeAreaFilter('${escapeJsQuote(a)}')">${a}</button>
+            `).join('');
+        }
+        renderThemeList();
+    }
 
-            return `
-                <div class="guide-item">
-                    <div class="guide-head-row">
-                        <div class="guide-title-wrap">
-                            <div class="guide-name"><span class="guide-idx">${num}</span>${g.name}</div>
-                            ${metaLine ? `<div class="guide-meta-line tabular-nums">${metaLine}</div>` : ''}
-                        </div>
+    function setThemeAreaFilter(val) {
+        themeAreaFilter = val;
+        renderTheme((globalData && globalData.theme_guide) || []);
+    }
+
+    function buildThemeItemHtml(g, globalIdx) {
+        const num = String(globalIdx + 1).padStart(2, '0');
+        const favKey = `theme::${g.name || ''}`;
+        const favActive = isFavItem(favKey);
+        const metaLine = [g.area || '', g.tag || ''].filter(Boolean).join(' · ');
+
+        const facts = [];
+        const timeVal = g.hours || g.time || '';
+        if (timeVal) facts.push({ k: '🕒 營業／時段', v: timeVal, full: timeVal.length > 18 });
+        if (g.fee) facts.push({ k: '🎟️ 費用門票', v: g.fee, full: g.fee.length > 18 });
+        if (g.stay) facts.push({ k: '⏳ 建議停留', v: g.stay, full: false });
+        if (g.access) facts.push({ k: '🚆 交通動線', v: g.access, full: true });
+
+        const factsHtml = facts.length ? `
+            <div class="guide-facts tabular-nums">
+                ${facts.map(f => `
+                    <div class="guide-fact ${f.full ? 'full' : ''}">
+                        <span class="guide-fact-k">${f.k}</span>
+                        <span class="guide-fact-v">${f.v}</span>
+                    </div>`).join('')}
+            </div>` : '';
+
+        const notes = [];
+        if (g.photo_tip) notes.push(`<div class="guide-note-line photo"><span class="guide-note-tag">📸 攝影光線</span>${g.photo_tip}</div>`);
+        if (g.goshuin) notes.push(`<div class="guide-note-line goshuin"><span class="guide-note-tag">⛩️ 御朱印／印章</span>${g.goshuin}</div>`);
+        if (g.tips) notes.push(`<div class="guide-note-line tip"><span class="guide-note-tag">💡 實戰貼士</span>${g.tips}</div>`);
+
+        const tagsArr = Array.isArray(g.highlights) ? g.highlights : [];
+        const tagsHtml = tagsArr.length ? `
+            <div class="guide-tags-row">
+                ${tagsArr.map(t => `<span class="guide-tag-pill"># ${t}</span>`).join('')}
+            </div>` : '';
+
+        return `
+            <div class="guide-item" onclick="openThemeCardSheet(${globalIdx}, event)">
+                <div class="guide-head-row">
+                    <div class="guide-title-wrap">
+                        <div class="guide-name"><span class="guide-idx">${num}</span>${g.name}</div>
+                        ${metaLine ? `<div class="guide-meta-line">${metaLine}</div>` : ''}
+                    </div>
+                    <div class="guide-actions">
+                        <button type="button" class="fav-btn ${favActive ? 'active' : ''}" title="收藏想去" onclick="toggleFavItem('${escapeJsQuote(favKey)}', 'theme')">${favActive ? '★' : '☆'}</button>
                         ${g.map_url ? `<a href="${g.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
                     </div>
-                    ${g.best ? `<div class="guide-highlight">★ 最佳時機｜${g.best}</div>` : ''}
-                    ${g.desc ? `<div class="guide-desc">${formatCleanParagraphs(g.desc)}</div>` : ''}
-                    ${g.tips ? `<div class="guide-tip">📸 ${g.tips}</div>` : ''}
-                </div>`;
-        }).join('');
+                </div>
+                ${factsHtml}
+                ${g.best ? `<div class="guide-highlight">★ 核心看點｜${g.best}</div>` : ''}
+                ${g.desc ? `<div class="guide-desc">${formatCleanParagraphs(g.desc)}</div>` : ''}
+                ${notes.length ? `<div class="guide-notes">${notes.join('')}</div>` : ''}
+                ${tagsHtml}
+            </div>`;
+    }
 
-        container.innerHTML = `
+    function renderThemeList() {
+        const listBox = document.getElementById('theme-list');
+        if (!listBox) return;
+        const allGuide = (globalData && globalData.theme_guide) || [];
+        const kw = (document.getElementById('theme-search-input')?.value || '').trim().toLowerCase();
+
+        const indexed = allGuide.map((g, idx) => ({ g, idx })).filter(({ g }) => {
+            const matchArea = themeAreaFilter === '全部地區'
+                || (themeAreaFilter === '★ 已收藏' ? isFavItem(`theme::${g.name || ''}`) : g.area === themeAreaFilter);
+            const hay = `${g.name || ''} ${g.area || ''} ${g.tag || ''} ${g.best || ''} ${g.desc || ''} ${g.photo_tip || ''} ${g.goshuin || ''} ${g.tips || ''} ${(g.highlights || []).join(' ')}`.toLowerCase();
+            const matchKw = !kw || hay.includes(kw);
+            return matchArea && matchKw;
+        });
+
+        if (!indexed.length) {
+            listBox.innerHTML = `<div class="panel-card">${themeAreaFilter === '★ 已收藏' ? '尚未收藏任何主題絕景，點卡片右上角 ☆ 即可加入。' : '無符合條件的主題絕景。'}</div>`;
+            return;
+        }
+
+        const hasAreas = indexed.some(({ g }) => Boolean(g.area));
+        if (!hasAreas) {
+            listBox.innerHTML = `
+                <div class="guide-group">
+                    <div class="guide-group-head">
+                        <span>✨ 主題絕景指南</span>
+                        <span class="tabular-nums">${indexed.length} 處</span>
+                    </div>
+                    ${indexed.map(({ g, idx }) => buildThemeItemHtml(g, idx)).join('')}
+                </div>`;
+            return;
+        }
+
+        const groups = [];
+        const groupMap = {};
+        indexed.forEach(entry => {
+            const areaKey = entry.g.area || '精選絕景';
+            if (!groupMap[areaKey]) {
+                groupMap[areaKey] = { area: areaKey, entries: [] };
+                groups.push(groupMap[areaKey]);
+            }
+            groupMap[areaKey].entries.push(entry);
+        });
+
+        listBox.innerHTML = groups.map(grp => `
             <div class="guide-group">
                 <div class="guide-group-head">
-                    <span>✨ 主題絕景指南</span>
-                    <span class="tabular-nums">${guide.length} 處</span>
+                    <span>✨ ${grp.area}</span>
+                    <span class="tabular-nums">${grp.entries.length} 處</span>
                 </div>
-                ${itemsHtml}
-            </div>`;
+                ${grp.entries.map(({ g, idx }) => buildThemeItemHtml(g, idx)).join('')}
+            </div>
+        `).join('');
     }
 
     function classifyPoiTag(tagStr) {
         const t = (tagStr || '').toLowerCase();
-        if (t.includes('咖') || t.includes('餐') || t.includes('食') || t.includes('酒') || t.includes('甜')) return '美食咖啡';
-        if (t.includes('景') || t.includes('拍') || t.includes('山') || t.includes('寺') || t.includes('館')) return '景點絕景';
-        if (t.includes('購') || t.includes('物') || t.includes('市')) return '購物市集';
+        if (t.includes('咖') || t.includes('coffee') || t.includes('roast') || t.includes('茶筒')) return '精品咖啡';
+        if (t.includes('酒') || t.includes('bar') || t.includes('精釀') || t.includes('小酌')) return '酒吧小酌';
+        if (t.includes('甜') || t.includes('年輪') || t.includes('菓子') || t.includes('伴手') || t.includes('冰')) return '甜點伴手';
+        if (t.includes('神') || t.includes('寺') || t.includes('景') || t.includes('古社') || t.includes('館')) return '神社景點';
+        if (t.includes('餐') || t.includes('食') || t.includes('牛') || t.includes('鰻') || t.includes('拉麵') || t.includes('燒肉') || t.includes('蕎麥')) return '在地美食';
         return '其他';
     }
 
@@ -3353,15 +3826,24 @@
             document.getElementById('poi-list').innerHTML = '<div class="panel-card">尚無探索地點資料。</div>';
             return;
         }
-        const cats = ['全部', '美食咖啡', '景點絕景', '購物市集', '其他'];
+        const cats = [
+            { id: '全部', label: '全部' },
+            { id: '★ 已收藏', label: '★ 已收藏' },
+            { id: '精品咖啡', label: '☕ 精品咖啡' },
+            { id: '在地美食', label: '🍽️ 在地美食' },
+            { id: '酒吧小酌', label: '🍺 酒吧小酌' },
+            { id: '神社景點', label: '⛩️ 神社景點' },
+            { id: '甜點伴手', label: '🥐 甜點伴手' },
+            { id: '其他', label: '✨ 其他' }
+        ];
         const areas = ['全部地區', ...new Set(list.map(i => i.area).filter(Boolean))];
 
         document.getElementById('poi-cat-filters').innerHTML = cats.map(c => `
-            <button type="button" class="filter-chip ${c === poiCategoryFilter ? 'active' : ''}" onclick="setPoiFilter('cat', '${c}')">${c}</button>
+            <button type="button" class="filter-chip ${c.id === poiCategoryFilter ? 'active' : ''}" onclick="setPoiFilter('cat', '${c.id}')">${c.label}</button>
         `).join('');
 
         document.getElementById('poi-area-filters').innerHTML = areas.map(a => `
-            <button type="button" class="filter-chip ${a === poiAreaFilter ? 'active' : ''}" onclick="setPoiFilter('area', '${String(a).replace(/'/g, "\\'")}')">${a}</button>
+            <button type="button" class="filter-chip ${a === poiAreaFilter ? 'active' : ''}" onclick="setPoiFilter('area', '${escapeJsQuote(a)}')">${a}</button>
         `).join('');
 
         renderPOIList();
@@ -3374,24 +3856,48 @@
     }
 
     function buildPoiItemHtml(f) {
-        const metaLine = [
-            f.area || '',
-            f.tag || '',
-            f.price || ''
-        ].filter(Boolean).join(' · ');
+        const favKey = `poi::${f.name || ''}`;
+        const favActive = isFavItem(favKey);
+        const metaLine = [f.tag || '', f.price || ''].filter(Boolean).join(' · ');
+
+        const facts = [];
+        if (f.hours) facts.push({ k: '🕒 營業時間', v: f.hours, full: f.hours.length > 20 });
+        if (f.closed) facts.push({ k: '🚫 公休日', v: f.closed, full: f.closed.length > 18 });
+        if (f.access) facts.push({ k: '🚶 位置交通', v: f.access, full: true });
+        if (f.reservation) facts.push({ k: '📌 預約建議', v: f.reservation, full: true });
+
+        const factsHtml = facts.length ? `
+            <div class="guide-facts tabular-nums">
+                ${facts.map(fc => `
+                    <div class="guide-fact ${fc.full ? 'full' : ''}">
+                        <span class="guide-fact-k">${fc.k}</span>
+                        <span class="guide-fact-v">${fc.v}</span>
+                    </div>`).join('')}
+            </div>` : '';
+
+        const tagsArr = Array.isArray(f.highlights) ? f.highlights : [];
+        const tagsHtml = tagsArr.length ? `
+            <div class="guide-tags-row">
+                ${tagsArr.map(t => `<span class="guide-tag-pill"># ${t}</span>`).join('')}
+            </div>` : '';
 
         return `
-            <div class="guide-item">
+            <div class="guide-item" onclick="openPoiCardSheet('${escapeJsQuote(f.name || '')}', event)">
                 <div class="guide-head-row">
                     <div class="guide-title-wrap">
                         <div class="guide-name">${f.name}</div>
                         ${metaLine ? `<div class="guide-meta-line tabular-nums">${metaLine}</div>` : ''}
                     </div>
-                    ${f.map_url ? `<a href="${f.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                    <div class="guide-actions">
+                        <button type="button" class="fav-btn ${favActive ? 'active' : ''}" title="收藏想去" onclick="toggleFavItem('${escapeJsQuote(favKey)}', 'poi')">${favActive ? '★' : '☆'}</button>
+                        ${f.map_url ? `<a href="${f.map_url}" target="_blank" rel="noopener" class="map-chip">📍 導航</a>` : ''}
+                    </div>
                 </div>
-                ${f.signature ? `<div class="guide-highlight">★ 推薦｜${f.signature}</div>` : ''}
+                ${factsHtml}
+                ${f.signature ? `<div class="guide-highlight">★ 推薦必點｜${f.signature}</div>` : ''}
                 ${f.desc ? `<div class="guide-desc">${formatCleanParagraphs(f.desc)}</div>` : ''}
-                ${f.tips ? `<div class="guide-tip">💡 ${f.tips}</div>` : ''}
+                ${f.tips ? `<div class="guide-notes"><div class="guide-note-line tip"><span class="guide-note-tag">💡 內行貼士</span>${f.tips}</div></div>` : ''}
+                ${tagsHtml}
             </div>`;
     }
 
@@ -3399,18 +3905,19 @@
         const keyword = (document.getElementById('poi-search-input')?.value || '').trim().toLowerCase();
         const filtered = (globalData.poi_database || []).filter(item => {
             const matchArea = poiAreaFilter === '全部地區' || item.area === poiAreaFilter;
-            const matchCat = poiCategoryFilter === '全部' || classifyPoiTag(item.tag) === poiCategoryFilter;
-            const matchKw = !keyword || `${item.name || ''} ${item.signature || ''} ${item.desc || ''} ${item.area || ''} ${item.tag || ''}`.toLowerCase().includes(keyword);
+            const matchCat = poiCategoryFilter === '全部'
+                || (poiCategoryFilter === '★ 已收藏' ? isFavItem(`poi::${item.name || ''}`) : classifyPoiTag(item.tag) === poiCategoryFilter);
+            const hay = `${item.name || ''} ${item.signature || ''} ${item.desc || ''} ${item.tips || ''} ${item.area || ''} ${item.tag || ''} ${item.access || ''} ${(item.highlights || []).join(' ')}`.toLowerCase();
+            const matchKw = !keyword || hay.includes(keyword);
             return matchArea && matchCat && matchKw;
         });
 
         const container = document.getElementById('poi-list');
         if (!filtered.length) {
-            container.innerHTML = '<div class="panel-card">無符合條件的地點。</div>';
+            container.innerHTML = `<div class="panel-card">${poiCategoryFilter === '★ 已收藏' ? '尚未收藏任何地點，點卡片右上角 ☆ 即可加入口袋名單。' : '無符合條件的地點。'}</div>`;
             return;
         }
 
-        // 依地區分組（減少零散長列表的視覺疲勞，直接照地理位置掃讀）
         const groups = [];
         const groupMap = {};
         filtered.forEach(item => {
@@ -4004,6 +4511,258 @@
     }
 
     checkLockStatus();
+
+    /* ================= iOS 原生互動引擎（PWA 圖示・分頁捲動記憶・Toast・Bottom Sheet・滑動翻日） ================= */
+    const tabScrollMemory = { dashboard: 0, itinerary: 0, flights: 0, explore: 0, tools: 0 };
+    let toastTimer = null;
+    let currentSheetPayload = null;
+
+    function hapticTick(ms = 8) {
+        try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
+    }
+
+    function showNativeToast(msg) {
+        const el = document.getElementById('ios-toast');
+        if (!el) return;
+        el.innerText = msg;
+        el.classList.add('show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('show'), 2100);
+    }
+
+    function getAppScrollTop() {
+        const canvas = document.getElementById('app-canvas');
+        if (canvas && getComputedStyle(canvas).overflowY === 'auto') return canvas.scrollTop;
+        return window.scrollY || document.documentElement.scrollTop || 0;
+    }
+
+    function setAppScrollTop(y, smooth = false) {
+        const canvas = document.getElementById('app-canvas');
+        const behavior = smooth ? 'smooth' : 'auto';
+        if (canvas && getComputedStyle(canvas).overflowY === 'auto') {
+            canvas.scrollTo({ top: y, behavior });
+        } else {
+            window.scrollTo({ top: y, behavior });
+        }
+    }
+
+    function initPwaAppExperience() {
+        const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#090b0e"/><circle cx="256" cy="256" r="168" fill="none" stroke="#f59e0b" stroke-width="18" opacity="0.35"/><circle cx="256" cy="256" r="126" fill="none" stroke="#f59e0b" stroke-width="10"/><polygon points="256,118 296,256 256,228 216,256" fill="#f59e0b"/><polygon points="256,394 296,256 256,284 216,256" fill="#38bdf8" opacity="0.85"/><circle cx="256" cy="256" r="16" fill="#f4f6f9"/></svg>`;
+        const iconUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgIcon);
+        if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+            const appleLink = document.createElement('link');
+            appleLink.rel = 'apple-touch-icon';
+            appleLink.href = iconUrl;
+            document.head.appendChild(appleLink);
+        }
+        const manifestObj = {
+            name: '隨身旅圖 Travel Compass',
+            short_name: '隨身旅圖',
+            start_url: '.',
+            display: 'standalone',
+            background_color: '#090b0e',
+            theme_color: '#090b0e',
+            icons: [{ src: iconUrl, sizes: '512x512', type: 'image/svg+xml' }]
+        };
+        if (!document.querySelector('link[rel="manifest"]')) {
+            const mLink = document.createElement('link');
+            mLink.rel = 'manifest';
+            mLink.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestObj));
+            document.head.appendChild(mLink);
+        }
+    }
+
+    function copyTextNative(text, label = '內容') {
+        const clean = String(text || '').trim();
+        if (!clean) return;
+        hapticTick(10);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(clean)
+                .then(() => showNativeToast(`✓ 已複製${label}：${clean.slice(0, 18)}${clean.length > 18 ? '…' : ''}`))
+                .catch(() => fallbackCopyText(clean, label));
+        } else {
+            fallbackCopyText(clean, label);
+        }
+    }
+
+    function fallbackCopyText(text, label) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showNativeToast(`✓ 已複製${label}`); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
+    function openItemActionSheet(payload) {
+        currentSheetPayload = payload;
+        hapticTick(8);
+        const body = document.getElementById('native-sheet-body');
+        const sheet = document.getElementById('native-sheet');
+        const backdrop = document.getElementById('sheet-backdrop');
+        if (!body || !sheet || !backdrop) return;
+
+        const cleanTitle = String(payload.title || '').trim();
+        const gmapsUrl = payload.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanTitle)}`;
+        const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(cleanTitle)}`;
+        const favBtnHtml = payload.favKey ? `
+            <button type="button" class="sheet-action-btn" id="sheet-fav-btn" onclick="toggleSheetFavorite()">
+                ${isFavItem(payload.favKey) ? '★ 已在收藏中' : '☆ 加入收藏'}
+            </button>` : '';
+
+        body.innerHTML = `
+            ${payload.kicker ? `<div class="sheet-kicker tabular-nums">${payload.kicker}</div>` : ''}
+            <h3 class="sheet-title">${cleanTitle}</h3>
+            ${payload.meta ? `<div style="font-size:0.76rem; font-weight:700; color:var(--text-muted); margin-bottom:10px;" class="tabular-nums">${payload.meta}</div>` : ''}
+            ${payload.desc ? `<div class="sheet-desc">${formatCleanParagraphs(payload.desc)}</div>` : ''}
+            ${payload.extra ? `<div style="font-size:0.8rem; color:var(--accent); font-weight:700; margin-bottom:12px; line-height:1.55;">${payload.extra}</div>` : ''}
+            <div class="sheet-actions-grid">
+                <a href="${gmapsUrl}" target="_blank" rel="noopener" class="sheet-action-btn primary" onclick="closeNativeSheet()">🗺️ 開啟 Google Maps 導航</a>
+                <a href="${appleMapsUrl}" target="_blank" rel="noopener" class="sheet-action-btn" onclick="closeNativeSheet()">🧭 Apple 地圖</a>
+                <button type="button" class="sheet-action-btn" onclick="copyTextNative('${escapeJsQuote(cleanTitle)}', '地點名稱')">📋 複製名稱</button>
+                ${favBtnHtml}
+            </div>
+        `;
+        backdrop.classList.add('open');
+        sheet.classList.add('open');
+    }
+
+    function toggleSheetFavorite() {
+        if (!currentSheetPayload || !currentSheetPayload.favKey) return;
+        toggleFavItem(currentSheetPayload.favKey, currentSheetPayload.favScope || 'poi');
+        const btn = document.getElementById('sheet-fav-btn');
+        const active = isFavItem(currentSheetPayload.favKey);
+        if (btn) btn.innerText = active ? '★ 已在收藏中' : '☆ 加入收藏';
+        showNativeToast(active ? '★ 已加入收藏口袋' : '已從收藏移除');
+    }
+
+    function closeNativeSheet() {
+        const sheet = document.getElementById('native-sheet');
+        const backdrop = document.getElementById('sheet-backdrop');
+        if (sheet) {
+            sheet.style.transform = '';
+            sheet.classList.remove('open');
+        }
+        if (backdrop) backdrop.classList.remove('open');
+    }
+
+    function openSchedCardSheet(dayNum, slotIdx, event) {
+        if (event && event.target && event.target.closest('a, button')) return;
+        const dayObj = ((globalData && globalData.itinerary) || []).find(d => Number(d.day) === Number(dayNum));
+        const s = dayObj && dayObj.schedule && dayObj.schedule[slotIdx];
+        if (!s) return;
+        const parsed = parseActivityTitle(s.activity);
+        const metaParts = [
+            s.time || '',
+            s.transport ? `${getMoveIcon(s.transport)} ${s.from && s.to ? `${s.from} → ${s.to}` : s.transport}` : '',
+            s.stay > 0 ? `停留 ${s.stay} 分鐘` : '',
+            s.move > 0 ? `移動 ${s.move} 分鐘` : ''
+        ].filter(Boolean).join(' · ');
+        openItemActionSheet({
+            kicker: `DAY ${dayNum}${parsed.kicker ? ` · ${parsed.kicker}` : ''}`,
+            title: parsed.title,
+            meta: metaParts,
+            desc: s.desc || '',
+            mapUrl: s.map_url || ''
+        });
+    }
+
+    function openThemeCardSheet(idx, event) {
+        if (event && event.target && event.target.closest('a, button')) return;
+        const g = ((globalData && globalData.theme_guide) || [])[idx];
+        if (!g) return;
+        const meta = [g.area, g.tag, g.hours || g.time, g.fee].filter(Boolean).join(' · ');
+        const extra = [g.photo_tip ? `📸 ${g.photo_tip}` : '', g.goshuin ? `⛩️ ${g.goshuin}` : '', g.tips ? `💡 ${g.tips}` : ''].filter(Boolean).join('<br>');
+        openItemActionSheet({
+            kicker: '✨ 主題絕景指南',
+            title: g.name,
+            meta,
+            desc: g.desc || '',
+            extra,
+            mapUrl: g.map_url || '',
+            favKey: `theme::${g.name || ''}`,
+            favScope: 'theme'
+        });
+    }
+
+    function openPoiCardSheet(poiName, event) {
+        if (event && event.target && event.target.closest('a, button')) return;
+        const f = ((globalData && globalData.poi_database) || []).find(item => item.name === poiName);
+        if (!f) return;
+        const meta = [f.area, f.tag, f.hours ? `營業 ${f.hours}` : '', f.closed ? `休 ${f.closed}` : '', f.price].filter(Boolean).join(' · ');
+        const extra = [f.signature ? `★ 推薦：${f.signature}` : '', f.access ? `🚶 ${f.access}` : '', f.tips ? `💡 ${f.tips}` : ''].filter(Boolean).join('<br>');
+        openItemActionSheet({
+            kicker: '☕ 探索雷達詳情',
+            title: f.name,
+            meta,
+            desc: f.desc || '',
+            extra,
+            mapUrl: f.map_url || '',
+            favKey: `poi::${f.name || ''}`,
+            favScope: 'poi'
+        });
+    }
+
+    /* 左右滑動切換單日行程 + Bottom Sheet 往下滑動關閉 */
+    function initNativeGestures() {
+        const itinEl = document.getElementById('itinerary');
+        if (itinEl) {
+            let startX = 0, startY = 0, tracking = false;
+            itinEl.addEventListener('touchstart', (e) => {
+                if (itineraryOverviewMode || e.touches.length !== 1) { tracking = false; return; }
+                if (e.target.closest('.day-tab-strip, .filter-row, input, textarea, select')) { tracking = false; return; }
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                tracking = true;
+            }, { passive: true });
+
+            itinEl.addEventListener('touchend', (e) => {
+                if (!tracking || !e.changedTouches.length) return;
+                tracking = false;
+                const dx = e.changedTouches[0].clientX - startX;
+                const dy = e.changedTouches[0].clientY - startY;
+                if (Math.abs(dx) > 58 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+                    const days = (globalData && globalData.itinerary) || [];
+                    const curIdx = days.findIndex(d => Number(d.day) === Number(activeDayNum));
+                    if (dx < 0 && curIdx >= 0 && curIdx < days.length - 1) {
+                        selectDayTab(days[curIdx + 1].day, 'next');
+                    } else if (dx > 0 && curIdx > 0) {
+                        selectDayTab(days[curIdx - 1].day, 'prev');
+                    }
+                }
+            }, { passive: true });
+        }
+
+        const sheet = document.getElementById('native-sheet');
+        const grabZone = document.getElementById('sheet-grabber-zone');
+        if (sheet && grabZone) {
+            let sy = 0, dragging = false;
+            grabZone.addEventListener('touchstart', (e) => {
+                sy = e.touches[0].clientY;
+                dragging = true;
+                sheet.style.transition = 'none';
+            }, { passive: true });
+            grabZone.addEventListener('touchmove', (e) => {
+                if (!dragging) return;
+                const delta = Math.max(0, e.touches[0].clientY - sy);
+                sheet.style.transform = `translate(-50%, ${delta}px)`;
+            }, { passive: true });
+            grabZone.addEventListener('touchend', (e) => {
+                if (!dragging) return;
+                dragging = false;
+                sheet.style.transition = '';
+                const delta = e.changedTouches[0].clientY - sy;
+                if (delta > 70) closeNativeSheet();
+                else sheet.style.transform = '';
+            }, { passive: true });
+        }
+    }
+
+    initPwaAppExperience();
+    window.addEventListener('DOMContentLoaded', initNativeGestures);
+
 </script>
 </body>
 </html>
