@@ -1938,27 +1938,27 @@
         }
         .shake { animation: shake 0.35s ease; }
 
-        /* ================= iOS 原生 App 質感升級（毛玻璃 Dock・觸覺按壓・滑動翻日・Bottom Sheet・Toast） ================= */
+        /* ================= iOS 原生 App 質感升級（毛玻璃 Dock・觸覺按壓・滑動翻日・繁中百科・開放探索推薦） ================= */
         :root,
         :root[data-theme="dark"] {
             --bg-dock-glass: rgba(14, 18, 25, 0.86);
-            --sheet-bg: #151a24;
-            --sheet-backdrop: rgba(0, 0, 0, 0.62);
+            --sheet-bg: #131822;
+            --sheet-backdrop: rgba(0, 0, 0, 0.65);
         }
         :root[data-theme="paper"] {
             --bg-dock-glass: rgba(255, 255, 255, 0.88);
             --sheet-bg: #fcfaf6;
-            --sheet-backdrop: rgba(38, 32, 25, 0.42);
+            --sheet-backdrop: rgba(38, 32, 25, 0.45);
         }
 
         html, body {
             overscroll-behavior-y: contain;
         }
 
-        /* 系統導覽元件禁止長按反白選字，保留內文可複製 */
         .app-topbar, .bottom-dock, .day-tab-strip, .sticky-subbar-wrap,
         .b-tab, .seg-btn, .filter-chip, .pager-btn, .cta-btn, .icon-pill-btn,
-        .mode-switch-btn, .fav-btn, .map-chip, .step-btn, .chk-filter-btn {
+        .mode-switch-btn, .fav-btn, .map-chip, .step-btn, .chk-filter-btn,
+        .rec-pill, .sheet-tool-btn {
             -webkit-user-select: none;
             user-select: none;
         }
@@ -1969,7 +1969,6 @@
             -webkit-backdrop-filter: blur(22px) saturate(180%);
         }
 
-        /* 原生 Spring 觸覺按壓微縮 */
         .sched-card, .sched-compact-row, .guide-item, .bento-tile,
         .overview-card, .stay-card, .flighty-card {
             transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.16s ease;
@@ -1982,7 +1981,6 @@
             cursor: pointer;
         }
 
-        /* 單日滑動切換方向動畫 */
         @keyframes slideFromRight {
             from { opacity: 0.35; transform: translateX(22px); }
             to { opacity: 1; transform: translateX(0); }
@@ -1994,7 +1992,6 @@
         .day-page.slide-next { animation: slideFromRight 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
         .day-page.slide-prev { animation: slideFromLeft 0.22s cubic-bezier(0.22, 1, 0.36, 1); }
 
-        /* 看板「下一站」快捷條 */
         .upnext-strip {
             display: flex;
             align-items: center;
@@ -2026,7 +2023,6 @@
             text-overflow: ellipsis;
         }
 
-        /* iOS 動態島風格懸浮 Toast */
         .ios-toast {
             position: fixed;
             top: calc(var(--topbar-total) + 10px);
@@ -2057,13 +2053,13 @@
             transform: translate(-50%, 0) scale(1);
         }
 
-        /* iOS 原生 Bottom Sheet 底部抽屜 */
+        /* iOS 原生 Bottom Sheet */
         .sheet-backdrop {
             position: fixed;
             inset: 0;
             background: var(--sheet-backdrop);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             opacity: 0;
             pointer-events: none;
             z-index: 9000;
@@ -2080,11 +2076,11 @@
             transform: translate(-50%, 104%);
             width: 100%;
             max-width: 480px;
-            max-height: 82vh;
+            max-height: 87vh;
             background: var(--sheet-bg);
             border-top: 1px solid var(--border-strong);
             border-radius: 24px 24px 0 0;
-            box-shadow: 0 -16px 44px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 -18px 48px rgba(0, 0, 0, 0.55);
             z-index: 9100;
             display: flex;
             flex-direction: column;
@@ -2108,62 +2104,521 @@
             background: var(--border-strong);
         }
         .sheet-scroll-body {
-            padding: 4px 18px 12px;
+            padding: 2px 16px 14px;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
         .sheet-kicker {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
+            letter-spacing: 0.3px;
         }
         .sheet-title {
             font-family: 'Noto Serif TC', serif;
-            font-size: 1.12rem;
+            font-size: 1.08rem;
             font-weight: 900;
             color: var(--text-primary);
             line-height: 1.35;
-            margin: 0 0 8px;
+            margin: 0 0 10px;
         }
-        .sheet-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            line-height: 1.68;
-            margin-bottom: 12px;
-            overflow-wrap: anywhere;
-        }
-        .sheet-actions-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
-            margin-top: 6px;
-        }
-        .sheet-action-btn {
+
+        .sheet-toolbar {
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 6px;
-            padding: 11px 10px;
-            border-radius: 13px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .sheet-toolbar::-webkit-scrollbar { display: none; }
+        .sheet-tool-btn {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 11px;
+            border-radius: 999px;
             border: 1px solid var(--border-subtle);
             background: var(--bg-card-alt);
             color: var(--text-primary);
-            font-size: 0.8rem;
+            font-size: 0.74rem;
             font-weight: 800;
             text-decoration: none;
             cursor: pointer;
             white-space: nowrap;
         }
-        .sheet-action-btn.primary {
-            grid-column: 1 / -1;
+        .sheet-tool-btn.primary {
             background: var(--cta-bg);
             color: var(--cta-text);
             border-color: transparent;
-            font-size: 0.86rem;
         }
-        .sheet-action-btn:active {
-            transform: scale(0.97);
+        .sheet-tool-btn:active { transform: scale(0.95); }
+
+        .sheet-sec {
+            margin-bottom: 14px;
+        }
+        .sheet-sec:last-child { margin-bottom: 0; }
+        .sheet-sec-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: var(--text-muted);
+            letter-spacing: 0.4px;
+            margin-bottom: 7px;
+        }
+        .sheet-live-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: var(--emerald);
+            background: var(--emerald-soft);
+            padding: 2px 7px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+
+        .live-status-strip {
+            font-size: 0.79rem;
+            font-weight: 700;
+            line-height: 1.5;
+            padding: 8px 11px;
+            border-radius: 11px;
+            background: var(--bg-card-alt);
+            border-left: 3px solid var(--emerald);
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .live-status-strip.warn {
+            border-left-color: var(--accent);
+            background: var(--accent-soft);
+        }
+        .live-status-strip.closed {
+            border-left-color: var(--danger);
+            background: var(--danger-soft);
+        }
+
+        .live-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+        .live-metric {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 11px;
+            padding: 8px 10px;
+        }
+        .live-metric-k {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .live-metric-v {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        /* 智慧關鍵字拆解切換列與實際查詢預覽 */
+        .kw-strip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            margin-bottom: 8px;
+            padding-bottom: 2px;
+        }
+        .kw-strip::-webkit-scrollbar { display: none; }
+        .kw-label {
+            flex: 0 0 auto;
+            font-size: 0.66rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .kw-chip {
+            flex: 0 0 auto;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: 999px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .kw-chip.active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        .kw-chip.custom {
+            border-style: dashed;
+            color: var(--sky);
+        }
+        .kw-chip:active { transform: scale(0.95); }
+        .query-preview-note {
+            margin-top: 6px;
+            font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+            font-size: 0.64rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .live-query-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .live-query-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
+            border-radius: 9px;
+            background: var(--sky-soft);
+            color: var(--sky);
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .live-query-chip.crowd {
+            background: var(--emerald-soft);
+            color: var(--emerald);
+        }
+        .live-query-chip:active { transform: scale(0.95); }
+
+        /* 重點先出來：繁中維基結構化重點卡片 */
+        .wiki-brief {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 13px;
+            padding: 11px 13px;
+            font-size: 0.81rem;
+            color: var(--text-secondary);
+            line-height: 1.62;
+        }
+        .wiki-brief-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .wiki-type-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.67rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            white-space: nowrap;
+        }
+        .wiki-tldr {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.48;
+            margin-bottom: 6px;
+        }
+        .wiki-bullets {
+            margin: 0 0 6px;
+            padding-left: 16px;
+            font-size: 0.77rem;
+            color: var(--text-secondary);
+            line-height: 1.52;
+        }
+        .wiki-bullets li { margin-bottom: 2px; }
+        .wiki-details summary {
+            font-size: 0.71rem;
+            font-weight: 800;
+            color: var(--sky);
+            cursor: pointer;
+            user-select: none;
+            margin-top: 4px;
+        }
+        .wiki-details p {
+            margin: 6px 0 0;
+            font-size: 0.77rem;
+            color: var(--text-secondary);
+            line-height: 1.62;
+        }
+        .wiki-link {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--sky);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        /* 探索推薦控制列 */
+        .rec-controls {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            margin-bottom: 8px;
+            padding-bottom: 2px;
+        }
+        .rec-controls::-webkit-scrollbar { display: none; }
+        .rec-pill {
+            flex: 0 0 auto;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 0.69rem;
+            font-weight: 800;
+            padding: 4px 9px;
+            border-radius: 999px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .rec-pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #ffffff;
+        }
+        .rec-pill.shuffle {
+            color: var(--sky);
+            border-color: rgba(56, 189, 248, 0.35);
+            background: var(--sky-soft);
+        }
+        .rec-pill.shuffle:disabled {
+            opacity: 0.55;
+            cursor: wait;
+        }
+        .rec-pill:active { transform: scale(0.94); }
+
+        /* 重點先出來：類型標記推薦卡片 */
+        .rec-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .rec-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--accent);
+            border-radius: 13px;
+            padding: 10px 12px;
+            cursor: pointer;
+        }
+        .rec-card.is-novel {
+            border-left-color: var(--sky);
+        }
+        .rec-card:active { transform: scale(0.985); }
+        .rec-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+        .rec-badges-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 0;
+            flex-wrap: wrap;
+        }
+        .rec-cat-badge {
+            font-size: 0.67rem;
+            font-weight: 900;
+            padding: 2px 7px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+        .rec-cat-cafe { background: rgba(245, 158, 11, 0.16); color: #f59e0b; }
+        .rec-cat-food { background: rgba(251, 113, 133, 0.16); color: #fb7185; }
+        .rec-cat-bar { background: rgba(167, 139, 250, 0.16); color: #a78bfa; }
+        .rec-cat-sweet { background: rgba(244, 114, 182, 0.16); color: #f472b6; }
+        .rec-cat-shrine { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+        .rec-cat-arch { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+        .rec-cat-view { background: rgba(52, 211, 153, 0.15); color: #34d399; }
+        .rec-cat-other { background: var(--bg-card-alt); color: var(--text-secondary); }
+
+        .rec-dist-pill {
+            font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        .rec-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--emerald);
+            background: var(--emerald-soft);
+            padding: 1px 6px;
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .rec-name {
+            font-size: 0.92rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            line-height: 1.35;
+        }
+        .rec-keypoint {
+            margin-top: 5px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            background: var(--bg-card-alt);
+            font-size: 0.77rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.45;
+        }
+        .rec-why {
+            margin-top: 4px;
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            line-height: 1.42;
+        }
+        .rec-foot {
+            margin-top: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+        }
+        .rec-foot-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        /* ================= Gemini 即時協作引擎 & 設定彈窗樣式 ================= */
+        .gemini-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-family: 'JetBrains Mono', 'Noto Sans TC', monospace;
+            font-size: 0.63rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(167, 139, 250, 0.4);
+            background: rgba(167, 139, 250, 0.14);
+            color: #c4b5fd;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        :root[data-theme="paper"] .gemini-pill-btn {
+            border-color: rgba(124, 58, 237, 0.35);
+            background: rgba(124, 58, 237, 0.1);
+            color: #6d28d9;
+        }
+        .gemini-pill-btn.active {
+            border-color: rgba(52, 211, 153, 0.45);
+            background: var(--emerald-soft);
+            color: var(--emerald);
+        }
+        .gemini-pill-btn:active { transform: scale(0.95); }
+
+        .rec-card.is-ai {
+            border-left-color: #a78bfa;
+        }
+        .rec-ai-tag {
+            font-size: 0.62rem;
+            font-weight: 800;
+            color: #c4b5fd;
+            background: rgba(167, 139, 250, 0.15);
+            padding: 1px 6px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+        :root[data-theme="paper"] .rec-ai-tag {
+            color: #6d28d9;
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .gemini-cfg-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .gemini-cfg-label {
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+        .gemini-cfg-input {
+            width: 100%;
+            background: var(--bg-card-alt);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 9px 11px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            outline: none;
+        }
+        .gemini-cfg-input:focus {
+            border-color: var(--accent);
+        }
+        .gemini-cfg-textarea {
+            width: 100%;
+            min-height: 118px;
+            background: var(--bg-card-alt);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 0.74rem;
+            line-height: 1.52;
+            resize: vertical;
+            outline: none;
+        }
+        .gemini-cfg-textarea:focus {
+            border-color: var(--accent);
+        }
+        .gemini-model-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 7px 10px;
+            border-radius: 9px;
+            background: var(--bg-card-alt);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.73rem;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .gemini-model-chip.selected {
+            border-color: var(--emerald);
+            background: var(--emerald-soft);
         }
 
     </style>
@@ -2405,6 +2860,7 @@
         renderEmergency(globalData.emergency || { guides: [] });
         initCurrencyWidget((globalData.trip_meta && globalData.trip_meta.currency) || 'jpy');
         updateTopbarContext(currentMainTab);
+        if (typeof syncTripCountryDNA === 'function') syncTripCountryDNA();
     }
 
     function switchTab(id) {
@@ -4220,7 +4676,24 @@
                 </div>
             </div>`).join('');
 
+        const gCfg = getGeminiConfig();
+        const geminiPanelHtml = `
+            <div class="panel-card" style="border-left: 3px solid #a78bfa; margin-bottom: 12px;">
+                <div class="panel-head" style="margin-bottom: 5px;">
+                    <span class="panel-title">✨ Gemini 即時推薦協作引擎</span>
+                    <button type="button" class="gemini-pill-btn ${gCfg.apiKey ? 'active' : ''}" onclick="openGeminiSettingsSheet()">
+                        ${gCfg.apiKey ? `● ${shortModelDisplayName(gCfg.mode === 'manual' ? gCfg.manualModel : gCfg.selectedModel) || '已啟用'}` : '🔑 設定本機 Key'}
+                    </button>
+                </div>
+                <div style="font-size: 0.76rem; color: var(--text-secondary); line-height: 1.52;">
+                    ${gCfg.apiKey
+                        ? `金鑰僅存於此手機 <code>localStorage</code>（<code>${maskApiKey(gCfg.apiKey)}</code>），點擊任一行程或餐廳卡片時會自動結合即時氣象與周邊圖資進行適中模型重排與新景點探索。`
+                        : `綁定您個人的 Gemini API Key（僅存於手機本機，不上傳雲端），即可在點擊卡片時啟用「自動適中模型」即時推薦與搜尋驗證。`}
+                </div>
+            </div>`;
+
         document.getElementById('logistics').innerHTML = `
+            ${geminiPanelHtml}
             <div class="section-kicker">
                 <span class="section-kicker-title">☀️ 氣候穿搭與行前筆記</span>
                 <span class="section-kicker-meta">${items.length} 則要點</span>
@@ -4512,10 +4985,88 @@
 
     checkLockStatus();
 
-    /* ================= iOS 原生互動引擎（PWA 圖示・分頁捲動記憶・Toast・Bottom Sheet・滑動翻日） ================= */
+    /* ================= iOS 原生互動引擎 + 繁中維基百科 + 開放世界微時刻推薦系統 ================= */
     const tabScrollMemory = { dashboard: 0, itinerary: 0, flights: 0, explore: 0, tools: 0 };
     let toastTimer = null;
     let currentSheetPayload = null;
+    let sheetRenderNonce = 0;
+
+    /* 推薦系統狀態控制（預設開啟「驚喜新發現」模式，主動探索 JSON 以外的新選項） */
+    let recNovelOnly = true;
+    let recIntentFilter = '全部';
+    let recShuffleSeed = 0;
+    let lastLiveWeather = null;
+    let lastOpenDiscoveries = [];
+
+    const RECOMMENDER_PROFILE_KEY = 'trip_micro_moment_profile_v1';
+    const WIKI_ZHTW_CACHE_KEY = 'trip_wiki_zhtw_cache_v2';
+    const SPOT_WEATHER_CACHE_KEY = 'trip_spot_weather_cache_v1';
+    const OPEN_DISCOVERY_CACHE_KEY = 'trip_open_discovery_cache_v1';
+    const CUSTOM_SAVED_POIS_KEY = 'trip_custom_saved_pois_v1';
+
+    const DEFAULT_TASTE_WEIGHTS = {
+        '精品咖啡': 1.05,
+        '建築美學': 1.0,
+        '攝影光線': 0.95,
+        '戶外探索': 0.90,
+        '文化古蹟': 0.85,
+        '在地美食': 0.85,
+        '酒吧小酌': 0.75,
+        '甜點伴手': 0.65,
+        '雨雪備案': 0.60,
+        '購物街': -1.0
+    };
+
+    let userTasteProfile = { ...DEFAULT_TASTE_WEIGHTS };
+    let wikiZhtwCache = {};
+    let spotWeatherCache = {};
+    let openDiscoveryCache = {};
+    let customSavedPois = [];
+
+    try {
+        const savedProfile = JSON.parse(localStorage.getItem(RECOMMENDER_PROFILE_KEY) || 'null');
+        if (savedProfile && typeof savedProfile === 'object') {
+            userTasteProfile = { ...DEFAULT_TASTE_WEIGHTS, ...savedProfile };
+        }
+        wikiZhtwCache = JSON.parse(localStorage.getItem(WIKI_ZHTW_CACHE_KEY) || '{}') || {};
+        spotWeatherCache = JSON.parse(localStorage.getItem(SPOT_WEATHER_CACHE_KEY) || '{}') || {};
+        openDiscoveryCache = JSON.parse(localStorage.getItem(OPEN_DISCOVERY_CACHE_KEY) || '{}') || {};
+        customSavedPois = JSON.parse(localStorage.getItem(CUSTOM_SAVED_POIS_KEY) || '[]') || [];
+    } catch (e) {}
+
+    function inferFeatureDimensions(text) {
+        const s = String(text || '').toLowerCase();
+        const dims = [];
+        if (/咖|手沖|淺焙|濃縮|茶館|茶鋪|抹茶|roast|coffee|cafe|espresso|tea|matcha|喫茶/.test(s)) dims.push('精品咖啡');
+        if (/建築|美術館|博物館|紀念館|老街|古城|町家|文化財|設計|橋|塔|館|castle|museum|gallery|architecture|historic|palace|fort/.test(s)) dims.push('建築美學');
+        if (/順光|斜光|倒影|長焦|廣角|同框|日出|日落|晨光|攝影|展望|景|庭園|公園|海灘|瀑布|峽谷|冰川|火山|viewpoint|sunset|sunrise|park|garden|beach|cliff|waterfall|lake/.test(s)) dims.push('攝影光線');
+        if (/單車|騎行|越野車|湖岸|步道|健行|登山|trek|hike|bike|cycle|trail/.test(s)) dims.push('戶外探索');
+        if (/神社|神宮|八幡宮|大社|寺院|寺|教堂|大教堂|修道院|清真寺|古蹟|遺址|御朱印|shrine|temple|cathedral|church|basilica|mosque|monument|ruins/.test(s)) dims.push('文化古蹟');
+        if (/餐|食|料理|牛|鰻|燒肉|拉麵|蕎麥|海鮮|小館|食堂|夜市|restaurant|bistro|tapas|warung|trattoria|brasserie|ramen|seafood|grill|dining/.test(s)) dims.push('在地美食');
+        if (/酒|精釀|酒館|酒吧|微醺|小酌|bar|pub|brewery|wine|cocktail|izakaya|biergarten/.test(s)) dims.push('酒吧小酌');
+        if (/甜點|烘焙|麵包|蛋糕|蛋塔|可頌|冰淇淋|和菓子|年輪|菓子|伴手|bakery|pastry|dessert|gelato|patisserie|confectionery|ice_cream/.test(s)) dims.push('甜點伴手');
+        if (/雨雪|雨天|室內|備案|indoor|rain/.test(s)) dims.push('雨雪備案');
+        return dims.length ? dims : ['建築美學'];
+    }
+
+    function recordMicroMomentSignal(text, delta = 0.08, explicitCountry = null) {
+        const dims = inferFeatureDimensions(text);
+        dims.forEach(d => {
+            const cur = typeof userTasteProfile[d] === 'number' ? userTasteProfile[d] : 0.5;
+            userTasteProfile[d] = Math.min(1.6, Math.max(-1.0, +(cur + delta).toFixed(3)));
+        });
+        try { localStorage.setItem(RECOMMENDER_PROFILE_KEY, JSON.stringify(userTasteProfile)); } catch (e) {}
+
+        // 同步累積至「目的地國家特徵學習庫」
+        try {
+            if (typeof recordCountryTraitSignal === 'function') {
+                const cInfo = explicitCountry || (typeof resolveDestinationCountry === 'function' ? resolveDestinationCountry(currentSheetPayload || { title: text }, null) : null);
+                if (cInfo && cInfo.key) {
+                    recordCountryTraitSignal(cInfo.key, cInfo.name, text, dims, delta);
+                }
+            }
+        } catch (e) {}
+    }
 
     function hapticTick(ms = 8) {
         try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
@@ -4576,6 +5127,7 @@
         const clean = String(text || '').trim();
         if (!clean) return;
         hapticTick(10);
+        recordMicroMomentSignal(clean, 0.15);
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(clean)
                 .then(() => showNativeToast(`✓ 已複製${label}：${clean.slice(0, 18)}${clean.length > 18 ? '…' : ''}`))
@@ -4596,9 +5148,1380 @@
         document.body.removeChild(ta);
     }
 
+    /* 1. 智慧營業與公休狀態即時判讀 */
+    const WEEKDAY_NAMES_ZH = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
+
+    function parseTripDateWeekday(dateFullStr) {
+        if (!dateFullStr) return null;
+        const parts = String(dateFullStr).split('-').map(Number);
+        if (parts.length !== 3 || parts.some(isNaN)) return null;
+        const dt = new Date(parts[0], parts[1] - 1, parts[2]);
+        return { dayIdx: dt.getDay(), label: WEEKDAY_NAMES_ZH[dt.getDay()], dateStr: dateFullStr };
+    }
+
+    function evaluateOperatingStatus(ctx) {
+        const hoursStr = ctx.hours || '';
+        const closedStr = ctx.closed || '';
+        const targetDayObj = ctx.dayNum
+            ? ((globalData && globalData.itinerary) || []).find(d => Number(d.day) === Number(ctx.dayNum))
+            : null;
+        const tripWd = targetDayObj ? parseTripDateWeekday(targetDayObj.date_full) : null;
+
+        const now = new Date();
+        const nowWdLabel = WEEKDAY_NAMES_ZH[now.getDay()];
+        const nowMins = now.getHours() * 60 + now.getMinutes();
+
+        if (!hoursStr && !closedStr) return null;
+
+        let isClosedOnTripDay = false;
+        if (tripWd && closedStr && !/無休/.test(closedStr)) {
+            if (closedStr.includes(tripWd.label)) isClosedOnTripDay = true;
+        }
+        let isClosedToday = false;
+        if (closedStr && !/無休/.test(closedStr) && closedStr.includes(nowWdLabel)) {
+            isClosedToday = true;
+        }
+
+        const timeRange = hoursStr.match(/(\d{1,2}):(\d{2})\s*[-–—~～]\s*(\d{1,2}):(\d{2})/);
+        let liveClockNote = '';
+        let level = 'ok';
+
+        if (timeRange) {
+            const openM = parseInt(timeRange[1], 10) * 60 + parseInt(timeRange[2], 10);
+            let closeM = parseInt(timeRange[3], 10) * 60 + parseInt(timeRange[4], 10);
+            if (closeM <= openM) closeM += 1440;
+            const adjNow = nowMins < openM && closeM > 1440 ? nowMins + 1440 : nowMins;
+
+            if (isClosedToday) {
+                liveClockNote = `今日（${nowWdLabel}）表定公休`;
+                level = 'warn';
+            } else if (adjNow >= openM && adjNow <= closeM) {
+                const left = closeM - adjNow;
+                liveClockNote = left <= 45
+                    ? `此刻營業中（距打烊僅剩 ${left} 分鐘）`
+                    : `此刻營業中（${timeRange[0]}）`;
+                if (left <= 45) level = 'warn';
+            } else if (adjNow < openM) {
+                const diff = openM - adjNow;
+                liveClockNote = diff <= 90
+                    ? `尚未開門（再 ${diff} 分鐘於 ${timeRange[1]}:${timeRange[2]} 營業）`
+                    : `今日 ${timeRange[1]}:${timeRange[2]} 開始營業`;
+            } else {
+                liveClockNote = `今日已過營業時間（${timeRange[0]}）`;
+            }
+        }
+
+        if (isClosedOnTripDay) {
+            return {
+                level: 'closed',
+                text: `🚨 撞期警告：表定「${closedStr}」公休，與 Day ${ctx.dayNum}（${tripWd.label}）衝突，請改用同區備案！`
+            };
+        }
+
+        const parts = [];
+        if (tripWd) {
+            parts.push(`✅ 行程排程檢核：Day ${ctx.dayNum} 為${tripWd.label}，${closedStr ? `公休（${closedStr}）無衝突` : '正常開放'}`);
+        }
+        if (liveClockNote) {
+            parts.push(`🕒 現地即時狀態：${liveClockNote}`);
+        }
+        if (!parts.length) return null;
+        return { level, text: parts.join(' ｜ ') };
+    }
+
+    /* 2. 精準座標對照（涵蓋日本與全球主要旅遊城市，並優先動態讀取行程座標） */
+    const SPOT_COORDS_DB = [
+        { kw: ['牧野水杉', '水杉', 'namiki', 'pic-land'], lat: 35.4832, lon: 136.0405, label: '高島・牧野水杉大道', mode: 'bike', city: '高島' },
+        { kw: ['陽光海灘', '知內濱', '高木濱'], lat: 35.4628, lon: 136.0652, label: '高島・牧野陽光海灘', mode: 'bike', city: '高島' },
+        { kw: ['牧野站'], lat: 35.4694, lon: 136.0589, label: 'JR 牧野站', mode: 'bike', city: '高島' },
+        { kw: ['今津', 'imazu', '西友', '沃里斯'], lat: 35.3982, lon: 136.0342, label: '高島・近江今津', mode: 'bike', city: '高島' },
+        { kw: ['白鬚', 'shirahige', '鵜川', '萩之濱', '白鬚そば'], lat: 35.2741, lon: 136.0112, label: '高島・白鬚湖岸', mode: 'bike', city: '高島' },
+        { kw: ['水鳥'], lat: 35.3578, lon: 136.0485, label: '高島・新旭水鳥湖岸', mode: 'bike', city: '高島' },
+        { kw: ['針江'], lat: 35.3442, lon: 136.0458, label: '高島・針江生水之鄉', mode: 'bike', city: '高島' },
+        { kw: ['新旭'], lat: 35.3532, lon: 136.0345, label: 'JR 新旭站', mode: 'bike', city: '高島' },
+        { kw: ['玄宮園', '鳳翔台'], lat: 35.2788, lon: 136.2528, label: '彥根・玄宮園', mode: 'walk', city: '彦根' },
+        { kw: ['彥根', 'hikone', '夢京橋', '伽羅'], lat: 35.2764, lon: 136.2518, label: '彥根城區', mode: 'walk', city: '彦根' },
+        { kw: ['collina'], lat: 35.1618, lon: 136.0985, label: '近江八幡・La Collina', mode: 'bike', city: '近江八幡' },
+        { kw: ['長命寺'], lat: 35.1636, lon: 136.0642, label: '近江八幡・長命寺港', mode: 'bike', city: '近江八幡' },
+        { kw: ['八幡堀', '日牟禮', '千成亭', '尾賀', '毛利志滿', '近江八幡'], lat: 35.1422, lon: 136.0915, label: '近江八幡水鄉', mode: 'bike', city: '近江八幡' },
+        { kw: ['石山寺', '茶丈藤村'], lat: 34.9604, lon: 135.9056, label: '大津・石山寺', mode: 'walk', city: '大津' },
+        { kw: ['三井寺', '大津'], lat: 35.0133, lon: 135.8531, label: '大津・三井寺疏水', mode: 'walk', city: '大津' },
+        { kw: ['關西機場', 'kix', 'haruka'], lat: 34.4342, lon: 135.2440, label: '關西國際機場', mode: 'walk', city: '大阪' },
+        { kw: ['涉成園'], lat: 34.9912, lon: 135.7634, label: '京都・涉成園周邊', mode: 'walk', city: '京都' },
+        { kw: ['東本願寺'], lat: 34.9915, lon: 135.7586, label: '京都・東本願寺', mode: 'walk', city: '京都' },
+        { kw: ['開化堂', 'kaikado'], lat: 34.9888, lon: 135.7676, label: '京都・七條河原町', mode: 'walk', city: '京都' },
+        { kw: ['walden'], lat: 34.9942, lon: 135.7618, label: '京都・五條涉成園北', mode: 'walk', city: '京都' },
+        { kw: ['murmur'], lat: 34.9901, lon: 135.7654, label: '京都・七條高瀨川', mode: 'walk', city: '京都' },
+        { kw: ['kurasu'], lat: 34.9852, lon: 135.7548, label: '京都站西側', mode: 'walk', city: '京都' },
+        { kw: ['市比賣'], lat: 34.9945, lon: 135.7668, label: '京都・五條河原町', mode: 'walk', city: '京都' },
+        { kw: ['len'], lat: 34.9968, lon: 135.7685, label: '京都・五條河原町', mode: 'walk', city: '京都' },
+        { kw: ['before 9'], lat: 35.0085, lon: 135.7598, label: '京都・烏丸御池', mode: 'walk', city: '京都' },
+        { kw: ['goodman'], lat: 35.0005, lon: 135.7575, label: '京都・四條烏丸', mode: 'walk', city: '京都' },
+        { kw: ['弘', '第一旭', '御宿野乃', '京都站', '空中徑路', '京都'], lat: 34.9875, lon: 135.7605, label: '京都站・七條', mode: 'walk', city: '京都' },
+        { kw: ['東京', 'tokyo', '新宿', '銀座', '羽田', '成田', '橫濱', 'yokohama'], lat: 35.6812, lon: 139.7671, label: '東京灣區', mode: 'walk', city: '東京' },
+        { kw: ['札幌', 'sapporo', '北海道', '函館', '釧路'], lat: 43.0618, lon: 141.3545, label: '札幌・北海道', mode: 'walk', city: '札幌' },
+        { kw: ['高松', '松山', '四國', '道後', '今治'], lat: 34.3428, lon: 134.0466, label: '瀨戶內・四國', mode: 'walk', city: '高松' },
+        { kw: ['曼谷', 'bangkok', 'silom', 'sukhumvit', '羅勇', 'rayong'], lat: 13.7563, lon: 100.5018, label: '曼谷市區', mode: 'walk', city: 'Bangkok' },
+        { kw: ['布拉格', 'prague'], lat: 50.0755, lon: 14.4378, label: '布拉格舊城', mode: 'walk', city: 'Prague' },
+        { kw: ['布達佩斯', 'budapest'], lat: 47.4979, lon: 19.0402, label: '布達佩斯', mode: 'walk', city: 'Budapest' },
+        { kw: ['里斯本', 'lisbon'], lat: 38.7223, lon: -9.1393, label: '里斯本', mode: 'walk', city: 'Lisbon' },
+        { kw: ['波多', 'porto'], lat: 41.1579, lon: -8.6291, label: '波多', mode: 'walk', city: 'Porto' },
+        { kw: ['巴塞隆納', 'barcelona'], lat: 41.3874, lon: 2.1686, label: '巴塞隆納', mode: 'walk', city: 'Barcelona' },
+        { kw: ['馬德里', 'madrid'], lat: 40.4168, lon: -3.7038, label: '馬德里', mode: 'walk', city: 'Madrid' },
+        { kw: ['倫敦', 'london'], lat: 51.5074, lon: -0.1278, label: '倫敦市區', mode: 'walk', city: 'London' },
+        { kw: ['首爾', 'seoul', '濟州', 'jeju'], lat: 37.5665, lon: 126.9780, label: '首爾市區', mode: 'walk', city: 'Seoul' },
+        { kw: ['香港', 'hong kong', '東涌'], lat: 22.3193, lon: 114.1694, label: '香港', mode: 'walk', city: 'Hong Kong' },
+        { kw: ['新加坡', 'singapore', '馬六甲', 'melaka', '吉隆坡'], lat: 1.3521, lon: 103.8198, label: '星馬區域', mode: 'walk', city: 'Singapore' },
+        { kw: ['峇里', 'bali', '龍目', 'lombok'], lat: -8.6500, lon: 115.2167, label: '峇里・龍目島', mode: 'walk', city: 'Bali' },
+        { kw: ['台北', '台中', '高雄'], lat: 25.0330, lon: 121.5654, label: '台灣', mode: 'walk', city: '台北' }
+    ];
+
+    function resolveContextCoords(ctx) {
+        if (typeof ctx.lat === 'number' && typeof ctx.lon === 'number' && !isNaN(ctx.lat) && !isNaN(ctx.lon)) {
+            return { lat: ctx.lat, lon: ctx.lon, label: ctx.area || ctx.title || '現地座標', mode: ctx.mode || 'walk', city: ctx.area || '' };
+        }
+        const hay = `${ctx.title || ''} ${ctx.area || ''} ${ctx.kicker || ''}`.toLowerCase();
+        for (const entry of SPOT_COORDS_DB) {
+            if (entry.kw.some(k => hay.includes(k))) return entry;
+        }
+        const allDays = (globalData && globalData.itinerary) || [];
+        if (ctx.dayNum) {
+            const d = allDays.find(item => Number(item.day) === Number(ctx.dayNum));
+            if (d && d.coords) {
+                const [lat, lon] = String(d.coords).split(',').map(Number);
+                if (!isNaN(lat) && !isNaN(lon)) return { lat, lon, label: d.date || `Day ${d.day}`, mode: 'walk', city: '' };
+            }
+        }
+        // 嘗試比對與該地點同區的行程日座標
+        const matchedDay = allDays.find(d => {
+            const dText = `${d.title || ''} ${d.subtitle || ''} ${(d.schedule || []).map(s => s.activity).join(' ')}`.toLowerCase();
+            return (ctx.area && dText.includes(String(ctx.area).toLowerCase())) || (ctx.title && dText.includes(String(ctx.title).toLowerCase()));
+        }) || allDays[0];
+        if (matchedDay && matchedDay.coords) {
+            const [lat, lon] = String(matchedDay.coords).split(',').map(Number);
+            if (!isNaN(lat) && !isNaN(lon)) {
+                return { lat, lon, label: ctx.area || matchedDay.title || `Day ${matchedDay.day}`, mode: 'walk', city: ctx.area || '' };
+            }
+        }
+        return { lat: 25.0330, lon: 121.5654, label: '現地座標', mode: 'walk', city: '' };
+    }
+
+    function calcHaversineMeters(lat1, lon1, lat2, lon2) {
+        if ([lat1, lon1, lat2, lon2].some(v => typeof v !== 'number' || isNaN(v))) return null;
+        const R = 6371000;
+        const toRad = d => d * Math.PI / 180;
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+        const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+        return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+    }
+
+    function formatDistanceAndEta(meters, mode = 'walk') {
+        if (typeof meters !== 'number' || isNaN(meters) || meters <= 0) return '';
+        const distLabel = meters >= 1000 ? `${(meters / 1000).toFixed(1)} km` : `${meters} m`;
+        if (mode === 'bike' || meters > 1200) {
+            const mins = Math.max(2, Math.round(meters / 260)); // ~15.6 km/h 休閒騎行
+            return `${distLabel} · 單車約 ${mins} 分`;
+        }
+        const mins = Math.max(1, Math.round(meters / 75)); // ~4.5 km/h 步行
+        return `${distLabel} · 步行約 ${mins} 分`;
+    }
+
+    async function fetchLiveSpotWeather(coordsInfo) {
+        const key = `${coordsInfo.lat.toFixed(2)},${coordsInfo.lon.toFixed(2)}`;
+        const cached = spotWeatherCache[key];
+        if (cached && (Date.now() - cached.ts < 20 * 60 * 1000)) return cached.data;
+
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${coordsInfo.lat}&longitude=${coordsInfo.lon}&current=temperature_2m,apparent_temperature,wind_speed_10m,weather_code&daily=sunrise,sunset,precipitation_probability_max&timezone=auto&forecast_days=1`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('weather fetch failed');
+        const json = await res.json();
+        const cur = json.current || {};
+        const daily = json.daily || {};
+
+        const sunriseRaw = (daily.sunrise && daily.sunrise[0]) || '';
+        const sunsetRaw = (daily.sunset && daily.sunset[0]) || '';
+        const data = {
+            temp: typeof cur.temperature_2m === 'number' ? Math.round(cur.temperature_2m) : null,
+            feelsLike: typeof cur.apparent_temperature === 'number' ? Math.round(cur.apparent_temperature) : null,
+            windKmh: typeof cur.wind_speed_10m === 'number' ? Math.round(cur.wind_speed_10m) : null,
+            rainProb: (daily.precipitation_probability_max && typeof daily.precipitation_probability_max[0] === 'number') ? daily.precipitation_probability_max[0] : null,
+            sunrise: sunriseRaw.split('T')[1] || '--:--',
+            sunset: sunsetRaw.split('T')[1] || '--:--'
+        };
+        spotWeatherCache[key] = { ts: Date.now(), data };
+        try { localStorage.setItem(SPOT_WEATHER_CACHE_KEY, JSON.stringify(spotWeatherCache)); } catch (e) {}
+        return data;
+    }
+
+    /* 3. 100% 繁體中文（zh-tw）維基百科即時檢索 ＋ 重點萃取引擎 */
+    const ZHTW_WIKI_MAP = [
+        { match: /白鬚神社/, query: '白鬚神社' },
+        { match: /水杉|メタセコイア/, query: '水杉' },
+        { match: /針江/, query: '針江生水之鄉' },
+        { match: /La Collina|たねや/, query: 'たねや' },
+        { match: /八幡堀/, query: '八幡堀' },
+        { match: /日牟禮/, query: '日牟禮八幡宮' },
+        { match: /長命寺/, query: '長命寺' },
+        { match: /玄宮園/, query: '玄宮園' },
+        { match: /彥根城/, query: '彥根城' },
+        { match: /東本願寺/, query: '東本願寺' },
+        { match: /涉成園/, query: '涉成園' },
+        { match: /開化堂|Kaikado/i, query: '開化堂' },
+        { match: /石山寺/, query: '石山寺' },
+        { match: /三井寺/, query: '園城寺' },
+        { match: /市比賣/, query: '市比賣神社' },
+        { match: /京都站|空中徑路/, query: '京都車站' },
+        { match: /關西機場|KIX/i, query: '關西國際機場' },
+        { match: /高瀨川/, query: '高瀨川 (京都府)' },
+        { match: /比良山/, query: '比良山地' },
+        { match: /琵琶湖/, query: '琵琶湖' }
+    ];
+
+    function classifyEntityBadge(title, text = '') {
+        const s = `${title} ${text}`.toLowerCase();
+        if (/咖啡|茶館|茶鋪|手沖|roast|coffee|cafe|espresso|tea|matcha|喫茶/.test(s)) return { icon: '☕', label: '獨立咖啡・茶館', cls: 'rec-cat-cafe', dim: '精品咖啡' };
+        if (/酒吧|精釀|酒館|小酌|bar|pub|brewery|wine|cocktail|izakaya/.test(s)) return { icon: '🍺', label: '酒吧・精釀小酌', cls: 'rec-cat-bar', dim: '酒吧小酌' };
+        if (/甜點|烘焙|麵包|蛋糕|蛋塔|冰淇淋|和菓子|年輪|菓子|麻糬|bakery|pastry|dessert|gelato|patisserie/.test(s)) return { icon: '🥐', label: '甜點・烘焙・伴手', cls: 'rec-cat-sweet', dim: '甜點伴手' };
+        if (/餐|食|料理|燒肉|焼肉|牛|鰻|拉麵|蕎麥|そば|食堂|海鮮|bistro|tapas|warung|restaurant|dining/.test(s)) return { icon: '🍽️', label: '在地餐食・料理', cls: 'rec-cat-food', dim: '在地美食' };
+        if (/神社|神宮|八幡宮|大社|寺院|寺|教堂|大教堂|修道院|清真寺|遺址|shrine|temple|cathedral|church|basilica|mosque|monument/.test(s)) return { icon: '🏛️', label: '宗教聖地・歷史古蹟', cls: 'rec-cat-shrine', dim: '文化古蹟' };
+        if (/城|天守|美術館|博物館|紀念館|建築|老街|古城|町家|橋|塔|館|museum|castle|gallery|architecture|palace/.test(s)) return { icon: '🏛️', label: '建築・博物館・街區', cls: 'rec-cat-arch', dim: '建築美學' };
+        if (/庭園|公園|展望|海灘|湖|濕地|林蔭|大道|瀑布|峽谷|冰川|火山|garden|park|viewpoint|beach|cliff|waterfall/.test(s)) return { icon: '📸', label: '自然風景・庭園・展望', cls: 'rec-cat-view', dim: '攝影光線' };
+        if (/車站|駅|機場|港|碼頭|station|airport|terminal|harbor/.test(s)) return { icon: '🚉', label: '交通樞紐・車站', cls: 'rec-cat-other', dim: '建築美學' };
+        return { icon: '📍', label: '周邊探索點', cls: 'rec-cat-other', dim: '建築美學' };
+    }
+
+    function distillWikiKeyPoints(title, extract) {
+        const clean = String(extract || '').replace(/\s+/g, ' ').trim();
+        const badge = classifyEntityBadge(title, clean);
+        const sentences = clean.split(/(?<=[。！？])/).map(s => s.trim()).filter(Boolean);
+
+        // 第一句通常為定義句，移除括號內冗長日文注音讓重點更乾淨
+        let tldr = (sentences[0] || clean).replace(/（[^）]{6,}）/g, '').trim();
+        if (tldr.length > 78) tldr = tldr.slice(0, 78) + '…';
+
+        // 從後續句子抓取關鍵亮點（年代、國寶/文化財、建築師、特色）
+        const highlights = [];
+        const keyPattern = /(建於|創建|始建|世界遺產|國寶|重要文化財|名勝|建築師|藤森照信|沃里斯|原廣司|供奉|主祭|以.{1,14}聞名|特色|賞梅|賞櫻|楓葉|庭園|天守|鳥居)/;
+        for (const sent of sentences.slice(1)) {
+            if (highlights.length >= 2) break;
+            if (keyPattern.test(sent)) {
+                let compact = sent.replace(/（[^）]{6,}）/g, '').trim();
+                if (compact.length > 64) compact = compact.slice(0, 64) + '…';
+                if (compact && compact !== tldr) highlights.push(compact);
+            }
+        }
+        if (!highlights.length && sentences[1]) {
+            let s2 = sentences[1].replace(/（[^）]{6,}）/g, '').trim();
+            if (s2.length > 64) s2 = s2.slice(0, 64) + '…';
+            if (s2) highlights.push(s2);
+        }
+
+        return { badge, tldr, highlights, fullText: clean };
+    }
+
+    function resolveZhtwWikiKeyword(titleStr) {
+        const s = String(titleStr || '');
+        for (const item of ZHTW_WIKI_MAP) {
+            if (item.match.test(s)) return item.query;
+        }
+        return s.replace(/[（(][^）)]*[）)]/g, '').split(/[×＆&➔→｜|：:]/)[0].trim();
+    }
+
+    async function fetchZhtwWikipediaBrief(titleStr) {
+        const kw = resolveZhtwWikiKeyword(titleStr);
+        if (!kw) return null;
+        if (wikiZhtwCache[kw] !== undefined) return wikiZhtwCache[kw];
+
+        try {
+            const searchUrl = `https://zh.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(kw)}&srlimit=1&variant=zh-tw&format=json&origin=*`;
+            const sRes = await fetch(searchUrl);
+            if (!sRes.ok) return null;
+            const sJson = await sRes.json();
+            const hit = sJson?.query?.search?.[0];
+            if (!hit || !hit.pageid) {
+                wikiZhtwCache[kw] = null;
+                return null;
+            }
+
+            const detailUrl = `https://zh.wikipedia.org/w/api.php?action=query&prop=extracts|info&exintro=1&explaintext=1&inprop=url&redirects=1&converttitles=1&variant=zh-tw&pageids=${hit.pageid}&format=json&origin=*`;
+            const dRes = await fetch(detailUrl);
+            if (!dRes.ok) return null;
+            const dJson = await dRes.json();
+            const page = dJson?.query?.pages?.[String(hit.pageid)];
+            const extract = String(page?.extract || '').trim();
+            if (!extract || /消歧義|消歧义/.test(extract.slice(0, 40))) {
+                wikiZhtwCache[kw] = null;
+                return null;
+            }
+
+            const baseUrl = page.fullurl || `https://zh.wikipedia.org/zh-tw/${encodeURIComponent(page.title || kw)}`;
+            const zhtwUrl = baseUrl.includes('variant=') ? baseUrl : `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}variant=zh-tw`;
+
+            const result = {
+                title: page.title || kw,
+                extract,
+                url: zhtwUrl
+            };
+            wikiZhtwCache[kw] = result;
+            try { localStorage.setItem(WIKI_ZHTW_CACHE_KEY, JSON.stringify(wikiZhtwCache)); } catch (e) {}
+            return result;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    /* 4. 開放世界即時周邊探索引擎（支援分批擴大半徑、扇區偏移與全要素圖資重新查詢） */
+    let recBatchIndex = 0;
+    let recIsFetching = false;
+    let shownDiscoveryHistory = new Set();
+
+    function isAlreadyInUserTrip(name) {
+        const clean = String(name || '').toLowerCase().replace(/[（(][^）)]*[）)]/g, '').trim();
+        if (!clean) return false;
+        const pool = [
+            ...((globalData && globalData.poi_database) || []).map(p => p.name),
+            ...((globalData && globalData.theme_guide) || []).map(g => g.name),
+            ...((globalData && globalData.itinerary) || []).flatMap(d => (d.schedule || []).map(s => s.activity))
+        ];
+        return pool.some(existing => {
+            const eLower = String(existing || '').toLowerCase();
+            return eLower.includes(clean) || clean.includes(eLower);
+        });
+    }
+
+    function offsetLatLon(lat, lon, metersNorth, metersEast) {
+        const dLat = metersNorth / 111320;
+        const dLon = metersEast / (111320 * Math.cos(lat * Math.PI / 180));
+        return { lat: +(lat + dLat).toFixed(5), lon: +(lon + dLon).toFixed(5) };
+    }
+
+    function getBatchSearchCenterAndRadius(coordsInfo, batchIdx) {
+        const baseWalk = 1100;
+        const baseBike = 1800;
+        if (batchIdx === 0) {
+            return {
+                lat: coordsInfo.lat,
+                lon: coordsInfo.lon,
+                osmRadius: coordsInfo.mode === 'bike' ? baseBike : baseWalk,
+                wikiRadius: coordsInfo.mode === 'bike' ? 2800 : 1600,
+                sectorLabel: '核心周邊'
+            };
+        }
+        if (batchIdx === 1) {
+            return {
+                lat: coordsInfo.lat,
+                lon: coordsInfo.lon,
+                osmRadius: coordsInfo.mode === 'bike' ? 3600 : 2200,
+                wikiRadius: coordsInfo.mode === 'bike' ? 5000 : 3500,
+                sectorLabel: '擴大生活圈'
+            };
+        }
+        // Batch 2+: 依方位角（北、東、南、西）偏移搜尋圓心，探索不同街區
+        const dirs = [
+            { n: 1, e: 0, name: '北側街區' },
+            { n: 0, e: 1, name: '東側街區' },
+            { n: -1, e: 0, name: '南側街區' },
+            { n: 0, e: -1, name: '西側街區' }
+        ];
+        const dir = dirs[(batchIdx - 2) % dirs.length];
+        const stepMeters = coordsInfo.mode === 'bike' ? 1600 : 800;
+        const shifted = offsetLatLon(coordsInfo.lat, coordsInfo.lon, dir.n * stepMeters, dir.e * stepMeters);
+        return {
+            lat: shifted.lat,
+            lon: shifted.lon,
+            osmRadius: coordsInfo.mode === 'bike' ? 2800 : 1600,
+            wikiRadius: coordsInfo.mode === 'bike' ? 4500 : 3000,
+            sectorLabel: dir.name
+        };
+    }
+
+    async function fetchWikiNearbyZhtw(coordsInfo, batchIdx = 0) {
+        const cfg = getBatchSearchCenterAndRadius(coordsInfo, batchIdx);
+        const limit = batchIdx === 0 ? 14 : 25;
+        const geoUrl = `https://zh.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord=${cfg.lat}|${cfg.lon}&gsradius=${cfg.wikiRadius}&gslimit=${limit}&variant=zh-tw&format=json&origin=*`;
+        const res = await fetch(geoUrl);
+        if (!res.ok) return [];
+        const json = await res.json();
+        const items = json?.query?.geosearch || [];
+        if (!items.length) return [];
+
+        // 過濾掉已經看過的，優先抓取新條目的摘要
+        const unseen = items.filter(i => !shownDiscoveryHistory.has(String(i.title || '').toLowerCase().trim()));
+        const targetSlice = (unseen.length >= 4 ? unseen : items).slice(0, 14);
+        const pageIds = targetSlice.map(i => i.pageid).join('|');
+
+        const extUrl = `https://zh.wikipedia.org/w/api.php?action=query&prop=extracts|info&exintro=1&explaintext=1&exsentences=2&inprop=url&converttitles=1&variant=zh-tw&pageids=${pageIds}&format=json&origin=*`;
+        const extRes = await fetch(extUrl);
+        const extJson = extRes.ok ? await extRes.json() : {};
+        const pages = extJson?.query?.pages || {};
+
+        return targetSlice.map(it => {
+            const p = pages[String(it.pageid)] || {};
+            const title = p.title || it.title;
+            const extract = String(p.extract || '').trim();
+            const distilled = distillWikiKeyPoints(title, extract);
+            const baseUrl = p.fullurl || `https://zh.wikipedia.org/zh-tw/${encodeURIComponent(title)}`;
+            const zhtwUrl = baseUrl.includes('variant=') ? baseUrl : `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}variant=zh-tw`;
+            const realDist = calcHaversineMeters(coordsInfo.lat, coordsInfo.lon, it.lat, it.lon) || Math.round(it.dist || 0);
+            return {
+                source: '維基繁中地標',
+                isOpenWorld: true,
+                name: title,
+                lat: it.lat,
+                lon: it.lon,
+                distMeters: realDist,
+                catBadge: distilled.badge,
+                tag: distilled.badge.label,
+                keyPoint: distilled.tldr || '歷史與文化地標建築',
+                hours: '',
+                closed: '',
+                price: '',
+                extract,
+                wikiUrl: zhtwUrl,
+                mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${title} ${coordsInfo.city || coordsInfo.label}`)}`,
+                rawText: `${title} ${distilled.badge.label} ${extract}`
+            };
+        });
+    }
+
+    const CUISINE_ZHTW_MAP = {
+        japanese: '日式料理', ramen: '拉麵', soba: '蕎麥麵', udon: '烏龍麵',
+        sushi: '壽司', yakiniku: '燒肉', eel: '鰻魚料理', unagi: '鰻魚飯',
+        izakaya: '居酒屋', coffee_shop: '手沖咖啡', cafe: '咖啡喫茶',
+        tea: '日本茶・抹茶', bakery: '手作烘焙', pastry: '甜點洋菓子',
+        italian: '義式料理', french: '法式料理', pizza: '窯烤披薩',
+        burger: '漢堡輕食', thai: '泰式料理', seafood: '海鮮料理'
+    };
+
+    function classifyOsmFeature(tags) {
+        if (!tags) return { badge: { icon: '📍', label: '周邊探索點', cls: 'rec-cat-other', dim: '建築美學' }, keyPoint: '在地探索地點' };
+        const cuisineRaw = String(tags.cuisine || '').split(';')[0].trim().toLowerCase();
+        const cuisineZh = CUISINE_ZHTW_MAP[cuisineRaw] || (cuisineRaw ? cuisineRaw : '');
+
+        if (tags.amenity === 'cafe' || tags.shop === 'coffee' || tags.shop === 'tea') {
+            const spec = cuisineZh || (tags.shop === 'tea' ? '精品茶館／茶葉專賣' : '獨立咖啡・精品烘焙');
+            return {
+                badge: { icon: '☕', label: '獨立咖啡・茶館', cls: 'rec-cat-cafe', dim: '精品咖啡' },
+                keyPoint: `主打：${spec}${tags.outdoor_seating === 'yes' ? ' · 附戶外座位' : ''}`
+            };
+        }
+        if (tags.amenity === 'bar' || tags.amenity === 'pub' || tags.amenity === 'biergarten') {
+            return {
+                badge: { icon: '🍺', label: '酒吧・精釀小酌', cls: 'rec-cat-bar', dim: '酒吧小酌' },
+                keyPoint: `類型：${tags.amenity === 'pub' ? '在地特色酒館' : '精釀／夜間小酌吧'}`
+            };
+        }
+        if (tags.shop === 'bakery' || tags.shop === 'pastry' || tags.shop === 'confectionery' || tags.amenity === 'ice_cream') {
+            const labelMap = { bakery: '職人烘焙麵包', pastry: '精緻甜點洋菓子', confectionery: '傳統糕點・伴手禮', ice_cream: '手工冰淇淋' };
+            const sub = labelMap[tags.shop || tags.amenity] || '甜點伴手';
+            return {
+                badge: { icon: '🥐', label: '甜點・烘焙・伴手', cls: 'rec-cat-sweet', dim: '甜點伴手' },
+                keyPoint: `主打：${sub}${cuisineZh ? `（${cuisineZh}）` : ''}`
+            };
+        }
+        if (tags.amenity === 'restaurant' || tags.amenity === 'izakaya') {
+            return {
+                badge: { icon: '🍽️', label: '在地餐食・料理', cls: 'rec-cat-food', dim: '在地美食' },
+                keyPoint: `料理類型：${cuisineZh || '在地特色餐館'}`
+            };
+        }
+        if (tags.tourism === 'viewpoint') {
+            return {
+                badge: { icon: '📸', label: '自然風景・庭園・展望', cls: 'rec-cat-view', dim: '攝影光線' },
+                keyPoint: '看點：高處視野／自然地景與光影取景點'
+            };
+        }
+        if (tags.tourism === 'museum' || tags.tourism === 'gallery') {
+            return {
+                badge: { icon: '🏛️', label: '建築・博物館・街區', cls: 'rec-cat-arch', dim: '建築美學' },
+                keyPoint: `看點：${tags.tourism === 'gallery' ? '藝術展演空間' : '主題文物與建築展示'}`
+            };
+        }
+        if (tags.historic === 'shrine' || tags.amenity === 'place_of_worship') {
+            const relMap = {
+                shinto: '神道教神社建築',
+                buddhist: '佛教寺院建築',
+                christian: '歷史教堂／修道院建築',
+                muslim: '清真寺文化建築'
+            };
+            const rel = relMap[tags.religion] || '宗教文化古蹟建築';
+            return {
+                badge: { icon: '🏛️', label: '宗教聖地・歷史古蹟', cls: 'rec-cat-shrine', dim: '文化古蹟' },
+                keyPoint: `看點：${rel}`
+            };
+        }
+        if (tags.historic) {
+            return {
+                badge: { icon: '🏛️', label: '建築・博物館・街區', cls: 'rec-cat-arch', dim: '建築美學' },
+                keyPoint: `看點：歷史遺構／文化建築（${tags.historic}）`
+            };
+        }
+        if (tags.leisure === 'garden' || tags.leisure === 'park') {
+            return {
+                badge: { icon: '📸', label: '自然風景・庭園・展望', cls: 'rec-cat-view', dim: '攝影光線' },
+                keyPoint: `看點：${tags.leisure === 'garden' ? '景觀庭園造景' : '自然綠地／水岸公園'}`
+            };
+        }
+        return {
+            badge: { icon: '📍', label: '周邊探索點', cls: 'rec-cat-other', dim: '建築美學' },
+            keyPoint: cuisineZh ? `特色：${cuisineZh}` : '周邊在地探索點'
+        };
+    }
+
+    async function fetchOsmNearbyPois(coordsInfo, batchIdx = 0) {
+        const cfg = getBatchSearchCenterAndRadius(coordsInfo, batchIdx);
+        const r = cfg.osmRadius;
+        // 批次 1+ 擴充查詢 shop（咖啡豆/茶鋪/烘焙/和菓子）與 leisure（庭園/公園），並同時搜尋 node 與 way 建築輪廓
+        const extraBlock = batchIdx >= 1
+            ? `nwr["shop"~"coffee|tea|bakery|pastry|confectionery"]["name"](around:${r},${cfg.lat},${cfg.lon});nwr["leisure"~"garden|park"]["name"](around:${r},${cfg.lat},${cfg.lon});`
+            : '';
+        const query = `[out:json][timeout:10];(nwr["amenity"~"cafe|bar|pub|restaurant|ice_cream"]["name"](around:${r},${cfg.lat},${cfg.lon});nwr["tourism"~"viewpoint|museum|gallery"]["name"](around:${r + 350},${cfg.lat},${cfg.lon});nwr["historic"~"castle|shrine|temple|monument|memorial"]["name"](around:${r + 350},${cfg.lat},${cfg.lon});${extraBlock});out center 40;`;
+
+        const res = await fetch('https://overpass-api.de/api/interpreter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+            body: 'data=' + encodeURIComponent(query)
+        });
+        if (!res.ok) return [];
+        const json = await res.json();
+        const elements = Array.isArray(json?.elements) ? json.elements : [];
+
+        return elements
+            .filter(el => el.tags && el.tags.name)
+            .map(el => {
+                const t = el.tags;
+                const elLat = typeof el.lat === 'number' ? el.lat : (el.center && el.center.lat);
+                const elLon = typeof el.lon === 'number' ? el.lon : (el.center && el.center.lon);
+                const displayName = t['name:zh-Hant'] || t['name:zh'] || t.name;
+                const classified = classifyOsmFeature(t);
+                const dist = calcHaversineMeters(coordsInfo.lat, coordsInfo.lon, elLat, elLon);
+                const externalSite = t.website || t['contact:website'] || t['contact:instagram'] || '';
+                const kpParts = [classified.keyPoint];
+                if (t.opening_hours) kpParts.push(`營業：${t.opening_hours}`);
+                if (t.description) kpParts.push(t.description);
+
+                return {
+                    source: 'OSM 現地圖資',
+                    isOpenWorld: true,
+                    name: displayName,
+                    lat: elLat,
+                    lon: elLon,
+                    distMeters: dist || 0,
+                    catBadge: classified.badge,
+                    tag: classified.badge.label,
+                    keyPoint: kpParts.join(' ｜ '),
+                    hours: t.opening_hours || '',
+                    closed: '',
+                    price: '',
+                    externalSite,
+                    extract: t.description || classified.keyPoint,
+                    mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${t.name} ${coordsInfo.city || ''}`.trim())}`,
+                    rawText: `${displayName} ${t.name} ${classified.badge.label} ${classified.badge.dim} ${t.cuisine || ''} ${t.description || ''}`
+                };
+            });
+    }
+
+    async function fetchOpenWorldNearby(coordsInfo, batchIdx = 0, forceRefresh = false) {
+        const key = `${coordsInfo.lat.toFixed(3)},${coordsInfo.lon.toFixed(3)}|b${batchIdx}`;
+        const cached = openDiscoveryCache[key];
+        if (!forceRefresh && cached && (Date.now() - cached.ts < 6 * 60 * 60 * 1000)) {
+            return cached.items;
+        }
+
+        const [wikiRes, osmRes] = await Promise.allSettled([
+            fetchWikiNearbyZhtw(coordsInfo, batchIdx),
+            fetchOsmNearbyPois(coordsInfo, batchIdx)
+        ]);
+
+        const combined = [
+            ...(wikiRes.status === 'fulfilled' ? wikiRes.value : []),
+            ...(osmRes.status === 'fulfilled' ? osmRes.value : [])
+        ];
+
+        const seen = new Set();
+        const deduped = combined.filter(item => {
+            const k = item.name.toLowerCase().trim();
+            if (!k || seen.has(k)) return false;
+            seen.add(k);
+            return true;
+        });
+
+        if (deduped.length) {
+            openDiscoveryCache[key] = { ts: Date.now(), items: deduped };
+            try { localStorage.setItem(OPEN_DISCOVERY_CACHE_KEY, JSON.stringify(openDiscoveryCache)); } catch (e) {}
+        }
+        return deduped;
+    }
+
+    /* 5. 混合式微時刻推薦引擎（重點先出來 + 明確類型標記 + 真正重新查詢換一批） */
+    function detectTimeWindowFromContext(ctx) {
+        const m = String(ctx.timeStr || '').match(/(\d{1,2}):(\d{2})/);
+        if (!m) return 'any';
+        const hour = parseInt(m[1], 10);
+        if (hour < 11) return 'morning';
+        if (hour < 14) return 'midday';
+        if (hour < 17) return 'afternoon';
+        return 'evening';
+    }
+
+    function matchIntentFilter(dims, intent) {
+        if (!intent || intent === '全部') return true;
+        if (intent === '☕ 咖啡休憩') return dims.includes('精品咖啡') || dims.includes('甜點伴手');
+        if (intent === '🏛️ 建築古蹟') return dims.includes('建築美學') || dims.includes('御朱印');
+        if (intent === '🍽️ 餐飲小酌') return dims.includes('在地美食') || dims.includes('酒吧小酌');
+        if (intent === '📸 風景視野') return dims.includes('攝影光線') || dims.includes('湖岸騎行');
+        return true;
+    }
+
+    function computeHybridRecommendations(ctx, coordsInfo, weatherData, openWorldItems) {
+        const pool = [];
+
+        // A. 開放世界即時探索候選
+        (openWorldItems || []).forEach(ow => {
+            const inTrip = isAlreadyInUserTrip(ow.name);
+            pool.push({
+                ...ow,
+                inTrip,
+                mode: coordsInfo.mode || 'walk'
+            });
+        });
+
+        // B. 本地 JSON 口袋庫（僅在關閉「只看新發現」時納入）
+        if (!recNovelOnly) {
+            ((globalData && globalData.poi_database) || []).forEach(p => {
+                const pCoords = resolveContextCoords({ title: p.name, area: p.area });
+                const dist = calcHaversineMeters(coordsInfo.lat, coordsInfo.lon, pCoords.lat, pCoords.lon);
+                const badge = classifyEntityBadge(p.name, `${p.tag || ''} ${p.signature || ''}`);
+                pool.push({
+                    source: '行程口袋庫',
+                    isOpenWorld: false,
+                    inTrip: true,
+                    kind: 'poi',
+                    name: p.name,
+                    area: p.area || '',
+                    catBadge: badge,
+                    tag: badge.label,
+                    keyPoint: p.signature ? `必點重點：${p.signature}` : (p.desc || ''),
+                    hours: p.hours || '',
+                    closed: p.closed || '',
+                    price: p.price || '',
+                    distMeters: dist || 0,
+                    mode: coordsInfo.mode || 'walk',
+                    extract: p.desc || '',
+                    mapUrl: p.map_url || '',
+                    rawText: `${p.name} ${p.tag} ${p.signature} ${p.desc} ${p.tips} ${(p.highlights || []).join(' ')}`
+                });
+            });
+
+            ((globalData && globalData.theme_guide) || []).forEach((g, idx) => {
+                const gCoords = resolveContextCoords({ title: g.name, area: g.area });
+                const dist = calcHaversineMeters(coordsInfo.lat, coordsInfo.lon, gCoords.lat, gCoords.lon);
+                const badge = classifyEntityBadge(g.name, `${g.tag || ''} ${g.best || ''}`);
+                pool.push({
+                    source: '主題絕景庫',
+                    isOpenWorld: false,
+                    inTrip: true,
+                    kind: 'theme',
+                    themeIdx: idx,
+                    name: g.name,
+                    area: g.area || '',
+                    catBadge: badge,
+                    tag: badge.label,
+                    keyPoint: g.best ? `核心看點：${g.best}` : (g.desc || ''),
+                    hours: g.hours || g.time || '',
+                    closed: '',
+                    price: g.fee || '',
+                    distMeters: dist || 0,
+                    mode: coordsInfo.mode || 'walk',
+                    extract: g.desc || '',
+                    mapUrl: g.map_url || '',
+                    rawText: `${g.name} ${g.tag} ${g.best} ${g.desc} ${g.photo_tip || ''} ${g.goshuin || ''} ${(g.highlights || []).join(' ')}`
+                });
+            });
+        }
+
+        const curTitleLower = String(ctx.title || '').toLowerCase();
+        const timeWin = detectTimeWindowFromContext(ctx);
+        const isColdOrWindy = weatherData && ((weatherData.windKmh !== null && weatherData.windKmh >= 18) || (weatherData.temp !== null && weatherData.temp <= 6));
+
+        const baseFiltered = pool.filter(item => {
+            const nLower = item.name.toLowerCase();
+            if (curTitleLower.includes(nLower) || nLower.includes(curTitleLower)) return false;
+            if (recNovelOnly && item.inTrip) return false;
+            const dims = inferFeatureDimensions(item.rawText);
+            return matchIntentFilter(dims, recIntentFilter);
+        });
+
+        // 在「換一批」時，優先排除已經看過的項目；若新項目不足 4 個才補上舊項目
+        const unseenFiltered = recBatchIndex > 0
+            ? baseFiltered.filter(item => !shownDiscoveryHistory.has(item.name.toLowerCase().trim()))
+            : baseFiltered;
+        const effectivePool = unseenFiltered.length >= 2 ? unseenFiltered : baseFiltered;
+
+        const scored = effectivePool.map((item) => {
+            const dims = inferFeatureDimensions(item.rawText);
+            let score = 48;
+            const whyParts = [];
+
+            if (item.distMeters > 0) {
+                if (item.distMeters <= 450) {
+                    score += 24;
+                    whyParts.push('就在旁邊');
+                } else if (item.distMeters <= 1200) {
+                    score += 17;
+                    whyParts.push('順路可達');
+                } else if (item.distMeters <= 3200 && item.mode === 'bike') {
+                    score += 14;
+                    whyParts.push('騎行延伸順路');
+                } else {
+                    score -= 6;
+                }
+            }
+
+            if (timeWin === 'morning' && dims.includes('精品咖啡')) {
+                score += 15;
+                whyParts.push('適合晨間手沖開機');
+            } else if (timeWin === 'midday' && dims.includes('在地美食')) {
+                score += 16;
+                whyParts.push('契合午間用餐時段');
+            } else if (timeWin === 'afternoon' && (dims.includes('攝影光線') || dims.includes('精品咖啡'))) {
+                score += 14;
+                whyParts.push('適合午後斜光拍攝／休憩');
+            } else if (timeWin === 'evening' && (dims.includes('酒吧小酌') || dims.includes('在地美食'))) {
+                score += 15;
+                whyParts.push('適合傍晚放鬆餐酒');
+            }
+
+            let prefSum = 0;
+            dims.forEach(d => { prefSum += (userTasteProfile[d] || 0.5); });
+            const avgPref = prefSum / dims.length;
+            score += Math.round(avgPref * 15);
+            if (avgPref >= 0.9) {
+                whyParts.push(`符合「${dims.slice(0, 2).join('＋')}」偏好`);
+            }
+
+            if (isColdOrWindy && (dims.includes('精品咖啡') || dims.includes('建築美學'))) {
+                score += 7;
+                whyParts.push('室內空間可避冷風');
+            }
+
+            const pct = Math.min(99, Math.max(66, score));
+            const catBadge = item.catBadge || classifyEntityBadge(item.name, item.rawText);
+            const cleanKeyPoint = item.keyPoint || (item.extract ? (item.extract.length > 68 ? item.extract.slice(0, 68) + '…' : item.extract) : `${catBadge.label}`);
+
+            return {
+                ...item,
+                dims,
+                pct,
+                catBadge,
+                keyPointText: cleanKeyPoint,
+                whyText: whyParts.length ? `推薦原因：${whyParts.join(' · ')}` : ''
+            };
+        });
+
+        // MMR 多樣性重排，確保前 4 名涵蓋不同類型
+        scored.sort((a, b) => b.pct - a.pct);
+        const selected = [];
+        const usedCats = new Set();
+        for (const cand of scored) {
+            if (selected.length >= 4) break;
+            const cLabel = cand.catBadge.label;
+            if (selected.length >= 2 && usedCats.has(cLabel) && scored.length > 4) continue;
+            selected.push(cand);
+            usedCats.add(cLabel);
+        }
+        for (const cand of scored) {
+            if (selected.length >= 4) break;
+            if (!selected.includes(cand)) selected.push(cand);
+        }
+
+        // 記錄本次已曝光項目，供下次「換一批」排除重複
+        selected.forEach(s => shownDiscoveryHistory.add(s.name.toLowerCase().trim()));
+        return selected;
+    }
+
+    function setRecNovelMode(novel) {
+        recNovelOnly = novel;
+        refreshSheetRecSection();
+    }
+
+    function setRecIntent(intent) {
+        recIntentFilter = intent;
+        refreshSheetRecSection();
+    }
+
+    async function triggerGeminiCollaborativePipeline(nonce, forceBypassCache = false) {
+        const gCfg = getGeminiConfig();
+        if (!gCfg.apiKey || !currentSheetPayload) return;
+        const coordsInfo = resolveContextCoords(currentSheetPayload);
+        geminiRuntimeStatus = { state: 'loading', modelUsed: gCfg.selectedModel || 'auto', latencySec: '', errorMsg: '', grounded: false };
+        refreshSheetRecSection();
+
+        try {
+            const aiRecs = await runGeminiCollaborativeRecs(currentSheetPayload, coordsInfo, lastLiveWeather, lastOpenDiscoveries, forceBypassCache);
+            if (nonce !== sheetRenderNonce) return;
+            lastGeminiRecs = aiRecs || [];
+        } catch (err) {
+            if (nonce !== sheetRenderNonce) return;
+            geminiRuntimeStatus = {
+                state: 'error',
+                modelUsed: gCfg.selectedModel || '',
+                latencySec: '',
+                errorMsg: err.message || '協作請求失敗',
+                grounded: false
+            };
+        }
+        if (nonce === sheetRenderNonce) refreshSheetRecSection();
+    }
+
+    async function shuffleSheetRecs() {
+        if (!currentSheetPayload || recIsFetching) return;
+        hapticTick(10);
+        recIsFetching = true;
+        recBatchIndex += 1;
+        lastGeminiRecs = [];
+        const nonce = sheetRenderNonce;
+
+        const coordsInfo = resolveContextCoords(currentSheetPayload);
+        const sectorCfg = getBatchSearchCenterAndRadius(coordsInfo, recBatchIndex);
+        const hasGemini = Boolean(getGeminiConfig().apiKey);
+
+        const ctrlBox = document.getElementById('sheet-rec-controls');
+        const listBox = document.getElementById('sheet-rec-list');
+        const badgeBox = document.getElementById('sheet-rec-badge');
+        if (ctrlBox) ctrlBox.innerHTML = renderRecControlsHtml();
+        if (badgeBox) badgeBox.innerText = `第 ${recBatchIndex + 1} 批查詢中...`;
+        if (listBox) {
+            listBox.innerHTML = `<div style="font-size:0.78rem; color:var(--sky); padding:10px 4px; font-weight:700;">🔄 正在向圖資${hasGemini ? '與 Gemini 適中模型' : ''}重新檢索「${sectorCfg.sectorLabel}（半徑 ${sectorCfg.osmRadius}m）」新地點...</div>`;
+        }
+
+        try {
+            const freshItems = await fetchOpenWorldNearby(coordsInfo, recBatchIndex, true);
+            if (nonce !== sheetRenderNonce) return;
+            const existingNames = new Set(lastOpenDiscoveries.map(i => i.name.toLowerCase().trim()));
+            const newlyAdded = (freshItems || []).filter(i => !existingNames.has(i.name.toLowerCase().trim()));
+            lastOpenDiscoveries = [...newlyAdded, ...lastOpenDiscoveries];
+
+            if (hasGemini) {
+                await triggerGeminiCollaborativePipeline(nonce, true);
+                if (nonce === sheetRenderNonce && geminiRuntimeStatus.state === 'ready') {
+                    showNativeToast(`✨ Gemini (${shortModelDisplayName(geminiRuntimeStatus.modelUsed)}) 已協作生成第 ${recBatchIndex + 1} 批推薦`);
+                }
+            } else {
+                showNativeToast(`✓ 已重新查詢「${sectorCfg.sectorLabel}」，新增 ${newlyAdded.length} 個周邊選項`);
+            }
+        } catch (e) {
+            if (nonce !== sheetRenderNonce) return;
+            showNativeToast('⚠️ 網路查詢逾時，已切換排序組合');
+        } finally {
+            recIsFetching = false;
+            if (nonce === sheetRenderNonce) refreshSheetRecSection();
+        }
+    }
+
+    function refreshSheetRecSection() {
+        if (!currentSheetPayload) return;
+        const coordsInfo = resolveContextCoords(currentSheetPayload);
+        const localRecs = computeHybridRecommendations(currentSheetPayload, coordsInfo, lastLiveWeather, lastOpenDiscoveries);
+        const gCfg = getGeminiConfig();
+
+        let mergedRecs = localRecs;
+        if (gCfg.apiKey && lastGeminiRecs.length) {
+            const filteredAi = lastGeminiRecs.filter(item => {
+                const dims = inferFeatureDimensions(item.rawText);
+                return matchIntentFilter(dims, recIntentFilter);
+            });
+            if (filteredAi.length) {
+                const aiNames = new Set(filteredAi.map(a => a.name.toLowerCase().trim()));
+                const extraLocal = localRecs.filter(l => !aiNames.has(l.name.toLowerCase().trim()));
+                mergedRecs = [...filteredAi, ...extraLocal].slice(0, 4);
+            }
+        }
+
+        const ctrlBox = document.getElementById('sheet-rec-controls');
+        const listBox = document.getElementById('sheet-rec-list');
+        const badgeBox = document.getElementById('sheet-rec-badge');
+        const geminiBtn = document.getElementById('sheet-gemini-btn');
+
+        if (geminiBtn) {
+            if (!gCfg.apiKey) {
+                geminiBtn.className = 'gemini-pill-btn';
+                geminiBtn.innerText = '🔑 啟用 Gemini 協作';
+            } else if (geminiRuntimeStatus.state === 'loading') {
+                geminiBtn.className = 'gemini-pill-btn';
+                geminiBtn.innerText = `⏳ ${shortModelDisplayName(gCfg.selectedModel || 'Gemini')} 思考中...`;
+            } else if (geminiRuntimeStatus.state === 'ready') {
+                geminiBtn.className = 'gemini-pill-btn active';
+                geminiBtn.innerText = `✨ ${shortModelDisplayName(geminiRuntimeStatus.modelUsed)} · ${geminiRuntimeStatus.latencySec}s`;
+            } else if (geminiRuntimeStatus.state === 'error') {
+                geminiBtn.className = 'gemini-pill-btn';
+                geminiBtn.innerText = '⚠️ Gemini 協作設定';
+            } else {
+                geminiBtn.className = 'gemini-pill-btn active';
+                geminiBtn.innerText = `✨ ${shortModelDisplayName(gCfg.selectedModel || 'Gemini')}`;
+            }
+        }
+
+        if (ctrlBox) ctrlBox.innerHTML = renderRecControlsHtml();
+        if (listBox) listBox.innerHTML = renderRecCardsHtml(mergedRecs);
+        if (badgeBox) {
+            badgeBox.innerText = (gCfg.apiKey && lastGeminiRecs.length)
+                ? `AI 協作 ${mergedRecs.length} 處`
+                : (recNovelOnly ? `新發現 ${mergedRecs.length} 處` : `精選 ${mergedRecs.length} 處`);
+        }
+    }
+
+    function renderRecControlsHtml() {
+        const intents = ['全部', '☕ 咖啡休憩', '🏛️ 建築古蹟', '🍽️ 餐飲小酌', '📸 風景視野'];
+        return `
+            <button type="button" class="rec-pill ${recNovelOnly ? 'active' : ''}" onclick="setRecNovelMode(true)">✨ 只看新發現</button>
+            <button type="button" class="rec-pill ${!recNovelOnly ? 'active' : ''}" onclick="setRecNovelMode(false)">🧭 含行程口袋</button>
+            <button type="button" class="rec-pill shuffle" ${recIsFetching ? 'disabled' : ''} onclick="shuffleSheetRecs()">${recIsFetching ? '⏳ 查詢中...' : '↻ 重新查詢換一批'}</button>
+            ${intents.map(it => `<button type="button" class="rec-pill ${recIntentFilter === it ? 'active' : ''}" onclick="setRecIntent('${it}')">${it}</button>`).join('')}
+        `;
+    }
+
+    function openRecommendedItem(encodedJson) {
+        try {
+            const item = JSON.parse(decodeURIComponent(encodedJson));
+            if (item.kind === 'theme' && typeof item.themeIdx === 'number' && item.themeIdx >= 0) {
+                openThemeCardSheet(item.themeIdx, null);
+                return;
+            }
+            if (item.kind === 'poi' && !item.isOpenWorld) {
+                openPoiCardSheet(item.name, null);
+                return;
+            }
+            openItemActionSheet({
+                kind: 'discovered',
+                area: item.tag || '周邊新發現',
+                lat: item.lat,
+                lon: item.lon,
+                hours: item.hours || '',
+                closed: item.closed || '',
+                kicker: `✨ ${item.source} · ${item.tag || '新探索點'}`,
+                title: item.name,
+                mapUrl: item.mapUrl || '',
+                favKey: `poi::${item.name}`,
+                favScope: 'poi',
+                discoveredObj: item
+            });
+        } catch (e) {}
+    }
+
+    /* 6. 智慧多語關鍵字拆解 ＋ Google Maps 真實人流／熱門時段 ＋ 全球目的地自動適配 */
+    let activeSearchEntityIdx = 0;
+    let customOverrideKeyword = '';
+
+    function extractMapUrlQuery(mapUrl) {
+        if (!mapUrl) return '';
+        try {
+            const u = new URL(mapUrl);
+            const raw = u.searchParams.get('query') || u.searchParams.get('q') || '';
+            return decodeURIComponent(raw.replace(/\+/g, ' ')).trim();
+        } catch (e) {
+            const m = String(mapUrl).match(/[?&](?:query|q)=([^&]+)/i);
+            if (!m) return '';
+            try { return decodeURIComponent(m[1].replace(/\+/g, ' ')).trim(); } catch (e2) { return m[1]; }
+        }
+    }
+
+    const ITIN_NOISE_PREFIX = /^(返抵|抵達|前往|搭乘?|領取|異地還車|退房|寄放行李|寄行李|取行李|逆向先攻|南下段|北上中段|北上終段|晨間第一咖|晨間第二咖|晨湯醒神|國寶)[：:\s]*/;
+    const ITIN_NOISE_SUFFIX = /(高蛋白晚餐|高蛋白補給|豪華海鮮丼早餐|輕量早餐|溫泉放鬆|雙層溫泉舒緩|坐式早餐|手沖醒腦|早春賞梅|快拍|散策|單車精華線|異地還車|二選一|地景建築|池畔倒影|晨光木構|建築美學|寄行李|退房寄放行李|領取運動型越野車|取單車|入境)$/;
+    const GENERIC_TRANSIT_WORDS = new Set(['返抵京都', '京都站', '關西機場', '京都市區', '抵達', '出發', '午餐', '晚餐', '早餐']);
+
+    function stripItineraryFluff(raw) {
+        let s = String(raw || '').trim();
+        s = s.replace(/約\s*[\d.–-]+\s*km/gi, '').replace(/[\d.]+\s*km/gi, '');
+        s = s.replace(/^[（(]|[）)]$/g, '').trim();
+        s = s.replace(/^[：:・\-—]+|[：:・\-—]+$/g, '').trim();
+        s = s.replace(ITIN_NOISE_PREFIX, '').trim();
+        s = s.replace(ITIN_NOISE_SUFFIX, '').trim();
+        s = s.replace(ITIN_NOISE_PREFIX, '').trim();
+        s = s.replace(/(晚餐|午餐|早餐|咖啡廳|單車補給站)$/, '').trim();
+        return s;
+    }
+
+    function deriveCoreBrand(nameStr) {
+        const raw = String(nameStr || '').trim();
+        if (!raw) return '';
+        if (/^[A-Za-z0-9\s.'&\-éÉ]+$/.test(raw)) {
+            const stripped = raw
+                .replace(/\b(Kyoto|Tokyo|Osaka|Takashima|Omi-?Hachiman|Omihachiman|Hikone|Makino|Ishiyama|Otsu|Bangkok|Prague|Budapest|Lisbon|Porto|Barcelona|Madrid|London|Seoul|Taipei|Station|Shichijo|Kawaramachi|Stand|Branch|Main Store|International Airport|Airport|Garden|Temple|Shrine)\b/gi, '')
+                .replace(/\s{2,}/g, ' ')
+                .trim();
+            if (stripped.length >= 4) return stripped;
+            const withCity = raw
+                .replace(/\b(Station|Shichijo|Kawaramachi|Stand|Branch|Main Store|International Airport|Airport)\b/gi, '')
+                .replace(/\s{2,}/g, ' ')
+                .trim();
+            return withCity || raw;
+        }
+        const cjkBrand = raw
+            .replace(/(京都駅前店|八條口店|京都七條店|京都七條|近江八幡本店|八幡堀店|本店|分店|站前店)$/, '')
+            .trim();
+        return cjkBrand.length >= 2 ? cjkBrand : raw;
+    }
+
+    function extractSmartEntities(ctx) {
+        const entities = [];
+        const seen = new Set();
+
+        function pushEntity(label, localTerm, brandTerm, langHint = 'local') {
+            const cleanLocal = String(localTerm || '').replace(/\s{2,}/g, ' ').trim();
+            const cleanBrand = String(brandTerm || cleanLocal).replace(/\s{2,}/g, ' ').trim();
+            const key = cleanLocal.toLowerCase();
+            if (!key || key.length < 2 || seen.has(key) || GENERIC_TRANSIT_WORDS.has(cleanLocal)) return;
+            seen.add(key);
+            entities.push({
+                label: label || cleanLocal,
+                local: cleanLocal,
+                brand: cleanBrand || cleanLocal,
+                langHint
+            });
+        }
+
+        const mapQ = extractMapUrlQuery(ctx.mapUrl);
+        if (mapQ) {
+            const isEn = /^[A-Za-z0-9\s.'&\-éÉ]+$/.test(mapQ);
+            pushEntity(mapQ, mapQ, deriveCoreBrand(mapQ), isEn ? 'en' : 'local');
+        }
+
+        const titleRaw = String(ctx.title || '');
+        const pois = (globalData && globalData.poi_database) || [];
+        const themes = (globalData && globalData.theme_guide) || [];
+        [...pois, ...themes].forEach(item => {
+            const itemMapQ = extractMapUrlQuery(item.map_url);
+            const itemNameClean = String(item.name || '').replace(/[（(][^）)]*[）)]/g, '').trim();
+            const sameMap = mapQ && itemMapQ && mapQ.toLowerCase() === itemMapQ.toLowerCase();
+            const sharedToken = itemNameClean.length >= 3 && (titleRaw.includes(itemNameClean) || itemNameClean.includes(titleRaw));
+            const hiroMatch = /弘/.test(titleRaw) && /焼肉処\s*弘/.test(itemNameClean);
+            if (sameMap || sharedToken || hiroMatch) {
+                pushEntity(itemNameClean, itemNameClean, deriveCoreBrand(itemNameClean), 'native');
+            }
+        });
+
+        const bracketMatches = [...titleRaw.matchAll(/[（(]([^）)]+)[）)]/g)].map(m => m[1]);
+        const titleWithoutBrackets = titleRaw.replace(/[（(][^）)]*[）)]/g, ' ');
+        const rawSegments = [
+            ...titleWithoutBrackets.split(/➔|→|->|×|＆|&|／|\//),
+            ...bracketMatches.flatMap(b => b.split(/／|\/|、|＆|&/))
+        ];
+
+        rawSegments.forEach(seg => {
+            const cleaned = stripItineraryFluff(seg);
+            if (!cleaned || cleaned.length < 2) return;
+            const isEn = /^[A-Za-z0-9\s.'&\-éÉ]+$/.test(cleaned);
+            pushEntity(cleaned, cleaned, deriveCoreBrand(cleaned), isEn ? 'en' : 'zh');
+        });
+
+        if (!entities.length) {
+            const fallback = stripItineraryFluff(titleRaw) || titleRaw.trim();
+            pushEntity(fallback, fallback, deriveCoreBrand(fallback), 'zh');
+        }
+        return entities;
+    }
+
+    function detectDestinationRegion(ctx, coordsInfo) {
+        const lat = coordsInfo && coordsInfo.lat;
+        const lon = coordsInfo && coordsInfo.lon;
+        if (typeof lat === 'number' && typeof lon === 'number' && !isNaN(lat) && !isNaN(lon)) {
+            if (lat >= 24 && lat <= 46 && lon >= 122.5 && lon <= 146) return 'JP';
+            if (lat >= 21.5 && lat <= 25.5 && lon >= 119.3 && lon <= 122.2) return 'TW';
+            if (lat >= 22.1 && lat <= 22.6 && lon >= 113.4 && lon <= 114.5) return 'HK';
+            if (lat >= 33.0 && lat <= 38.7 && lon >= 124.5 && lon <= 131.5) return 'KR';
+            if (lat >= 5.5 && lat <= 20.5 && lon >= 97.3 && lon <= 105.7) return 'TH';
+            if (lat >= 0.8 && lat <= 7.5 && lon >= 99.5 && lon <= 119.5) return 'SG_MY';
+            if (lat >= -11 && lat <= 6 && lon >= 95 && lon <= 141) return 'ID';
+            if (lat >= 4.5 && lat <= 21 && lon >= 116 && lon <= 127) return 'PH';
+            if (lat >= 49.8 && lat <= 61 && lon >= -8.5 && lon <= 2.0) return 'UK';
+            if (lat >= 63 && lat <= 67 && lon >= -25 && lon <= -13) return 'IS';
+            if (lat >= 35 && lat <= 71 && lon >= -10 && lon <= 32) return 'EU';
+        }
+        const cur = ((globalData && globalData.trip_meta && globalData.trip_meta.currency) || '').toLowerCase();
+        const curMap = {
+            jpy: 'JP', twd: 'TW', hkd: 'HK', krw: 'KR', thb: 'TH',
+            sgd: 'SG_MY', myr: 'SG_MY', idr: 'ID', php: 'PH',
+            gbp: 'UK', isk: 'IS', eur: 'EU', czk: 'EU', huf: 'EU'
+        };
+        if (curMap[cur]) return curMap[cur];
+
+        const tripText = `${(globalData && globalData.trip_meta && globalData.trip_meta.title) || ''} ${ctx.title || ''} ${ctx.area || ''}`.toUpperCase();
+        if (/\b(KIX|NRT|HND|CTS|FUK|OKA|NGO|TAK|MYJ)\b|日本|京都|東京|大阪|北海道|四國/.test(tripText)) return 'JP';
+        if (/\b(BKK|DMK|HKT)\b|泰國|曼谷|普吉/.test(tripText)) return 'TH';
+        if (/\b(LHR|LGW)\b|英國|倫敦/.test(tripText)) return 'UK';
+        if (/\b(KEF)\b|冰島/.test(tripText)) return 'IS';
+        if (/\b(HEL|PRG|BUD|LIS|OPO|BCN|MAD)\b|歐洲|布拉格|布達佩斯|里斯本|巴塞隆納/.test(tripText)) return 'EU';
+        if (/\b(ICN|GMP|CJU)\b|韓國|首爾|濟州/.test(tripText)) return 'KR';
+        if (/\b(HKG)\b|香港/.test(tripText)) return 'HK';
+        if (/\b(TPE|TSA|RMQ|KHH)\b|台灣|台北|台中/.test(tripText)) return 'TW';
+        return 'GLOBAL';
+    }
+
+    function detectJapanTransitUrl(hayText) {
+        const s = String(hayText || '').toLowerCase();
+        if (/東京|新宿|澀谷|銀座|橫濱|成田|羽田|新幹線|jr東|山手/.test(s)) return 'https://traininfo.jreast.co.jp/train_info/e/';
+        if (/札幌|函館|新千歲|釧路|北海道/.test(s)) return 'https://www3.jrhokkaido.co.jp/webunkou/index_e.html';
+        if (/高松|松山|四國|今治|琴平/.test(s)) return 'https://www.jr-shikoku.co.jp/info/';
+        return 'https://trafficinfo.westjr.co.jp/kinki.html';
+    }
+
+    function buildSmartLookupResult(ctx, coordsInfo) {
+        const entities = extractSmartEntities(ctx);
+        const region = detectDestinationRegion(ctx, coordsInfo);
+        const safeIdx = Math.min(activeSearchEntityIdx, Math.max(0, entities.length - 1));
+        const activeEnt = customOverrideKeyword
+            ? { label: customOverrideKeyword, local: customOverrideKeyword, brand: deriveCoreBrand(customOverrideKeyword), langHint: 'custom' }
+            : entities[safeIdx];
+
+        const topTwoTerms = [];
+        if (activeEnt) topTwoTerms.push(activeEnt.local);
+        if (!customOverrideKeyword && entities.length > 1) {
+            const companion = entities.find((e, i) => i !== safeIdx && e.local.toLowerCase() !== activeEnt.local.toLowerCase());
+            if (companion) topTwoTerms.push(companion.local);
+        }
+        const uniqueTerms = [...new Set(topTwoTerms.filter(Boolean))];
+        const multiLangOr = uniqueTerms.length > 1
+            ? `(${uniqueTerms.map(t => `"${t}"`).join(' OR ')})`
+            : `"${uniqueTerms[0] || ''}"`;
+
+        const brandTerms = [];
+        if (activeEnt) brandTerms.push(activeEnt.brand);
+        if (!customOverrideKeyword && entities.length > 1) {
+            const companion = entities.find((e, i) => i !== safeIdx && e.brand.toLowerCase() !== activeEnt.brand.toLowerCase());
+            if (companion && companion.brand.length >= 3) brandTerms.push(companion.brand);
+        }
+        const uniqueBrands = [...new Set(brandTerms.filter(Boolean))];
+        const igOrQuery = uniqueBrands.length > 1
+            ? `(${uniqueBrands.map(b => `"${b}"`).join(' OR ')})`
+            : `"${uniqueBrands[0] || ''}"`;
+
+        const cityHint = (coordsInfo && coordsInfo.city) || '';
+        const primaryTerm = activeEnt ? activeEnt.local : '';
+        const fullHay = `${ctx.kicker || ''} ${ctx.title || ''} ${ctx.area || ''}`;
+        const isFoodOrCafe = ctx.kind === 'poi' || /咖啡|喫茶|牛|鰻|燒肉|焼肉|拉麵|蕎麥|そば|酒|bar|cafe|coffee|tea|茶|年輪|料理|餐廳|美食|早餐|午餐|晚餐/i.test(fullHay);
+        const isTransit = /jr|haruka|新快速|湖西線|琵琶湖線|地鐵|metro|train|station|站|機場/i.test(fullHay);
+
+        // 1. Google Maps 現地地標卡：開啟官方 Google Maps Place 頁面，直接查看「目前人潮 / 熱門時段 (Popular Times)」與即時營業狀態
+        const isDefaultSelection = !customOverrideKeyword && safeIdx === 0;
+        const gmapsLiveCrowdUrl = (isDefaultSelection && ctx.mapUrl)
+            ? ctx.mapUrl
+            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`;
+
+        const chips = [
+            {
+                label: '📊 Google Maps 即時人流／熱門時段',
+                url: gmapsLiveCrowdUrl,
+                isCrowd: true
+            }
+        ];
+
+        if (region === 'JP') {
+            if (isTransit) {
+                chips.push({ label: '🚆 JR 鐵道即時運行情報', url: detectJapanTransitUrl(fullHay) });
+            }
+            if (isFoodOrCafe) {
+                chips.push({
+                    label: '🍽️ Tabelog 評分與菜單',
+                    url: `https://www.google.com/search?q=${encodeURIComponent(`site:tabelog.com ${multiLangOr} ${cityHint}`.trim())}`
+                });
+            }
+            chips.push({
+                label: '📸 IG 官方／最新公休',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${igOrQuery}`.trim())}`
+            });
+            chips.push({
+                label: '🔍 Google 商家總覽',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`
+            });
+        } else if (region === 'TW') {
+            if (isFoodOrCafe) {
+                chips.push({
+                    label: '🍜 在地食記與菜單評價',
+                    url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint} 評價 菜單`.trim())}`
+                });
+            }
+            chips.push({
+                label: '📸 IG 最新營業／公休',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${igOrQuery}`.trim())}`
+            });
+            chips.push({
+                label: '🔍 Google 商家總覽',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`
+            });
+        } else if (region === 'KR') {
+            if (isFoodOrCafe) {
+                chips.push({
+                    label: '🍽️ Naver 在地食評與菜單',
+                    url: `https://www.google.com/search?q=${encodeURIComponent(`site:naver.com ${primaryTerm} ${cityHint}`.trim())}`
+                });
+            }
+            chips.push({
+                label: '📸 IG 官方／最新公休',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${igOrQuery}`.trim())}`
+            });
+            chips.push({
+                label: '🔍 Google 商家總覽',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`
+            });
+        } else if (region === 'TH') {
+            if (isFoodOrCafe) {
+                chips.push({
+                    label: '🍽️ Wongnai／Tripadvisor 食評',
+                    url: `https://www.google.com/search?q=${encodeURIComponent(`(site:wongnai.com OR site:tripadvisor.com) ${multiLangOr} ${cityHint}`.trim())}`
+                });
+            }
+            chips.push({
+                label: '📸 IG 官方／最新營業',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${igOrQuery}`.trim())}`
+            });
+            chips.push({
+                label: '🔍 Google 商家總覽',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`
+            });
+        } else if (region === 'EU' || region === 'UK' || region === 'IS') {
+            if (isFoodOrCafe) {
+                chips.push({
+                    label: '🍽️ Tripadvisor／TheFork 評價',
+                    url: `https://www.google.com/search?q=${encodeURIComponent(`(site:tripadvisor.com OR site:thefork.com) ${multiLangOr} ${cityHint}`.trim())}`
+                });
+            }
+            chips.push({
+                label: '📸 IG 官方帳號／最新動態',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${igOrQuery}`.trim())}`
+            });
+            chips.push({
+                label: '🔍 Google 商家總覽',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`
+            });
+        } else {
+            if (isFoodOrCafe) {
+                chips.push({
+                    label: '🍽️ Tripadvisor／在地食評',
+                    url: `https://www.google.com/search?q=${encodeURIComponent(`site:tripadvisor.com ${multiLangOr} ${cityHint}`.trim())}`
+                });
+            }
+            chips.push({
+                label: '📸 IG 官方／最新動態',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`site:instagram.com ${igOrQuery}`.trim())}`
+            });
+            chips.push({
+                label: '🔍 Google 商家總覽',
+                url: `https://www.google.com/search?q=${encodeURIComponent(`${primaryTerm} ${cityHint}`.trim())}`
+            });
+        }
+
+        return {
+            entities,
+            region,
+            activeEnt,
+            igOrQuery,
+            multiLangOr,
+            chips
+        };
+    }
+
+    function renderWikiKeyPointCardHtml(wiki) {
+        const d = distillWikiKeyPoints(wiki.title, wiki.extract);
+        const bulletsHtml = d.highlights.length
+            ? `<ul class="wiki-bullets">${d.highlights.map(h => `<li>${h}</li>`).join('')}</ul>`
+            : '';
+        return `
+            <div class="wiki-brief-head">
+                <span class="wiki-type-pill">${d.badge.icon} ${d.badge.label}</span>
+                <a href="${wiki.url}" target="_blank" rel="noopener" class="wiki-link">繁中全文 ↗</a>
+            </div>
+            <div class="wiki-tldr">⚡ ${d.tldr}</div>
+            ${bulletsHtml}
+            <details class="wiki-details">
+                <summary>展開完整百科說明 ▾</summary>
+                <p>${d.fullText}</p>
+            </details>
+        `;
+    }
+
+    function selectSearchKeyword(idx) {
+        hapticTick(6);
+        activeSearchEntityIdx = idx;
+        customOverrideKeyword = '';
+        refreshLookupChipsAndWiki();
+    }
+
+    function promptCustomSearchKeyword() {
+        const cur = customOverrideKeyword || (currentSheetPayload && currentSheetPayload.title) || '';
+        const val = prompt('輸入想查詢的精準店名或關鍵字（支援日文／英文／中文）：', cur);
+        if (val === null) return;
+        const trimmed = val.trim();
+        if (!trimmed) return;
+        customOverrideKeyword = trimmed;
+        refreshLookupChipsAndWiki();
+    }
+
+    function refreshLookupChipsAndWiki() {
+        if (!currentSheetPayload) return;
+        const coordsInfo = resolveContextCoords(currentSheetPayload);
+        const res = buildSmartLookupResult(currentSheetPayload, coordsInfo);
+        const kwBox = document.getElementById('sheet-kw-strip');
+        const chipsBox = document.getElementById('sheet-query-chips');
+        const noteBox = document.getElementById('sheet-query-note');
+
+        if (kwBox) {
+            kwBox.innerHTML = renderKeywordStripHtml(res.entities);
+        }
+        if (chipsBox) {
+            chipsBox.innerHTML = res.chips.map(ch => `<a href="${ch.url}" target="_blank" rel="noopener" class="live-query-chip ${ch.isCrowd ? 'crowd' : ''}">${ch.label} ↗</a>`).join('');
+        }
+        if (noteBox) {
+            noteBox.innerText = `關鍵字：${res.multiLangOr}（點「Google Maps 即時人流」可直接看熱門時段圖表）`;
+        }
+
+        const targetTerm = res.activeEnt ? res.activeEnt.local : currentSheetPayload.title;
+        const sec = document.getElementById('sheet-wiki-sec');
+        const badge = document.getElementById('sheet-wiki-badge');
+        const box = document.getElementById('sheet-wiki-box');
+        if (sec && box) {
+            sec.style.display = 'block';
+            if (badge) badge.innerText = '維基繁中檢索中';
+            box.innerText = `正在檢索「${targetTerm}」繁中重點...`;
+            fetchZhtwWikipediaBrief(targetTerm).then(wiki => {
+                if (!wiki) {
+                    sec.style.display = 'none';
+                    return;
+                }
+                if (badge) badge.innerText = '● 類型與重點已標記';
+                box.innerHTML = renderWikiKeyPointCardHtml(wiki);
+            }).catch(() => { sec.style.display = 'none'; });
+        }
+    }
+
+    function renderKeywordStripHtml(entities) {
+        const chips = entities.map((e, i) => {
+            const isAct = !customOverrideKeyword && i === Math.min(activeSearchEntityIdx, entities.length - 1);
+            return `<button type="button" class="kw-chip ${isAct ? 'active' : ''}" onclick="selectSearchKeyword(${i})">${e.label}</button>`;
+        }).join('');
+        const customChip = customOverrideKeyword
+            ? `<button type="button" class="kw-chip active" onclick="promptCustomSearchKeyword()">✎ ${customOverrideKeyword}</button>`
+            : `<button type="button" class="kw-chip custom" onclick="promptCustomSearchKeyword()">+ 自訂詞</button>`;
+        return `<span class="kw-label">🔍 拆解關鍵字</span>${chips}${customChip}`;
+    }
+
     function openItemActionSheet(payload) {
         currentSheetPayload = payload;
+        const nonce = ++sheetRenderNonce;
+        recBatchIndex = 0;
+        recIsFetching = false;
+        shownDiscoveryHistory = new Set();
+        activeSearchEntityIdx = 0;
+        customOverrideKeyword = '';
+        lastLiveWeather = null;
+        lastOpenDiscoveries = [];
+        lastGeminiRecs = [];
+        geminiRuntimeStatus = { state: 'idle', modelUsed: '', latencySec: '', errorMsg: '', grounded: false };
+
         hapticTick(8);
+        recordMicroMomentSignal(`${payload.kicker || ''} ${payload.title || ''}`, 0.08);
+
         const body = document.getElementById('native-sheet-body');
         const sheet = document.getElementById('native-sheet');
         const backdrop = document.getElementById('sheet-backdrop');
@@ -4608,37 +6531,229 @@
         const gmapsUrl = payload.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cleanTitle)}`;
         const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(cleanTitle)}`;
         const favBtnHtml = payload.favKey ? `
-            <button type="button" class="sheet-action-btn" id="sheet-fav-btn" onclick="toggleSheetFavorite()">
-                ${isFavItem(payload.favKey) ? '★ 已在收藏中' : '☆ 加入收藏'}
+            <button type="button" class="sheet-tool-btn" id="sheet-fav-btn" onclick="toggleSheetFavorite()">
+                ${isFavItem(payload.favKey) ? '★ 已收藏' : '☆ 收藏'}
             </button>` : '';
+
+        const opStatus = evaluateOperatingStatus(payload);
+        const opStatusHtml = opStatus
+            ? `<div class="live-status-strip ${opStatus.level === 'closed' ? 'closed' : (opStatus.level === 'warn' ? 'warn' : '')}">${opStatus.text}</div>`
+            : '';
+
+        const coordsInfo = resolveContextCoords(payload);
+        const lookupRes = buildSmartLookupResult(payload, coordsInfo);
+        const chipsHtml = lookupRes.chips.map(ch => `<a href="${ch.url}" target="_blank" rel="noopener" class="live-query-chip ${ch.isCrowd ? 'crowd' : ''}">${ch.label} ↗</a>`).join('');
+        const primaryWikiKeyword = lookupRes.activeEnt ? lookupRes.activeEnt.local : cleanTitle;
 
         body.innerHTML = `
             ${payload.kicker ? `<div class="sheet-kicker tabular-nums">${payload.kicker}</div>` : ''}
             <h3 class="sheet-title">${cleanTitle}</h3>
-            ${payload.meta ? `<div style="font-size:0.76rem; font-weight:700; color:var(--text-muted); margin-bottom:10px;" class="tabular-nums">${payload.meta}</div>` : ''}
-            ${payload.desc ? `<div class="sheet-desc">${formatCleanParagraphs(payload.desc)}</div>` : ''}
-            ${payload.extra ? `<div style="font-size:0.8rem; color:var(--accent); font-weight:700; margin-bottom:12px; line-height:1.55;">${payload.extra}</div>` : ''}
-            <div class="sheet-actions-grid">
-                <a href="${gmapsUrl}" target="_blank" rel="noopener" class="sheet-action-btn primary" onclick="closeNativeSheet()">🗺️ 開啟 Google Maps 導航</a>
-                <a href="${appleMapsUrl}" target="_blank" rel="noopener" class="sheet-action-btn" onclick="closeNativeSheet()">🧭 Apple 地圖</a>
-                <button type="button" class="sheet-action-btn" onclick="copyTextNative('${escapeJsQuote(cleanTitle)}', '地點名稱')">📋 複製名稱</button>
+
+            <div class="sheet-toolbar">
+                <a href="${gmapsUrl}" target="_blank" rel="noopener" class="sheet-tool-btn primary" onclick="recordMicroMomentSignal('${escapeJsQuote(cleanTitle)}', 0.25); closeNativeSheet();">🗺️ Google Maps 導航</a>
+                <a href="${appleMapsUrl}" target="_blank" rel="noopener" class="sheet-tool-btn" onclick="closeNativeSheet()">🧭 Apple 地圖</a>
+                <button type="button" class="sheet-tool-btn" onclick="copyTextNative('${escapeJsQuote(lookupRes.activeEnt ? lookupRes.activeEnt.local : cleanTitle)}', '地點名稱')">📋 複製名稱</button>
                 ${favBtnHtml}
             </div>
+
+            <div class="sheet-sec">
+                <div class="sheet-sec-head">
+                    <span>📡 即時人流查詢與現地氣象（${coordsInfo.label}）</span>
+                    <span class="sheet-live-badge" id="sheet-weather-badge">LIVE 查詢中</span>
+                </div>
+                ${opStatusHtml}
+                <div class="live-metrics-grid tabular-nums" id="sheet-weather-grid">
+                    <div class="live-metric"><div class="live-metric-k">🌡️ 現地氣溫／體感</div><div class="live-metric-v">連線讀取中...</div></div>
+                    <div class="live-metric"><div class="live-metric-k">🌅 日出／日落黃金光</div><div class="live-metric-v">連線讀取中...</div></div>
+                </div>
+                <div class="kw-strip" id="sheet-kw-strip">${renderKeywordStripHtml(lookupRes.entities)}</div>
+                <div class="live-query-row" id="sheet-query-chips">${chipsHtml}</div>
+                <div class="query-preview-note" id="sheet-query-note">關鍵字：${lookupRes.multiLangOr}（點「Google Maps 即時人流」可直接看熱門時段圖表）</div>
+            </div>
+
+            <div class="sheet-sec" id="sheet-wiki-sec">
+                <div class="sheet-sec-head">
+                    <span>🏛️ 地標定位與重點摘要</span>
+                    <span class="sheet-live-badge" id="sheet-wiki-badge">維基繁中萃取中</span>
+                </div>
+                <div class="wiki-brief" id="sheet-wiki-box">正在萃取台灣繁體中文百科重點...</div>
+            </div>
+
+            <div class="sheet-sec">
+                <div class="sheet-sec-head">
+                    <span>🧠 周邊開放探索與即時協作</span>
+                    <div style="display:inline-flex; align-items:center; gap:5px;">
+                        <button type="button" class="gemini-pill-btn" id="sheet-gemini-btn" onclick="openGeminiSettingsSheet()">🔑 啟用 Gemini 協作</button>
+                        <span class="sheet-live-badge" id="sheet-rec-badge">正在掃描周邊...</span>
+                    </div>
+                </div>
+                <div class="rec-controls" id="sheet-rec-controls">
+                    ${renderRecControlsHtml()}
+                </div>
+                <div class="rec-list" id="sheet-rec-list">
+                    <div style="font-size:0.78rem; color:var(--text-muted); padding:6px 2px;">正在透過繁中維基地理百科與 OpenStreetMap 圖資搜尋周邊新選項...</div>
+                </div>
+            </div>
         `;
+
         backdrop.classList.add('open');
         sheet.classList.add('open');
+
+        // 1. Open-Meteo 現地即時氣象
+        fetchLiveSpotWeather(coordsInfo).then(w => {
+            if (nonce !== sheetRenderNonce) return;
+            lastLiveWeather = w;
+            const badge = document.getElementById('sheet-weather-badge');
+            const grid = document.getElementById('sheet-weather-grid');
+            if (badge) badge.innerText = '● Open-Meteo LIVE';
+            if (grid && w) {
+                const windWarn = w.windKmh !== null && w.windKmh >= 18 ? '（風勢偏強）' : '';
+                grid.innerHTML = `
+                    <div class="live-metric">
+                        <div class="live-metric-k">🌡️ 現地氣溫 ／ 體感</div>
+                        <div class="live-metric-v">${w.temp !== null ? `${w.temp}°C` : '—'}（體感 ${w.feelsLike !== null ? `${w.feelsLike}°C` : '—'}）</div>
+                    </div>
+                    <div class="live-metric">
+                        <div class="live-metric-k">💨 風速 ／ 降雨率</div>
+                        <div class="live-metric-v">${w.windKmh !== null ? `${w.windKmh} km/h${windWarn}` : '—'} · ${w.rainProb !== null ? `${w.rainProb}%` : '—'}</div>
+                    </div>
+                    <div class="live-metric" style="grid-column: 1 / -1;">
+                        <div class="live-metric-k">📸 當地日出 ／ 日落時間（前後 1h 為最佳斜光窗口）</div>
+                        <div class="live-metric-v">🌅 日出 ${w.sunrise} 　｜　🌇 日落 ${w.sunset}</div>
+                    </div>
+                `;
+            }
+            refreshSheetRecSection();
+        }).catch(() => {
+            if (nonce !== sheetRenderNonce) return;
+            const badge = document.getElementById('sheet-weather-badge');
+            if (badge) badge.innerText = '離線模式';
+        });
+
+        // 2. 100% 繁體中文（zh-tw）維基百科重點萃取
+        (async () => {
+            let wiki = await fetchZhtwWikipediaBrief(primaryWikiKeyword);
+            if (!wiki && lookupRes.entities.length > 1) {
+                for (const ent of lookupRes.entities.slice(1, 3)) {
+                    wiki = await fetchZhtwWikipediaBrief(ent.local);
+                    if (wiki) break;
+                }
+            }
+            if (nonce !== sheetRenderNonce) return;
+            const sec = document.getElementById('sheet-wiki-sec');
+            const badge = document.getElementById('sheet-wiki-badge');
+            const box = document.getElementById('sheet-wiki-box');
+            if (!wiki) {
+                if (sec) sec.style.display = 'none';
+                return;
+            }
+            if (badge) badge.innerText = '● 類型與重點已標記';
+            if (box) box.innerHTML = renderWikiKeyPointCardHtml(wiki);
+        })();
+
+        // 3. Stage 1 開放世界圖資探索 ＋ Stage 2 Gemini 即時協作重排生成
+        fetchOpenWorldNearby(coordsInfo, 0, false).then(items => {
+            if (nonce !== sheetRenderNonce) return;
+            lastOpenDiscoveries = items || [];
+            refreshSheetRecSection();
+            if (getGeminiConfig().apiKey) {
+                triggerGeminiCollaborativePipeline(nonce, false);
+            }
+        }).catch(() => {
+            if (nonce !== sheetRenderNonce) return;
+            lastOpenDiscoveries = [];
+            refreshSheetRecSection();
+            if (getGeminiConfig().apiKey) {
+                triggerGeminiCollaborativePipeline(nonce, false);
+            }
+        });
+    }
+
+    function renderRecCardsHtml(recs) {
+        if (!recs || !recs.length) {
+            return `<div style="font-size:0.78rem; color:var(--text-muted); padding:6px 2px;">此篩選條件下暫無其他選項，可點上方「↻ 重新查詢換一批」擴大搜尋半徑或切換「全部」類型。</div>`;
+        }
+        return recs.map(r => {
+            const navUrl = r.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}`;
+            const distText = r.customEtaLabel || formatDistanceAndEta(r.distMeters, r.mode);
+            const cat = r.catBadge || { icon: '📍', label: r.tag || '探索點', cls: 'rec-cat-other' };
+            const encoded = encodeURIComponent(JSON.stringify({
+                kind: r.kind || 'discovered',
+                isOpenWorld: Boolean(r.isOpenWorld),
+                themeIdx: typeof r.themeIdx === 'number' ? r.themeIdx : -1,
+                name: r.name,
+                tag: cat.label,
+                lat: r.lat,
+                lon: r.lon,
+                hours: r.hours,
+                closed: r.closed,
+                source: r.source,
+                mapUrl: r.mapUrl
+            }));
+            const siteBtn = r.externalSite && /^https?:\/\//i.test(r.externalSite)
+                ? `<a href="${r.externalSite}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="map-chip" style="padding:2px 8px;">🌐 官網</a>`
+                : '';
+
+            return `
+                <div class="rec-card ${r.isAiCurated ? 'is-ai' : (r.isOpenWorld ? 'is-novel' : '')}" onclick="openRecommendedItem('${encoded}')">
+                    <div class="rec-top">
+                        <div class="rec-badges-left">
+                            <span class="rec-cat-badge ${cat.cls}">${cat.icon} ${cat.label}</span>
+                            ${r.isAiCurated ? `<span class="rec-ai-tag">✨ AI 協作</span>` : ''}
+                            ${distText ? `<span class="rec-dist-pill">📍 ${distText}</span>` : ''}
+                        </div>
+                        <span class="rec-score tabular-nums">${r.pct}% 契合</span>
+                    </div>
+                    <div class="rec-name">${r.name}</div>
+                    <div class="rec-keypoint">⚡ ${r.keyPointText}</div>
+                    ${r.whyText ? `<div class="rec-why">${r.whyText}</div>` : ''}
+                    <div class="rec-foot tabular-nums">
+                        <span>來源：${r.source}</span>
+                        <div class="rec-foot-actions">
+                            ${siteBtn}
+                            <a href="${navUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="map-chip" style="padding:2px 8px;">📊 人流／導航</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     function toggleSheetFavorite() {
         if (!currentSheetPayload || !currentSheetPayload.favKey) return;
+        const wasFav = isFavItem(currentSheetPayload.favKey);
         toggleFavItem(currentSheetPayload.favKey, currentSheetPayload.favScope || 'poi');
         const btn = document.getElementById('sheet-fav-btn');
         const active = isFavItem(currentSheetPayload.favKey);
-        if (btn) btn.innerText = active ? '★ 已在收藏中' : '☆ 加入收藏';
-        showNativeToast(active ? '★ 已加入收藏口袋' : '已從收藏移除');
+        if (!wasFav && active) {
+            recordMicroMomentSignal(currentSheetPayload.title || '', 0.35);
+            // 若是開放探索新發現的地點，同步存進本地自訂收藏庫，方便在「探索 → 美食與咖啡」直接看到
+            if (currentSheetPayload.discoveredObj && globalData && Array.isArray(globalData.poi_database)) {
+                const d = currentSheetPayload.discoveredObj;
+                if (!globalData.poi_database.some(p => p.name === d.name)) {
+                    const newPoi = {
+                        area: '✨ 新發現收藏',
+                        tag: d.tag || '周邊新發現',
+                        name: d.name,
+                        map_url: d.mapUrl || '',
+                        hours: d.hours || '',
+                        signature: d.source || '開放探索發現',
+                        desc: d.extract || '透過周邊微時刻探索雷達發現的新地點。',
+                        highlights: ['開放探索發現']
+                    };
+                    globalData.poi_database.unshift(newPoi);
+                    customSavedPois.unshift(newPoi);
+                    try { localStorage.setItem(CUSTOM_SAVED_POIS_KEY, JSON.stringify(customSavedPois)); } catch (e) {}
+                    initPOI(globalData.poi_database);
+                }
+            }
+        }
+        if (btn) btn.innerText = active ? '★ 已收藏' : '☆ 收藏';
+        showNativeToast(active ? '★ 已加入收藏口袋（偏好權重已提升）' : '已從收藏移除');
     }
 
     function closeNativeSheet() {
+        sheetRenderNonce++;
         const sheet = document.getElementById('native-sheet');
         const backdrop = document.getElementById('sheet-backdrop');
         if (sheet) {
@@ -4654,18 +6769,18 @@
         const s = dayObj && dayObj.schedule && dayObj.schedule[slotIdx];
         if (!s) return;
         const parsed = parseActivityTitle(s.activity);
-        const metaParts = [
-            s.time || '',
-            s.transport ? `${getMoveIcon(s.transport)} ${s.from && s.to ? `${s.from} → ${s.to}` : s.transport}` : '',
-            s.stay > 0 ? `停留 ${s.stay} 分鐘` : '',
-            s.move > 0 ? `移動 ${s.move} 分鐘` : ''
-        ].filter(Boolean).join(' · ');
+        const matchedPoi = ((globalData && globalData.poi_database) || []).find(p => parsed.title.includes(p.name) || p.name.includes(parsed.title));
+
         openItemActionSheet({
-            kicker: `DAY ${dayNum}${parsed.kicker ? ` · ${parsed.kicker}` : ''}`,
+            kind: 'schedule',
+            dayNum,
+            timeStr: s.time || '',
+            area: matchedPoi ? matchedPoi.area : '',
+            hours: matchedPoi ? matchedPoi.hours : '',
+            closed: matchedPoi ? matchedPoi.closed : '',
+            kicker: `DAY ${dayNum} · ${s.time || '--:--'}${parsed.kicker ? ` · ${parsed.kicker}` : ''}`,
             title: parsed.title,
-            meta: metaParts,
-            desc: s.desc || '',
-            mapUrl: s.map_url || ''
+            mapUrl: s.map_url || (matchedPoi ? matchedPoi.map_url : '')
         });
     }
 
@@ -4673,14 +6788,15 @@
         if (event && event.target && event.target.closest('a, button')) return;
         const g = ((globalData && globalData.theme_guide) || [])[idx];
         if (!g) return;
-        const meta = [g.area, g.tag, g.hours || g.time, g.fee].filter(Boolean).join(' · ');
-        const extra = [g.photo_tip ? `📸 ${g.photo_tip}` : '', g.goshuin ? `⛩️ ${g.goshuin}` : '', g.tips ? `💡 ${g.tips}` : ''].filter(Boolean).join('<br>');
         openItemActionSheet({
-            kicker: '✨ 主題絕景指南',
+            kind: 'theme',
+            timeStr: g.time || '',
+            area: g.area || '',
+            hours: g.hours || g.time || '',
+            closed: '',
+            access: g.access || '',
+            kicker: `✨ 主題絕景${g.area ? ` · ${g.area}` : ''}`,
             title: g.name,
-            meta,
-            desc: g.desc || '',
-            extra,
             mapUrl: g.map_url || '',
             favKey: `theme::${g.name || ''}`,
             favScope: 'theme'
@@ -4691,14 +6807,15 @@
         if (event && event.target && event.target.closest('a, button')) return;
         const f = ((globalData && globalData.poi_database) || []).find(item => item.name === poiName);
         if (!f) return;
-        const meta = [f.area, f.tag, f.hours ? `營業 ${f.hours}` : '', f.closed ? `休 ${f.closed}` : '', f.price].filter(Boolean).join(' · ');
-        const extra = [f.signature ? `★ 推薦：${f.signature}` : '', f.access ? `🚶 ${f.access}` : '', f.tips ? `💡 ${f.tips}` : ''].filter(Boolean).join('<br>');
         openItemActionSheet({
-            kicker: '☕ 探索雷達詳情',
+            kind: 'poi',
+            timeStr: f.hours || '',
+            area: f.area || '',
+            hours: f.hours || '',
+            closed: f.closed || '',
+            access: f.access || '',
+            kicker: `☕ 探索雷達${f.area ? ` · ${f.area}` : ''}`,
             title: f.name,
-            meta,
-            desc: f.desc || '',
-            extra,
             mapUrl: f.map_url || '',
             favKey: `poi::${f.name || ''}`,
             favScope: 'poi'
@@ -4758,6 +6875,831 @@
                 else sheet.style.transform = '';
             }, { passive: true });
         }
+    }
+
+    /* ================= 7. 目的地國家自學習畫像引擎 ＋ Gemini API 本機協作引擎 ================= */
+    const GEMINI_CFG_STORAGE_KEY = 'trip_gemini_collab_cfg_v1';
+    const GEMINI_RESP_CACHE_KEY = 'trip_gemini_resp_cache_v2';
+    const COUNTRY_TRAITS_STORAGE_KEY = 'trip_dest_country_traits_v1';
+    const GEMINI_MODEL_TTL_MS = 24 * 60 * 60 * 1000;
+
+    const DEFAULT_GEMINI_SYSTEM_PROMPT = `你是「隨身旅圖」的全球即時微時刻旅遊協作顧問，具備跨文化在地知識，專精獨立精品咖啡與茶館、建築與街區美學、攝影光線窗口、順路動線規劃與在地職人餐飲。
+請根據使用者提供的【目的地國家／城市動態畫像】、【當前微時刻情境】、【現地氣象】、【周邊圖資候選】與【個人偏好權重】，主動適應當地的飲食、建築、氣候與交通文化，為當下推薦 4 個最值得前往的「全新選項」。
+
+【嚴格遵守規則】
+1. 跨國文化自適應：完全依據【目的地國家／城市動態畫像】與經緯度座標，推薦符合該國度真實文化脈絡的特色空間（例如歐洲的歷史咖啡館、烘焙坊、小酒館、教堂廣場與觀景台；東南亞的獨立烘焙咖啡、在地小館、海岸懸崖與瀑布；東亞的茶館、職人餐飲與歷史古蹟等），切勿錯置其他國家的文化標籤。
+2. 語言與風格：一律使用台灣繁體中文（zh-TW），語氣精準俐落、重點置頂，不寫空泛形容詞。
+3. 真實性與零重複：優先結合 Google 搜尋驗證真實存在且營業中的店家／景點，嚴格排除【已排入行程】與【已看過清單】中的地點，並避開商業連鎖購物街。
+4. 重點先出來：每筆推薦的 key_point 必須在 22～44 字內直接點出「招牌必點／建築或風景亮點／光線取景／為何此刻順路」。
+5. 類型標記：category 只能從以下 7 個通用標準分類擇一：
+   「獨立咖啡・茶館」、「在地餐食・料理」、「酒吧・精釀小酌」、「甜點・烘焙・伴手」、「宗教聖地・歷史古蹟」、「建築・博物館・街區」、「自然風景・庭園・展望」
+6. 輸出格式：只輸出合法的 JSON 物件（不要加 Markdown 程式碼圍欄或任何前後說明文字），格式如下：
+{
+  "country_name": "偵測到的目的地國家或城市圈（繁體中文）",
+  "learned_traits": [
+    "該國家／城市當下最實用的 2～3 條在地文化或旅遊節奏特點（例如用餐尖峰與午休公休慣例、小費或訂位習慣、當地特色飲品甜點與光影氣候特性）"
+  ],
+  "recommendations": [
+    {
+      "name": "店家或地標名稱（可附當地原名）",
+      "category": "上述 7 個分類之一",
+      "key_point": "一句話重點（招牌特色或核心看點）",
+      "why": "結合當地文化特色、時段、天候、距離與個人偏好的推薦原因（28字內）",
+      "est_time": "步行約 X 分 或 單車／車程約 X 分",
+      "match_score": 92,
+      "map_query": "適合 Google Maps 精準定位的名稱＋城市"
+    }
+  ]
+}`;
+
+    /* 7A. 目的地國家特徵自學習儲存庫（Trip DNA ＋ 行為回饋 ＋ AI 累積在地知識） */
+    let countryTraitsStore = {};
+    try {
+        countryTraitsStore = JSON.parse(localStorage.getItem(COUNTRY_TRAITS_STORAGE_KEY) || '{}') || {};
+    } catch (e) { countryTraitsStore = {}; }
+
+    function saveCountryTraitsStore() {
+        try { localStorage.setItem(COUNTRY_TRAITS_STORAGE_KEY, JSON.stringify(countryTraitsStore)); } catch (e) {}
+    }
+
+    function resolveDestinationCountry(ctx, coordsInfo) {
+        const c = coordsInfo || (ctx ? resolveContextCoords(ctx) : null);
+        const lat = c && c.lat;
+        const lon = c && c.lon;
+        const hay = `${(ctx && ctx.title) || ''} ${(ctx && ctx.area) || ''} ${(c && c.label) || ''} ${(c && c.city) || ''} ${(globalData && globalData.trip_meta && globalData.trip_meta.title) || ''}`.toLowerCase();
+
+        // 1. 優先依關鍵城市或國家名精準識別
+        const cityCountryRules = [
+            { kw: ['捷克', '布拉格', 'prague'], key: 'CZ', name: '捷克（布拉格）' },
+            { kw: ['斯洛伐克', '布拉提斯拉瓦', 'bratislava'], key: 'SK', name: '斯洛伐克' },
+            { kw: ['匈牙利', '布達佩斯', 'budapest'], key: 'HU', name: '匈牙利（布達佩斯）' },
+            { kw: ['葡萄牙', '里斯本', '波多', 'lisbon', 'porto'], key: 'PT', name: '葡萄牙' },
+            { kw: ['西班牙', '巴塞隆納', '馬德里', 'barcelona', 'madrid'], key: 'ES', name: '西班牙' },
+            { kw: ['芬蘭', '赫爾辛基', 'helsinki'], key: 'FI', name: '芬蘭' },
+            { kw: ['冰島', '雷克雅維克', 'iceland', 'reykjavik', 'kef'], key: 'IS', name: '冰島' },
+            { kw: ['英國', '倫敦', 'london', 'uk', 'lhr'], key: 'GB', name: '英國' },
+            { kw: ['泰國', '曼谷', '普吉', '羅勇', 'bangkok', 'phuket', 'rayong', 'bkk'], key: 'TH', name: '泰國' },
+            { kw: ['印尼', '峇里', '龍目', '泗水', '科莫多', 'bali', 'lombok', 'surabaya', 'komodo'], key: 'ID', name: '印尼' },
+            { kw: ['新加坡', 'singapore', 'sin'], key: 'SG', name: '新加坡' },
+            { kw: ['馬來西亞', '馬六甲', '吉隆坡', '亞庇', 'melaka', 'kuala lumpur', 'kota kinabalu', 'kul'], key: 'MY', name: '馬來西亞' },
+            { kw: ['菲律賓', '馬尼拉', '達沃', 'manila', 'davao', 'mnl'], key: 'PH', name: '菲律賓' },
+            { kw: ['韓國', '首爾', '濟州', 'seoul', 'jeju', 'icn'], key: 'KR', name: '韓國' },
+            { kw: ['香港', '東涌', 'hong kong', 'hkg'], key: 'HK', name: '香港' },
+            { kw: ['台灣', '台北', '台中', '高雄', '台南', 'taipei', 'taichung', 'tpe'], key: 'TW', name: '台灣' },
+            { kw: ['日本', '京都', '東京', '大阪', '北海道', '札幌', '函館', '高松', '松山', '四國', '琵琶湖', '高島', '近江八幡', '彥根', '橫濱', '名古屋', 'kyoto', 'tokyo', 'osaka', 'sapporo'], key: 'JP', name: '日本' }
+        ];
+        for (const r of cityCountryRules) {
+            if (r.kw.some(k => hay.includes(k))) return { key: r.key, name: r.name };
+        }
+
+        // 2. 依經緯度邊界識別
+        if (typeof lat === 'number' && typeof lon === 'number' && !isNaN(lat) && !isNaN(lon)) {
+            if (lat >= 24 && lat <= 46 && lon >= 122.5 && lon <= 146) return { key: 'JP', name: '日本' };
+            if (lat >= 21.5 && lat <= 25.5 && lon >= 119.3 && lon <= 122.2) return { key: 'TW', name: '台灣' };
+            if (lat >= 22.1 && lat <= 22.6 && lon >= 113.4 && lon <= 114.5) return { key: 'HK', name: '香港' };
+            if (lat >= 33.0 && lat <= 38.7 && lon >= 124.5 && lon <= 131.5) return { key: 'KR', name: '韓國' };
+            if (lat >= 5.5 && lat <= 20.5 && lon >= 97.3 && lon <= 105.7) return { key: 'TH', name: '泰國' };
+            if (lat >= 1.15 && lat <= 1.5 && lon >= 103.6 && lon <= 104.1) return { key: 'SG', name: '新加坡' };
+            if (lat >= 0.8 && lat <= 7.5 && lon >= 99.5 && lon <= 119.5) return { key: 'MY', name: '馬來西亞' };
+            if (lat >= -11 && lat <= 6 && lon >= 95 && lon <= 141) return { key: 'ID', name: '印尼' };
+            if (lat >= 4.5 && lat <= 21 && lon >= 116 && lon <= 127) return { key: 'PH', name: '菲律賓' };
+            if (lat >= 49.8 && lat <= 61 && lon >= -8.5 && lon <= 2.0) return { key: 'GB', name: '英國' };
+            if (lat >= 63 && lat <= 67 && lon >= -25 && lon <= -13) return { key: 'IS', name: '冰島' };
+            if (lat >= 36.8 && lat <= 42.2 && lon >= -9.6 && lon <= -6.1) return { key: 'PT', name: '葡萄牙' };
+            if (lat >= 36.0 && lat <= 43.8 && lon >= -6.0 && lon <= 3.4) return { key: 'ES', name: '西班牙' };
+            if (lat >= 48.5 && lat <= 51.1 && lon >= 12.0 && lon <= 18.9) return { key: 'CZ', name: '捷克' };
+            if (lat >= 45.7 && lat <= 48.6 && lon >= 16.1 && lon <= 22.9) return { key: 'HU', name: '匈牙利' };
+            if (lat >= 35 && lat <= 71 && lon >= -10 && lon <= 32) return { key: 'EU', name: '歐洲地區' };
+        }
+
+        // 3. 依幣別或自由文字回退
+        const cur = ((globalData && globalData.trip_meta && globalData.trip_meta.currency) || '').toLowerCase();
+        const curNameMap = {
+            jpy: { key: 'JP', name: '日本' },
+            twd: { key: 'TW', name: '台灣' },
+            hkd: { key: 'HK', name: '香港' },
+            krw: { key: 'KR', name: '韓國' },
+            thb: { key: 'TH', name: '泰國' },
+            sgd: { key: 'SG', name: '新加坡' },
+            myr: { key: 'MY', name: '馬來西亞' },
+            idr: { key: 'ID', name: '印尼' },
+            php: { key: 'PH', name: '菲律賓' },
+            gbp: { key: 'GB', name: '英國' },
+            isk: { key: 'IS', name: '冰島' },
+            czk: { key: 'CZ', name: '捷克' },
+            huf: { key: 'HU', name: '匈牙利' },
+            eur: { key: 'EU', name: '歐洲地區' }
+        };
+        if (curNameMap[cur]) return curNameMap[cur];
+
+        const fallbackLabel = (c && (c.city || c.label)) || '跨國探索目的地';
+        return { key: `CUSTOM_${fallbackLabel}`, name: fallbackLabel };
+    }
+
+    function ensureCountryBucket(countryKey, countryName) {
+        if (!countryTraitsStore[countryKey]) {
+            countryTraitsStore[countryKey] = {
+                name: countryName || countryKey,
+                tripDna: [],
+                aiTraits: [],
+                dimAffinity: {},
+                savedKeywords: [],
+                updatedAt: Date.now()
+            };
+        } else if (countryName && countryName !== countryKey) {
+            countryTraitsStore[countryKey].name = countryName;
+        }
+        return countryTraitsStore[countryKey];
+    }
+
+    /* 從當前載入的行程 JSON 自動萃取該國家的「行程 DNA 特點」（移動方式、飲食偏好、主題密度） */
+    function syncTripCountryDNA() {
+        if (!globalData || typeof globalData !== 'object') return;
+        const days = Array.isArray(globalData.itinerary) ? globalData.itinerary : [];
+        const pois = Array.isArray(globalData.poi_database) ? globalData.poi_database : [];
+        const themes = Array.isArray(globalData.theme_guide) ? globalData.theme_guide : [];
+        const logisticsItems = (globalData.logistics && Array.isArray(globalData.logistics.items)) ? globalData.logistics.items : [];
+
+        const groupedTexts = {};
+        const addSample = (cInfo, txt) => {
+            if (!cInfo || !cInfo.key || !txt) return;
+            if (!groupedTexts[cInfo.key]) groupedTexts[cInfo.key] = { name: cInfo.name, texts: [] };
+            groupedTexts[cInfo.key].texts.push(txt);
+        };
+
+        days.forEach(d => {
+            let coords = null;
+            if (d.coords) {
+                const [lat, lon] = String(d.coords).split(',').map(Number);
+                if (!isNaN(lat) && !isNaN(lon)) coords = { lat, lon, label: d.title || '' };
+            }
+            const cInfo = resolveDestinationCountry({ title: `${d.title || ''} ${d.subtitle || ''}` }, coords);
+            const dayCorpus = [
+                d.title, d.subtitle, d.plan_b, d.photo_notes,
+                ...(d.schedule || []).map(s => `${s.activity || ''} ${s.transport || ''} ${s.desc || ''}`)
+            ].filter(Boolean).join(' ');
+            addSample(cInfo, dayCorpus);
+        });
+
+        pois.forEach(p => {
+            const cInfo = resolveDestinationCountry({ title: p.name, area: p.area }, null);
+            addSample(cInfo, `${p.tag || ''} ${p.name || ''} ${p.signature || ''} ${p.desc || ''}`);
+        });
+
+        themes.forEach(g => {
+            const cInfo = resolveDestinationCountry({ title: g.name, area: g.area }, null);
+            addSample(cInfo, `${g.tag || ''} ${g.name || ''} ${g.best || ''} ${g.desc || ''}`);
+        });
+
+        const logCorpus = logisticsItems.map(i => `${i.title || ''} ${i.desc || ''}`).join(' ');
+
+        Object.entries(groupedTexts).forEach(([cKey, grp]) => {
+            const bucket = ensureCountryBucket(cKey, grp.name);
+            const fullCorpus = `${grp.texts.join(' ')} ${logCorpus}`.toLowerCase();
+            const dna = [];
+
+            if (/單車|騎行|越野車|bike|cycle|biwaichi/.test(fullCorpus)) dna.push('行程節奏以單車騎行與沿途補給站為主');
+            else if (/健行|登山|攻頂|步道|trek|hike|summit/.test(fullCorpus)) dna.push('行程包含山岳／自然步道健行，重視高蛋白餐飲與體力恢復');
+            else if (/包車|自駕|專車|driver|private car/.test(fullCorpus)) dna.push('移動以包車／專車接駁為主，可彈性延伸周邊景點');
+            else if (/jr|新幹線|地鐵|火車|渡輪|metro|train|ferry/.test(fullCorpus)) dna.push('高度依賴軌道交通與車站步行圈動線');
+
+            const dimCounts = {};
+            grp.texts.forEach(t => {
+                inferFeatureDimensions(t).forEach(d => { dimCounts[d] = (dimCounts[d] || 0) + 1; });
+            });
+            const topDims = Object.entries(dimCounts).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => k);
+            if (topDims.length) dna.push(`本行程在當地的核心關注領域：${topDims.join('、')}`);
+
+            if (/高蛋白|protein/.test(fullCorpus)) dna.push('餐飲偏好高蛋白、優質肉類或海鮮補給');
+            if (/手沖|淺焙|single origin|pour-over|roast/.test(fullCorpus)) dna.push('咖啡偏好獨立自家烘焙與單品手沖');
+            if (/順光|斜光|倒影|日出|日落|golden hour/.test(fullCorpus)) dna.push('重視自然光線窗口（晨光／斜射光／倒影構圖）');
+
+            bucket.tripDna = [...new Set(dna)].slice(0, 5);
+            bucket.updatedAt = Date.now();
+        });
+
+        saveCountryTraitsStore();
+    }
+
+    function recordCountryTraitSignal(countryKey, countryName, text, dims, delta = 0.08) {
+        if (!countryKey) return;
+        const bucket = ensureCountryBucket(countryKey, countryName);
+        (dims || inferFeatureDimensions(text)).forEach(d => {
+            const cur = typeof bucket.dimAffinity[d] === 'number' ? bucket.dimAffinity[d] : 0;
+            bucket.dimAffinity[d] = +(cur + delta).toFixed(2);
+        });
+        const cleanKw = String(text || '').replace(/[（(][^）)]*[）)]/g, '').trim();
+        if (cleanKw && cleanKw.length >= 2 && cleanKw.length <= 24 && delta >= 0.15) {
+            if (!bucket.savedKeywords.includes(cleanKw)) {
+                bucket.savedKeywords.unshift(cleanKw);
+                bucket.savedKeywords = bucket.savedKeywords.slice(0, 12);
+            }
+        }
+        bucket.updatedAt = Date.now();
+        saveCountryTraitsStore();
+    }
+
+    function absorbGeminiCountryTraits(countryKey, detectedCountryName, traitsArr) {
+        if (!countryKey || !Array.isArray(traitsArr) || !traitsArr.length) return;
+        const bucket = ensureCountryBucket(countryKey, detectedCountryName);
+        traitsArr.forEach(t => {
+            const clean = String(t || '').trim();
+            if (clean && clean.length >= 6 && !bucket.aiTraits.includes(clean)) {
+                bucket.aiTraits.unshift(clean);
+            }
+        });
+        bucket.aiTraits = bucket.aiTraits.slice(0, 8);
+        bucket.updatedAt = Date.now();
+        saveCountryTraitsStore();
+    }
+
+    function buildCountryContextSummary(countryInfo) {
+        const bucket = countryTraitsStore[countryInfo.key];
+        const lines = [`- 偵測目的地國家／地區：${(bucket && bucket.name) || countryInfo.name}`];
+        if (bucket) {
+            if (bucket.tripDna && bucket.tripDna.length) {
+                lines.push(`- 系統自動萃取之行程與當地特徵：\n  * ${bucket.tripDna.join('\n  * ')}`);
+            }
+            if (bucket.aiTraits && bucket.aiTraits.length) {
+                lines.push(`- 歷史協作累積之當地文化與實用規則：\n  * ${bucket.aiTraits.slice(0, 5).join('\n  * ')}`);
+            }
+            const topCountryDims = Object.entries(bucket.dimAffinity || {})
+                .filter(([, v]) => v > 0)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([k]) => k);
+            if (topCountryDims.length) {
+                lines.push(`- 使用者在此國家的歷史點擊／收藏偏好：${topCountryDims.join('、')}`);
+            }
+            if (bucket.savedKeywords && bucket.savedKeywords.length) {
+                lines.push(`- 使用者在此國家曾關注／收藏的指標地點：${bucket.savedKeywords.slice(0, 5).join('、')}`);
+            }
+        }
+        return lines.join('\n');
+    }
+
+    let geminiRuntimeStatus = {
+        state: 'idle',
+        modelUsed: '',
+        latencySec: '',
+        errorMsg: '',
+        grounded: false
+    };
+    let lastGeminiRecs = [];
+    let geminiRespCache = {};
+    try {
+        geminiRespCache = JSON.parse(localStorage.getItem(GEMINI_RESP_CACHE_KEY) || '{}') || {};
+    } catch (e) { geminiRespCache = {}; }
+
+    function getGeminiConfig() {
+        try {
+            const raw = JSON.parse(localStorage.getItem(GEMINI_CFG_STORAGE_KEY) || 'null');
+            if (raw && typeof raw === 'object') {
+                return {
+                    apiKey: String(raw.apiKey || '').trim(),
+                    mode: raw.mode === 'manual' ? 'manual' : 'auto',
+                    manualModel: String(raw.manualModel || '').trim(),
+                    customPrompt: String(raw.customPrompt || '').trim(),
+                    detectedModels: Array.isArray(raw.detectedModels) ? raw.detectedModels : [],
+                    selectedModel: String(raw.selectedModel || '').trim(),
+                    fallbackModel: String(raw.fallbackModel || '').trim(),
+                    lastCheckedTs: Number(raw.lastCheckedTs) || 0
+                };
+            }
+        } catch (e) {}
+        return {
+            apiKey: '',
+            mode: 'auto',
+            manualModel: '',
+            customPrompt: '',
+            detectedModels: [],
+            selectedModel: '',
+            fallbackModel: '',
+            lastCheckedTs: 0
+        };
+    }
+
+    function saveGeminiConfig(cfg) {
+        try { localStorage.setItem(GEMINI_CFG_STORAGE_KEY, JSON.stringify(cfg)); } catch (e) {}
+    }
+
+    function maskApiKey(key) {
+        if (!key) return '未設定';
+        if (key.length <= 10) return '••••••';
+        return `${key.slice(0, 6)}••••••${key.slice(-4)}`;
+    }
+
+    function shortModelDisplayName(modelId) {
+        return String(modelId || '')
+            .replace(/^models\//, '')
+            .replace(/-preview.*$/, '')
+            .replace(/-latest$/, '');
+    }
+
+    /* 自動適中模型評分器：鎖定最新世代標準 Flash（排除過輕的 lite/8b 與過重的 pro/ultra/thinking） */
+    function scoreGeminiModelForSweetSpot(mObj) {
+        const rawName = String(mObj.name || '').replace(/^models\//, '');
+        const lower = rawName.toLowerCase();
+        const methods = Array.isArray(mObj.supportedGenerationMethods) ? mObj.supportedGenerationMethods : [];
+        if (!methods.includes('generateContent')) return null;
+
+        const banned = ['embedding', 'imagen', 'veo', 'lyria', 'tts', 'audio', 'robotics', 'computer-use', 'deep-research', 'aqa', 'learnlm', 'gemma', 'bisect', 'image'];
+        if (banned.some(b => lower.includes(b))) return null;
+        if (!lower.includes('gemini')) return null;
+
+        const verMatch = lower.match(/gemini-(\d+(?:\.\d+)?)/);
+        const version = verMatch ? parseFloat(verMatch[1]) : 1.5;
+
+        let score = version * 22;
+        let tier = 'balanced';
+        let tierBadge = '⚖️ 適中平衡（自動首選）';
+
+        const isLite = /lite|8b|nano/.test(lower);
+        const isHeavy = /\bpro\b|\bultra\b|thinking/.test(lower);
+        const isFlash = /flash/.test(lower);
+
+        if (isFlash && !isLite && !isHeavy) {
+            score += 65;
+            tier = 'balanced';
+            tierBadge = '⚖️ 適中平衡（主力推薦）';
+        } else if (isLite) {
+            score += 20;
+            tier = 'fast_lite';
+            tierBadge = '⚡ 極速輕量（較簡略）';
+        } else if (isHeavy) {
+            score += 32;
+            tier = 'deep_heavy';
+            tierBadge = '🧠 深度重型（較慢）';
+        } else {
+            score += 25;
+        }
+
+        if (/exp/.test(lower)) score -= 6;
+        if (/preview/.test(lower)) score -= 2;
+
+        return {
+            id: rawName,
+            displayName: mObj.displayName || rawName,
+            version,
+            tier,
+            tierBadge,
+            score: Math.round(score * 10) / 10
+        };
+    }
+
+    async function refreshGeminiModelList(apiKey, silent = false) {
+        const cleanKey = String(apiKey || '').trim();
+        if (!cleanKey) return null;
+
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(cleanKey)}`);
+        if (!res.ok) {
+            const errTxt = await res.text().catch(() => '');
+            throw new Error(`API 驗證失敗 (${res.status}) ${errTxt.slice(0, 80)}`);
+        }
+        const json = await res.json();
+        const models = Array.isArray(json?.models) ? json.models : [];
+        const scored = models
+            .map(scoreGeminiModelForSweetSpot)
+            .filter(Boolean)
+            .sort((a, b) => b.score - a.score);
+
+        const seen = new Set();
+        const uniqueRanked = scored.filter(item => {
+            if (seen.has(item.id)) return false;
+            seen.add(item.id);
+            return true;
+        });
+
+        const primary = uniqueRanked[0] ? uniqueRanked[0].id : 'gemini-2.5-flash';
+        const fallback = uniqueRanked[1] ? uniqueRanked[1].id : 'gemini-2.0-flash';
+
+        const cfg = getGeminiConfig();
+        cfg.apiKey = cleanKey;
+        cfg.detectedModels = uniqueRanked.slice(0, 8);
+        cfg.selectedModel = primary;
+        cfg.fallbackModel = fallback;
+        cfg.lastCheckedTs = Date.now();
+        saveGeminiConfig(cfg);
+
+        if (!silent) {
+            showNativeToast(`✓ 已自動鎖定適中模型：${shortModelDisplayName(primary)}`);
+        }
+        return cfg;
+    }
+
+    /* 兼容解析 Gemini 回傳（支援新式 { country_name, learned_traits, recommendations } 與舊式純陣列 [...]） */
+    function extractGeminiCollaborativePayload(rawText) {
+        const cleaned = String(rawText || '')
+            .replace(/```json\s*/gi, '')
+            .replace(/```\s*/g, '')
+            .trim();
+
+        const objStart = cleaned.indexOf('{');
+        const arrStart = cleaned.indexOf('[');
+
+        if (objStart !== -1 && (arrStart === -1 || objStart < arrStart)) {
+            const objEnd = cleaned.lastIndexOf('}');
+            if (objEnd > objStart) {
+                const parsedObj = JSON.parse(cleaned.slice(objStart, objEnd + 1));
+                if (parsedObj && Array.isArray(parsedObj.recommendations)) {
+                    return {
+                        countryName: String(parsedObj.country_name || '').trim(),
+                        learnedTraits: Array.isArray(parsedObj.learned_traits) ? parsedObj.learned_traits : [],
+                        items: parsedObj.recommendations
+                    };
+                }
+            }
+        }
+
+        if (arrStart !== -1) {
+            const arrEnd = cleaned.lastIndexOf(']');
+            if (arrEnd > arrStart) {
+                const parsedArr = JSON.parse(cleaned.slice(arrStart, arrEnd + 1));
+                if (Array.isArray(parsedArr)) {
+                    return { countryName: '', learnedTraits: [], items: parsedArr };
+                }
+            }
+        }
+        throw new Error('模型未回傳有效 JSON 結構');
+    }
+
+    function mapCategoryStringToBadge(catStr, titleStr) {
+        const s = String(catStr || '');
+        if (s.includes('咖啡') || s.includes('茶館')) return { icon: '☕', label: '獨立咖啡・茶館', cls: 'rec-cat-cafe', dim: '精品咖啡' };
+        if (s.includes('餐食') || s.includes('料理')) return { icon: '🍽️', label: '在地餐食・料理', cls: 'rec-cat-food', dim: '在地美食' };
+        if (s.includes('酒吧') || s.includes('小酌')) return { icon: '🍺', label: '酒吧・精釀小酌', cls: 'rec-cat-bar', dim: '酒吧小酌' };
+        if (s.includes('甜點') || s.includes('烘焙') || s.includes('伴手')) return { icon: '🥐', label: '甜點・烘焙・伴手', cls: 'rec-cat-sweet', dim: '甜點伴手' };
+        if (s.includes('宗教') || s.includes('聖地') || s.includes('神社') || s.includes('寺院')) return { icon: '🏛️', label: '宗教聖地・歷史古蹟', cls: 'rec-cat-shrine', dim: '文化古蹟' };
+        if (s.includes('建築') || s.includes('博物館') || s.includes('街區')) return { icon: '🏛️', label: '建築・博物館・街區', cls: 'rec-cat-arch', dim: '建築美學' };
+        if (s.includes('自然') || s.includes('庭園') || s.includes('展望') || s.includes('風景')) return { icon: '📸', label: '自然風景・庭園・展望', cls: 'rec-cat-view', dim: '攝影光線' };
+        return classifyEntityBadge(titleStr, s);
+    }
+
+    async function callGeminiGenerateSingle(apiKey, modelId, systemPrompt, userPrompt, useGrounding = true, useThinkingBudget = true) {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelId)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const genConfig = {
+            temperature: 0.45,
+            maxOutputTokens: 1600
+        };
+        if (useThinkingBudget && /2\.5|3/.test(modelId) && !/lite/.test(modelId)) {
+            genConfig.thinkingConfig = { thinkingBudget: 512 };
+        }
+
+        const bodyObj = {
+            systemInstruction: { parts: [{ text: systemPrompt }] },
+            contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+            generationConfig: genConfig
+        };
+        if (useGrounding) {
+            bodyObj.tools = [{ google_search: {} }];
+        }
+
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bodyObj)
+        });
+
+        if (!res.ok) {
+            const errBody = await res.text().catch(() => '');
+            const err = new Error(`HTTP ${res.status}: ${errBody.slice(0, 140)}`);
+            err.status = res.status;
+            throw err;
+        }
+
+        const data = await res.json();
+        const candidate = data?.candidates?.[0];
+        const parts = candidate?.content?.parts || [];
+        const textOut = parts.map(p => p.text || '').join('\n').trim();
+        const hasGrounding = Boolean(candidate?.groundingMetadata?.webSearchQueries?.length || candidate?.groundingMetadata?.groundingChunks?.length);
+        return { textOut, hasGrounding };
+    }
+
+    async function runGeminiCollaborativeRecs(ctx, coordsInfo, weatherData, openWorldCandidates, forceBypassCache = false) {
+        let cfg = getGeminiConfig();
+        if (!cfg.apiKey) return null;
+
+        if (!cfg.selectedModel || (Date.now() - cfg.lastCheckedTs > GEMINI_MODEL_TTL_MS)) {
+            try {
+                cfg = await refreshGeminiModelList(cfg.apiKey, true) || cfg;
+            } catch (e) {}
+        }
+
+        const countryInfo = resolveDestinationCountry(ctx, coordsInfo);
+        const countryContextBlock = buildCountryContextSummary(countryInfo);
+
+        const primaryModel = cfg.mode === 'manual' && cfg.manualModel
+            ? cfg.manualModel
+            : (cfg.selectedModel || 'gemini-2.5-flash');
+        const fallbackModel = cfg.fallbackModel && cfg.fallbackModel !== primaryModel
+            ? cfg.fallbackModel
+            : 'gemini-2.0-flash';
+
+        const excludedList = [
+            ctx.title || '',
+            ...Array.from(shownDiscoveryHistory),
+            ...((globalData && globalData.poi_database) || []).map(p => p.name),
+            ...((globalData && globalData.theme_guide) || []).map(g => g.name)
+        ].filter(Boolean).slice(0, 35);
+
+        const cacheKey = `${primaryModel}|${countryInfo.key}|${ctx.title}|${coordsInfo.lat.toFixed(3)},${coordsInfo.lon.toFixed(3)}|${recIntentFilter}|${recNovelOnly}|b${recBatchIndex}`;
+        if (!forceBypassCache && geminiRespCache[cacheKey] && (Date.now() - geminiRespCache[cacheKey].ts < 30 * 60 * 1000)) {
+            const hit = geminiRespCache[cacheKey];
+            geminiRuntimeStatus = {
+                state: 'ready',
+                modelUsed: hit.modelUsed,
+                latencySec: hit.latencySec,
+                errorMsg: '',
+                grounded: hit.grounded
+            };
+            return hit.items;
+        }
+
+        const topPrefs = Object.entries(userTasteProfile)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([k, v]) => `${k}(${v})`)
+            .join('、');
+
+        const nearbySeeds = (openWorldCandidates || [])
+            .slice(0, 12)
+            .map(c => `- ${c.name} [${c.tag || '地標'}] (${formatDistanceAndEta(c.distMeters, coordsInfo.mode)})`)
+            .join('\n');
+
+        const weatherLine = weatherData
+            ? `現地氣溫 ${weatherData.temp ?? '?'}°C（體感 ${weatherData.feelsLike ?? '?'}°C）、風速 ${weatherData.windKmh ?? '?'} km/h、日落 ${weatherData.sunset || '--:--'}`
+            : '現地氣象未提供';
+
+        const userPrompt = [
+            `【目的地國家／城市動態畫像（自動學習累積）】`,
+            countryContextBlock,
+            ``,
+            `【當前微時刻情境】`,
+            `- 目前所在／檢視節點：${ctx.title}（${ctx.kicker || ''}）`,
+            `- 區域與座標：${coordsInfo.label}（${coordsInfo.lat}, ${coordsInfo.lon}），移動模式：${coordsInfo.mode === 'bike' ? '單車騎行' : '步行／大眾運輸'}`,
+            `- 現地氣象：${weatherLine}`,
+            `- 使用者意圖篩選：${recIntentFilter}`,
+            `- 探索模式：${recNovelOnly ? '只看行程外的全新發現（第 ' + (recBatchIndex + 1) + ' 批探索）' : '可包含經典必訪與新發現'}`,
+            `- 跨旅程全域偏好權重：${topPrefs}`,
+            ``,
+            `【嚴格排除清單（不可重複推薦）】`,
+            excludedList.join('、') || '無',
+            ``,
+            `【周邊開放圖資參考候選（可從中嚴選最契合者，並可結合 Google 搜尋補充周邊更優質的隱藏名店）】`,
+            nearbySeeds || '（請直接依座標與城市透過 Google 搜尋發掘周邊真實地點）'
+        ].join('\n');
+
+        const sysPrompt = cfg.customPrompt || DEFAULT_GEMINI_SYSTEM_PROMPT;
+        const t0 = performance.now();
+
+        let rawReply = null;
+        let usedModel = primaryModel;
+
+        try {
+            rawReply = await callGeminiGenerateSingle(cfg.apiKey, primaryModel, sysPrompt, userPrompt, true, true);
+        } catch (e1) {
+            try {
+                rawReply = await callGeminiGenerateSingle(cfg.apiKey, primaryModel, sysPrompt, userPrompt, false, false);
+            } catch (e2) {
+                usedModel = fallbackModel;
+                rawReply = await callGeminiGenerateSingle(cfg.apiKey, fallbackModel, sysPrompt, userPrompt, false, false);
+            }
+        }
+
+        const elapsedSec = ((performance.now() - t0) / 1000).toFixed(1);
+        const extracted = extractGeminiCollaborativePayload(rawReply.textOut);
+
+        // 自動吸收 Gemini 這次學到的目的地國家文化與實用特點
+        if (extracted.learnedTraits && extracted.learnedTraits.length) {
+            absorbGeminiCountryTraits(countryInfo.key, extracted.countryName || countryInfo.name, extracted.learnedTraits);
+        }
+
+        const mappedItems = (extracted.items || []).slice(0, 4).map((obj, i) => {
+            const name = String(obj.name || '').trim();
+            const catBadge = mapCategoryStringToBadge(obj.category, name);
+            const mapQ = String(obj.map_query || `${name} ${coordsInfo.city || countryInfo.name || ''}`).trim();
+            const scoreNum = Math.min(99, Math.max(72, parseInt(obj.match_score, 10) || (94 - i * 3)));
+            return {
+                source: `Gemini (${shortModelDisplayName(usedModel)})`,
+                isOpenWorld: true,
+                isAiCurated: true,
+                name,
+                lat: coordsInfo.lat,
+                lon: coordsInfo.lon,
+                distMeters: 0,
+                customEtaLabel: String(obj.est_time || '').trim(),
+                catBadge,
+                tag: catBadge.label,
+                keyPointText: String(obj.key_point || '').trim() || catBadge.label,
+                whyText: obj.why ? `✨ AI 協作洞察：${String(obj.why).trim()}` : '',
+                pct: scoreNum,
+                mapUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQ)}`,
+                rawText: `${name} ${obj.category || ''} ${obj.key_point || ''} ${obj.why || ''}`
+            };
+        }).filter(item => item.name);
+
+        if (!mappedItems.length) throw new Error('Gemini 回傳空推薦清單');
+
+        mappedItems.forEach(m => shownDiscoveryHistory.add(m.name.toLowerCase().trim()));
+        geminiRuntimeStatus = {
+            state: 'ready',
+            modelUsed: usedModel,
+            latencySec: elapsedSec,
+            errorMsg: '',
+            grounded: rawReply.hasGrounding
+        };
+
+        geminiRespCache[cacheKey] = {
+            ts: Date.now(),
+            modelUsed: usedModel,
+            latencySec: elapsedSec,
+            grounded: rawReply.hasGrounding,
+            items: mappedItems
+        };
+        try { localStorage.setItem(GEMINI_RESP_CACHE_KEY, JSON.stringify(geminiRespCache)); } catch (e) {}
+
+        return mappedItems;
+    }
+
+    function clearLearnedCountryTraits(countryKey = '') {
+        if (countryKey) {
+            delete countryTraitsStore[countryKey];
+            showNativeToast('✓ 已重置該目的地的學習特徵');
+        } else {
+            countryTraitsStore = {};
+            showNativeToast('✓ 已清除所有國家學習記憶');
+        }
+        saveCountryTraitsStore();
+        syncTripCountryDNA();
+        openGeminiSettingsSheet();
+    }
+
+    function openGeminiSettingsSheet() {
+        hapticTick(8);
+        syncTripCountryDNA();
+        const cfg = getGeminiConfig();
+        const body = document.getElementById('native-sheet-body');
+        const sheet = document.getElementById('native-sheet');
+        const backdrop = document.getElementById('sheet-backdrop');
+        if (!body || !sheet || !backdrop) return;
+
+        const curCountry = resolveDestinationCountry(currentSheetPayload || {}, null);
+        const curBucket = countryTraitsStore[curCountry.key] || { name: curCountry.name, tripDna: [], aiTraits: [], dimAffinity: {} };
+        const learnedAllItems = [
+            ...(curBucket.tripDna || []).map(t => `🧭 [行程 DNA] ${t}`),
+            ...(curBucket.aiTraits || []).map(t => `✨ [AI 洞察] ${t}`)
+        ];
+        const learnedHtml = learnedAllItems.length
+            ? `<ul class="wiki-bullets" style="margin-top:4px;">${learnedAllItems.map(i => `<li>${i}</li>`).join('')}</ul>`
+            : `<div style="font-size:0.72rem; color:var(--text-muted);">尚未累積此目的地的額外特徵，點擊景點或執行 AI 協作後會自動學習。</div>`;
+
+        const modelsListHtml = (cfg.detectedModels || []).length
+            ? cfg.detectedModels.map(m => {
+                const isSel = cfg.mode === 'auto'
+                    ? m.id === cfg.selectedModel
+                    : m.id === cfg.manualModel;
+                return `
+                    <div class="gemini-model-chip ${isSel ? 'selected' : ''}" onclick="selectManualGeminiModel('${escapeJsQuote(m.id)}')">
+                        <div style="min-width:0;">
+                            <div style="font-weight:800; color:var(--text-primary); font-family:'JetBrains Mono',monospace;">${m.id}</div>
+                            <div style="font-size:0.65rem; color:var(--text-secondary);">${m.tierBadge}</div>
+                        </div>
+                        <span style="font-size:0.72rem; font-weight:900; color:${isSel ? 'var(--emerald)' : 'var(--text-muted)'};">${isSel ? '✓ 使用中' : '選用'}</span>
+                    </div>`;
+            }).join('')
+            : `<div style="font-size:0.74rem; color:var(--text-muted);">貼上 API Key 並點擊「儲存並自動偵測適中模型」，系統會自動向 Google 取得最新可用模型並鎖定速度與品質最平衡的版本。</div>`;
+
+        body.innerHTML = `
+            <div class="sheet-kicker">✨ GLOBAL CONTEXT & AI COLLABORATION</div>
+            <h3 class="sheet-title">Gemini 全球協作與國家特徵學習</h3>
+
+            <div class="live-status-strip" style="border-left-color:#a78bfa;">
+                🔒 <strong>隱私安全機制</strong>：API Key 與國家學習記憶僅存於此手機 <code>localStorage</code>，絕不上傳第三方伺服器。
+            </div>
+
+            <div class="gemini-cfg-box">
+                <div class="gemini-cfg-label">
+                    <span>🌍 目前識別目的地：${curBucket.name}</span>
+                    <button type="button" class="rec-pill" onclick="clearLearnedCountryTraits('${escapeJsQuote(curCountry.key)}')">重設此國學習</button>
+                </div>
+                <div style="font-size:0.71rem; color:var(--text-secondary); line-height:1.45;">
+                    系統會自動從行程 JSON、點擊收藏行為與 Gemini 搜尋結果中，持續累積該國家的餐飲作息、交通節奏與文化特點：
+                </div>
+                ${learnedHtml}
+            </div>
+
+            <div class="gemini-cfg-box">
+                <div class="gemini-cfg-label">
+                    <span>🔑 Gemini API Key</span>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:0.66rem; color:var(--emerald);">${maskApiKey(cfg.apiKey)}</span>
+                </div>
+                <input type="password" id="gemini-key-input" class="gemini-cfg-input" placeholder="貼上 AIzaSy 開頭的 Gemini API Key..." value="${cfg.apiKey}">
+                <div style="display:grid; grid-template-columns: 1fr auto; gap:6px; margin-top:8px;">
+                    <button type="button" class="sheet-tool-btn primary" style="justify-content:center; border-radius:10px; padding:9px;" onclick="saveAndTestGeminiKey()">⚡ 儲存並自動偵測適中模型</button>
+                    ${cfg.apiKey ? `<button type="button" class="sheet-tool-btn" style="color:var(--danger); border-radius:10px; padding:9px 11px;" onclick="clearGeminiKey()">清除</button>` : ''}
+                </div>
+                <div id="gemini-test-status" style="margin-top:6px; font-size:0.72rem; color:var(--text-secondary);"></div>
+            </div>
+
+            <div class="gemini-cfg-box">
+                <div class="gemini-cfg-label">
+                    <span>⚖️ 模型迭代自動適中路由（Sweet-Spot Router）</span>
+                    <button type="button" class="rec-pill ${cfg.mode === 'auto' ? 'active' : ''}" onclick="setGeminiAutoMode()">${cfg.mode === 'auto' ? '✓ 自動適中模式' : '切回自動適中'}</button>
+                </div>
+                <div style="font-size:0.71rem; color:var(--text-secondary); margin-bottom:8px; line-height:1.48;">
+                    自動避開過輕易簡略的 <code>lite/8b</code> 與過慢的 <code>pro/thinking</code>，永遠自動鎖定最新世代標準 <strong>Flash 平衡模型</strong>（目前主力：<code>${cfg.selectedModel || '待偵測'}</code>）。
+                </div>
+                <div id="gemini-models-list">${modelsListHtml}</div>
+            </div>
+
+            <div class="gemini-cfg-box">
+                <div class="gemini-cfg-label">
+                    <span>📝 泛化協作 System Prompt（可自訂微調）</span>
+                    <button type="button" class="rec-pill" onclick="resetGeminiPromptDefault()">還原預設</button>
+                </div>
+                <textarea id="gemini-prompt-textarea" class="gemini-cfg-textarea">${cfg.customPrompt || DEFAULT_GEMINI_SYSTEM_PROMPT}</textarea>
+                <button type="button" class="sheet-tool-btn" style="width:100%; justify-content:center; margin-top:7px; border-radius:10px;" onclick="saveCustomGeminiPrompt()">💾 儲存 Prompt 設定</button>
+            </div>
+        `;
+
+        backdrop.classList.add('open');
+        sheet.classList.add('open');
+    }
+
+    async function saveAndTestGeminiKey() {
+        const inp = document.getElementById('gemini-key-input');
+        const statusEl = document.getElementById('gemini-test-status');
+        const key = (inp && inp.value || '').trim();
+        if (!key) {
+            showNativeToast('請先輸入 Gemini API Key');
+            return;
+        }
+        if (statusEl) statusEl.innerText = '🔄 正在連線 Google API 偵測最新可用模型與延遲測試...';
+        try {
+            const updated = await refreshGeminiModelList(key, true);
+            if (statusEl) {
+                statusEl.style.color = 'var(--emerald)';
+                statusEl.innerText = `✅ 連線成功！已自動選用適中模型：${updated.selectedModel}（備援：${updated.fallbackModel}）`;
+            }
+            renderLogistics((globalData && globalData.logistics) || { items: [], alerts: [] });
+            setTimeout(() => openGeminiSettingsSheet(), 450);
+        } catch (err) {
+            if (statusEl) {
+                statusEl.style.color = 'var(--danger)';
+                statusEl.innerText = `❌ ${err.message || '連線失敗，請確認 Key 是否正確'}`;
+            }
+        }
+    }
+
+    function clearGeminiKey() {
+        if (!confirm('確定要從此手機瀏覽器清除 Gemini API Key 嗎？')) return;
+        const cfg = getGeminiConfig();
+        cfg.apiKey = '';
+        cfg.detectedModels = [];
+        cfg.selectedModel = '';
+        saveGeminiConfig(cfg);
+        lastGeminiRecs = [];
+        showNativeToast('已清除本機 Gemini API Key');
+        renderLogistics((globalData && globalData.logistics) || { items: [], alerts: [] });
+        openGeminiSettingsSheet();
+    }
+
+    function setGeminiAutoMode() {
+        const cfg = getGeminiConfig();
+        cfg.mode = 'auto';
+        saveGeminiConfig(cfg);
+        showNativeToast('✓ 已切換為「自動適中模型」路由');
+        openGeminiSettingsSheet();
+    }
+
+    function selectManualGeminiModel(modelId) {
+        const cfg = getGeminiConfig();
+        cfg.mode = 'manual';
+        cfg.manualModel = modelId;
+        saveGeminiConfig(cfg);
+        showNativeToast(`✓ 已手動指定模型：${shortModelDisplayName(modelId)}`);
+        openGeminiSettingsSheet();
+    }
+
+    function saveCustomGeminiPrompt() {
+        const ta = document.getElementById('gemini-prompt-textarea');
+        if (!ta) return;
+        const cfg = getGeminiConfig();
+        const txt = ta.value.trim();
+        cfg.customPrompt = (txt && txt !== DEFAULT_GEMINI_SYSTEM_PROMPT.trim()) ? txt : '';
+        saveGeminiConfig(cfg);
+        geminiRespCache = {};
+        try { localStorage.removeItem(GEMINI_RESP_CACHE_KEY); } catch (e) {}
+        showNativeToast('✓ 已儲存自訂 Prompt（下次查詢立即生效）');
+    }
+
+    function resetGeminiPromptDefault() {
+        const ta = document.getElementById('gemini-prompt-textarea');
+        if (ta) ta.value = DEFAULT_GEMINI_SYSTEM_PROMPT;
+        const cfg = getGeminiConfig();
+        cfg.customPrompt = '';
+        saveGeminiConfig(cfg);
+        showNativeToast('已還原泛化預設 Prompt');
     }
 
     initPwaAppExperience();
